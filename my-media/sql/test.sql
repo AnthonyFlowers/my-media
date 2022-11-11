@@ -16,7 +16,8 @@ create table tv_show (
 
 create table tv_show_season (
 	tv_show_season_id int primary key auto_increment,
-    tv_show_id int
+    tv_show_id int not null,
+    tv_show_season_index int default(0)
 );
 
 create table tv_show_season_tv_show (
@@ -65,6 +66,29 @@ begin
     insert into tv_show (tv_show_name) values
 		('Rick and Morty'),
         ('Suits');
+        
+	insert into tv_show_season (tv_show_id, tv_show_season_index) values
+		(1, 1), 
+        (1, 2),
+        (1, 3),
+        (2, 1),
+        (2, 2),
+        (2, 3);
+	
+    insert into tv_show_season_tv_show (tv_show_season_id, tv_show_id) values
+		(1, 1),
+        (2, 2);
+	
+    insert into tv_show_episode (tv_show_season_id, tv_show_episode_index) values
+		(1, 1), 
+        (1, 2),
+        (1, 3),
+        (1, 4),
+        (4, 1),
+        (4, 2),
+        (4, 3),
+        (4, 4);
+        
 	set sql_safe_updates = 1;
 end //
 delimiter ;
