@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -13,11 +14,11 @@ public class TvShowEpisode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int tvShowEpisodeId;
     int tvShowSeasonId;
-    @Size(min = 0, message = "TV Show episode index can't be negative")
+    @Min(0)
     int tvShowEpisodeIndex;
-    @Size(max = 256, message="TV Show episode name can't exceed 255 characters")
+    @Size(max = 256, message = "TV Show episode name can't exceed 255 characters")
     String tvShowEpisodeName;
-    @Size(min = 0, message = "TV Show episode length cannot be negative")
+    @Min(0)
     int tvShowEpisodeLength;
 
     public int getTvShowEpisodeId() {

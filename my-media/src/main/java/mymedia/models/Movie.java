@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -15,9 +16,9 @@ public class Movie {
 
     @Size(max = 256, message = "Movie name can't exceed 255 characters")
     private String movieName;
-    @Size(min = 0, message = "Movie year cannot be negative")
+    @Min(0)
     private int movieYear;
-    @Size(min = 0, message = "Movie length cannot be negative")
+    @Min(0)
     private int movieLength;
 
     public int getMovieId() {

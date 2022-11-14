@@ -8,7 +8,6 @@ public class TvShowSeason {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int tvShowSeasonId;
-
     private int tvShowId;
     private int tvShowSeasonIndex;
 

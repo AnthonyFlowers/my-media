@@ -10,7 +10,7 @@ public class TvShow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int tvShowId;
 
-    @Size(max = 256)
+    @Size(max = 256, message = "TV Show name cannot exceed 255 characters")
     private String tvShowName;
 
     @OneToMany(mappedBy = "tvShowId")
