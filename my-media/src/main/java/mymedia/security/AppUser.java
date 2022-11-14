@@ -1,27 +1,33 @@
 package mymedia.security;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
-@Entity
 public class AppUser implements UserDetails {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int appUserId;
-    @Size(max = 50, message = "Username cannot be more than 50 characters")
     private String username;
 
-    @Transient
     private String password;
-    @NotNull
-    private String passwordHash;
     private boolean enabled;
+    private Collection<GrantedAuthority> authorities;
+
+    public AppUser() {
+    }
+
+    public AppUser(int appUserId, String username, String password, boolean enabled, List<String> roles) {
+        this.appUserId = appUserId;
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
+        this.authorities = rolesToAuthorities(roles);
+    }
+
 
     public int getAppUserId() {
         return appUserId;
@@ -31,14 +37,21 @@ public class AppUser implements UserDetails {
         this.appUserId = appUserId;
     }
 
+
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null; // todo: implement
+    public Collection<GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    private Collection<GrantedAuthority> rolesToAuthorities(List<String> roles) {
+        return roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override
     public String getPassword() {
-        return null; // todo: implement
+        return password;
     }
 
     public void setPassword(String password) {
@@ -66,14 +79,6 @@ public class AppUser implements UserDetails {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
     }
 
     public boolean isEnabled() {

@@ -6,6 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.GrantedAuthority;
+
+import javax.transaction.Transactional;
+import java.util.Collection;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,49 +34,58 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void shouldFindAtLeast1User() {
-        assertTrue(2 <= repository.findAll().size());
-    }
-
-    @Test
     void shouldCreateNewUser() {
         AppUser user = new AppUser();
-        user.setEnabled(true);
-        user.setPassword("password"); // should not be saved
-        user.setPasswordHash("123");
         user.setUsername("");
+        user.setPassword("password");
+        user.setEnabled(true);
 
-        AppUser savedUser = repository.save(user);
+        AppUser savedUser = repository.create(user);
         assertEquals(4, savedUser.getAppUserId());
-        assertNull(savedUser.getPassword()); // password should be ignored when saving
     }
 
     @Test
     void shouldFindUserJohnSmith() {
-        AppUser user = repository.findById(1).orElse(null);
+        AppUser user = repository.findByUsername("johnsmith");
         assertNotNull(user);
         assertEquals("johnsmith", user.getUsername());
     }
 
     @Test
     void shouldUpdateUserJaneDoe() {
-        AppUser user = repository.findById(2).orElse(null);
+        AppUser user = repository.findByUsername("janedoe");
         assertNotNull(user);
         user.setUsername("jane_doe");
-        repository.save(user);
+        repository.update(user);
 
-        AppUser updated = repository.findById(2).orElse(null);
+        AppUser updated = repository.findByUsername("jane_doe");
         assertNotNull(updated);
         assertEquals("jane_doe", updated.getUsername());
     }
 
     @Test
+    void shouldNotFindUserThatDoesNotExist() {
+        AppUser user = repository.findByUsername("doesnotexist");
+        assertNull(user);
+    }
+
+    @Test
     void shouldDeleteUserAshKetchum() {
-        AppUser user = repository.findById(3).orElse(null);
+        AppUser user = repository.findByUsername("ashketchum");
         assertNotNull(user);
 
-        repository.delete(user);
-        AppUser rm = repository.findById(3).orElse(null);
+        assertTrue(repository.delete(user));
+        AppUser rm = repository.findByUsername("ashketchum");
         assertNull(rm);
+    }
+
+    @Test
+    @Transactional
+    void shouldFindAdminAuthorityForJohnSmith() {
+        AppUser user = repository.findByUsername("johnsmith");
+        assertNotNull(user);
+        Collection<GrantedAuthority> authorities = user.getAuthorities();
+        assertEquals(1, authorities.size());
+        assertTrue(authorities.stream().anyMatch((a) -> Objects.equals(a.getAuthority(), "ADMIN")));
     }
 }
