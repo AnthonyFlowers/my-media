@@ -36,8 +36,8 @@ class AppUserRepositoryTest {
     @Test
     void shouldCreateNewUser() {
         AppUser user = new AppUser();
-        user.setUsername("");
-        user.setPassword("password");
+        user.setUsername("newuser");
+        user.setPassword("password_hash");
         user.setEnabled(true);
 
         AppUser savedUser = repository.create(user);
