@@ -2,6 +2,7 @@ package mymedia.security;
 
 import mymedia.domain.ActionStatus;
 import mymedia.domain.Result;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,14 +40,6 @@ class AppUserServiceTest {
         Result<AppUser> result = service.create("johnsmith", "P@ssw0rd");
         assertTrue(result.isSuccess());
         assertEquals(user, result.getPayload());
-    }
-
-    @Test
-    void shouldNotCreateUserDuplicateUsername() {
-        doThrow(new DuplicateKeyException("")).when(repository).save(any());
-        Result<AppUser> result = service.create("johnsmith", "P@ssw0rd");
-        assertFalse(result.isSuccess());
-        assertEquals(1, result.getMessages().size());
     }
 
     @Test
