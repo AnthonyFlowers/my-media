@@ -2,6 +2,7 @@ package mymedia.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,7 +23,7 @@ public class SecurityConfig {
         http.csrf().disable();
         http.cors();
         http.authorizeRequests()
-                .antMatchers("/authenticate").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth/create_account", "/auth").permitAll()
                 .antMatchers("/**").denyAll()
                 .and()
                 .addFilter(new JwtRequestFilter(authenticationManager(authConfig), converter))
