@@ -1,5 +1,5 @@
 package mymedia.domain;
 
-public enum Action {
+public enum ActionStatus {
     INVALID
 }

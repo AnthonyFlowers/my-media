@@ -14,7 +14,7 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@SpringBootTest
 class AppUserRepositoryTest {
 
     @Autowired

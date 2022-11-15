@@ -8,7 +8,7 @@ public class Result<T> {
     private final List<String> messages = new ArrayList<>();
     private T payload;
 
-    public void addMessage(Action resultAction, String message) {
+    public void addMessage(ActionStatus resultActionStatus, String message) {
         messages.add(message);
     }
 

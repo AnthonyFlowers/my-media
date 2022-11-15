@@ -55,10 +55,12 @@ public class AppUserRepository {
     public void update(AppUser user) {
         final String sql = "update app_user set " +
                 "username = ?, " +
+                "password_hash = ?, " +
                 "enabled = ? " +
                 "where app_user_id = ?;";
         jdbcTemplate.update(sql,
                 user.getUsername(),
+                user.getPassword(),
                 user.isEnabled(),
                 user.getAppUserId());
         updateRoles(user);

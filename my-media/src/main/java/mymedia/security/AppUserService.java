@@ -1,6 +1,6 @@
 package mymedia.security;
 
-import mymedia.domain.Action;
+import mymedia.domain.ActionStatus;
 import mymedia.domain.Result;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +27,7 @@ public class AppUserService implements UserDetailsService {
         if (user == null || !user.isEnabled()) {
             throw new UsernameNotFoundException(username + " not found");
         }
+
         return user;
     }
 
@@ -35,37 +36,54 @@ public class AppUserService implements UserDetailsService {
         if (!result.isSuccess()) {
             return result;
         }
+        password = encoder.encode(password);
         AppUser user = new AppUser(0, username, password, true, List.of("USER"));
         try {
             user = repository.create(user);
-            result.setPayload(user);
         } catch (DuplicateKeyException e){
-            result.addMessage(Action.INVALID, "That username already exists");
+            result.addMessage(ActionStatus.INVALID, "That username already exists");
+        }
+        if(result.isSuccess()){
+            result.setPayload(user);
         }
         return result;
     }
 
+    public Result<AppUser> update(AppUser user) {
+        Result<AppUser> result = validate(user.getUsername(), user.getPassword());
+        user.setPassword(encoder.encode(user.getPassword()));
+        try {
+            repository.update(user);
+        } catch (DuplicateKeyException e){
+            result.addMessage(ActionStatus.INVALID, "That username already exists");
+        }
+        if(result.isSuccess()) {
+            result.setPayload(user);
+        }
+        return result;
+    }
+
+
     private Result<AppUser> validate(String username, String password) {
         Result<AppUser> result = new Result<>();
         if (username == null || username.isBlank()) {
-            result.addMessage(Action.INVALID, "username is required");
+            result.addMessage(ActionStatus.INVALID, "username is required");
             return result;
         }
         if (password == null) {
-            result.addMessage(Action.INVALID, "password is required");
+            result.addMessage(ActionStatus.INVALID, "password is required");
             return result;
         }
         if (username.length() > 50) {
-            result.addMessage(Action.INVALID, "username must be less than 50 characters");
+            result.addMessage(ActionStatus.INVALID, "username must be less than 50 characters");
         }
 
         if (!isValidPassword(password)) {
-            result.addMessage(Action.INVALID,
+            result.addMessage(ActionStatus.INVALID,
                     "password must be at least 8 characters, " +
-                            "have one digit, a capital letter, a lowercase letter, " +
-                            "and a non-digit/non-letter character");
+                            "have one digit, a letter, and a non-digit/non-letter character");
         }
-        return null;
+        return result;
     }
 
     private boolean isValidPassword(String password) {
