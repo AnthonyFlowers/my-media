@@ -45,8 +45,11 @@ public class JwtConverter {
             int userId = (int) jws.getBody().get("app_user_id");
             String authorities = (String) jws.getBody().get("authorities");
 
-            return new AppUser(userId, username, null, true,
-                    Arrays.asList(authorities.split(",")));
+            AppUser user = new AppUser(userId, username, null, true);
+            user.setRoles(Arrays.stream(authorities.split(","))
+                    .map(a -> new AppRole(0, a.toString()))
+                    .collect(Collectors.toList()));
+            return user;
         } catch (JwtException e) {
             e.printStackTrace();
         }

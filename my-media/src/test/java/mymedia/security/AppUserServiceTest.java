@@ -35,7 +35,7 @@ class AppUserServiceTest {
     @Test
     void shouldCreateUser() {
         AppUser user = getTestUser();
-        when(repository.create(any())).thenReturn(user);
+        when(repository.save(any())).thenReturn(user);
         Result<AppUser> result = service.create("johnsmith", "P@ssw0rd");
         assertTrue(result.isSuccess());
         assertEquals(user, result.getPayload());
@@ -43,7 +43,7 @@ class AppUserServiceTest {
 
     @Test
     void shouldNotCreateUserDuplicateUsername() {
-        doThrow(new DuplicateKeyException("")).when(repository).create(any());
+        doThrow(new DuplicateKeyException("")).when(repository).save(any());
         Result<AppUser> result = service.create("johnsmith", "P@ssw0rd");
         assertFalse(result.isSuccess());
         assertEquals(1, result.getMessages().size());
@@ -66,7 +66,7 @@ class AppUserServiceTest {
     @Test
     void shouldNotUpdateUser() {
         AppUser user = getTestUser();
-        doThrow(new DuplicateKeyException("")).when(repository).update(user);
+        doThrow(new DuplicateKeyException("")).when(repository).save(user);
         Result<AppUser> result = service.update(user);
         assertFalse(result.isSuccess());
         assertEquals(1, result.getMessages().size());
@@ -75,6 +75,6 @@ class AppUserServiceTest {
     private static AppUser getTestUser() {
         return new AppUser(1, "johnsmith",
                 "$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa",
-                true, List.of("USER"));
+                true);
     }
 }

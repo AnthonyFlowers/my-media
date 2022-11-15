@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 @Service
@@ -37,12 +38,9 @@ public class AppUserService implements UserDetailsService {
             return result;
         }
         password = encoder.encode(password);
-        AppUser user = new AppUser(0, username, password, true, List.of("USER"));
-        try {
-            user = repository.create(user);
-        } catch (DuplicateKeyException e){
-            result.addMessage(ActionStatus.INVALID, "That username already exists");
-        }
+        AppUser user = new AppUser(0, username, password, true);
+        user.addRole(new AppRole(2, "USER"));
+        user = repository.save(user);
         if(result.isSuccess()){
             result.setPayload(user);
         }
@@ -53,7 +51,7 @@ public class AppUserService implements UserDetailsService {
         Result<AppUser> result = validate(user.getUsername(), user.getPassword());
         user.setPassword(encoder.encode(user.getPassword()));
         try {
-            repository.update(user);
+            repository.save(user);
         } catch (DuplicateKeyException e){
             result.addMessage(ActionStatus.INVALID, "That username already exists");
         }

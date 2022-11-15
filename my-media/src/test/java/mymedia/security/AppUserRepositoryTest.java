@@ -40,7 +40,7 @@ class AppUserRepositoryTest {
         user.setPassword("password_hash");
         user.setEnabled(true);
 
-        AppUser savedUser = repository.create(user);
+        AppUser savedUser = repository.save(user);
         assertEquals(4, savedUser.getAppUserId());
     }
 
@@ -56,7 +56,7 @@ class AppUserRepositoryTest {
         AppUser user = repository.findByUsername("janedoe");
         assertNotNull(user);
         user.setUsername("jane_doe");
-        repository.update(user);
+        repository.save(user);
 
         AppUser updated = repository.findByUsername("jane_doe");
         assertNotNull(updated);
@@ -73,8 +73,7 @@ class AppUserRepositoryTest {
     void shouldDeleteUserAshKetchum() {
         AppUser user = repository.findByUsername("ashketchum");
         assertNotNull(user);
-
-        assertTrue(repository.delete(user));
+        repository.delete(user);
         AppUser rm = repository.findByUsername("ashketchum");
         assertNull(rm);
     }
