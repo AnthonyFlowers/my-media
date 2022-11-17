@@ -1,0 +1,26 @@
+@url = http://localhost:8080
+
+###
+
+POST {{url}}/auth/create_account HTTP/1.1
+Content-Type: application/json
+
+{
+    "username": "johnsmith9",
+    "password": "P@ssw0rd"
+}
+
+###
+
+POST {{url}}/auth HTTP/1.1
+Content-Type:  application/json
+
+{
+    "username": "johnsmith",
+    "password": "P@ssw0rd"
+}
+
+###
+
+POST {{url}}/auth/refresh_token HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJteW1lZGlhIiwiYXBwX3VzZXJfaWQiOjEsImF1dGhvcml0aWVzIjoiVVNFUiIsInN1YiI6ImpvaG5zbWl0aCIsImV4cCI6MTY2ODcxODAxNn0.3NZFcKtKyfvX7qJ_weHK_cXXAZ2vLKdQ1wlnk5IZ96w

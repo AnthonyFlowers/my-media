@@ -33,7 +33,7 @@ public class JwtConverter {
     }
 
     public AppUser getUserFromToken(String jwtToken) {
-        if (jwtToken == null || !jwtToken.startsWith("bearer "))
+        if (jwtToken == null || !jwtToken.startsWith("Bearer "))
             return null;
         try {
             Jws<Claims> jws = Jwts.parserBuilder()

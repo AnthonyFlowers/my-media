@@ -1,5 +1,9 @@
+use my_media;
 use my_media_test;
 call set_known_good_state();
+select * from app_user;
+select * from app_user_role;
+select * from app_role;
 select * from tv_show_episode;
 select * from tv_show;
 select * from tv_show_season;

@@ -1,5 +1,6 @@
 package mymedia.security;
 
+import mymedia.models.Movie;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,6 +26,11 @@ public class AppUser implements UserDetails {
             joinColumns = @JoinColumn(name = "app_user_id"),
             inverseJoinColumns = @JoinColumn(name = "app_role_id"))
     private List<AppRole> roles;
+    @ManyToMany
+    @JoinTable(name = "app_user_movie",
+            joinColumns = @JoinColumn(name = "app_user_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id"))
+    private List<Movie> movies;
 
     public AppUser() {
         this.roles = new ArrayList<>();
@@ -107,5 +113,9 @@ public class AppUser implements UserDetails {
 
     public void addRole(AppRole user) {
         this.roles.add(user);
+    }
+
+    public List<Movie> getMovies() {
+        return movies;
     }
 }

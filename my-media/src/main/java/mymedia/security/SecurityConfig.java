@@ -23,7 +23,11 @@ public class SecurityConfig {
         http.csrf().disable();
         http.cors();
         http.authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/auth/create_account", "/auth").permitAll()
+                .antMatchers(HttpMethod.POST,
+                        "/auth/create_account",
+                        "/auth",
+                        "/auth/refresh_token")
+                .permitAll()
                 .antMatchers("/**").denyAll()
                 .and()
                 .addFilter(new JwtRequestFilter(authenticationManager(authConfig), converter))
