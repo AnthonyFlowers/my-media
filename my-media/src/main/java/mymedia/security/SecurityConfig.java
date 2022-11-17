@@ -28,6 +28,8 @@ public class SecurityConfig {
                         "/auth",
                         "/auth/refresh_token")
                 .permitAll()
+                .antMatchers(HttpMethod.GET, "/api/movie").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/movie/*").authenticated()
                 .antMatchers("/**").denyAll()
                 .and()
                 .addFilter(new JwtRequestFilter(authenticationManager(authConfig), converter))

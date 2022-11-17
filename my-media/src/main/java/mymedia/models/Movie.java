@@ -1,11 +1,11 @@
 package mymedia.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import mymedia.security.AppUser;
+
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Entity
 public class Movie {
@@ -20,6 +20,12 @@ public class Movie {
     private int movieYear;
     @Min(0)
     private int movieLength;
+
+    @ManyToMany
+    @JoinTable(name = "app_user_movie",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "app_user_id"))
+    private List<AppUser> users;
 
     public int getMovieId() {
         return movieId;
@@ -51,5 +57,9 @@ public class Movie {
 
     public void setMovieLength(int movieLength) {
         this.movieLength = movieLength;
+    }
+
+    public void addUser(AppUser appUser) {
+        users.add(appUser);
     }
 }

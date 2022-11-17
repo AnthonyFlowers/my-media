@@ -2,6 +2,7 @@ package mymedia.security;
 
 import mymedia.domain.ActionStatus;
 import mymedia.domain.Result;
+import mymedia.models.Movie;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,7 +29,6 @@ public class AppUserService implements UserDetailsService {
         if (user == null || !user.isEnabled()) {
             throw new UsernameNotFoundException(username + " not found");
         }
-
         return user;
     }
 
@@ -49,7 +49,9 @@ public class AppUserService implements UserDetailsService {
 
     public Result<AppUser> update(AppUser user) {
         Result<AppUser> result = validate(user.getUsername(), user.getPassword());
-        user.setPassword(encoder.encode(user.getPassword()));
+        if(user.getPassword() != null) {
+            user.setPassword(encoder.encode(user.getPassword()));
+        }
         try {
             repository.save(user);
         } catch (DuplicateKeyException e){

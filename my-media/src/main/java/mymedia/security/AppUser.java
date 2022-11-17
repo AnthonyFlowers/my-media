@@ -118,4 +118,7 @@ public class AppUser implements UserDetails {
     public List<Movie> getMovies() {
         return movies;
     }
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
+    }
 }

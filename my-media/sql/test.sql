@@ -101,7 +101,7 @@ insert into app_role (`name`) values
 delimiter //
 create procedure set_known_good_state()
 begin
-    set sql_safe_updates = 0;
+set sql_safe_updates = 0;
 
 delete from app_user_role;
     alter table app_user_role auto_increment = 1;
