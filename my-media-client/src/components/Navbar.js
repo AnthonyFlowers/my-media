@@ -1,39 +1,55 @@
 import { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import AuthContext from './AuthContext';
 
 
 function Navbar() {
     const defaultNav = [
-        { name: 'Home', href: '/' },
-        { name: 'Movies', href: '/movies' }
+        { name: 'Home', href: '/', active: false },
+        { name: 'Movies', href: '/movies', active: false }
     ];
     const { user, logout } = useContext(AuthContext);
-    const [ pageNav, setPageNav ] = useState(defaultNav);
+    const [pageNav, setPageNav] = useState(defaultNav);
+    const location = useLocation();
 
     useEffect(() => {
-        var nextPageNav = [...defaultNav].concat((user ? [
-            { name: 'Logout', href: '/logout' }
-        ] : [
-            { name: 'Login', href: '/login' },
-            { name: 'Create Account', href: '/register' }
-        ]));
+        var nextPageNav = [...defaultNav];
+        nextPageNav.forEach(n => {
+            if (location.pathname === (n.href)) {
+                n.active = true;
+            } else {
+                n.active = false;
+            }
+        })
         setPageNav(nextPageNav);
-    }, [user]);
+    }, [user, location]);
+
+
 
     return (
-        <nav>
-            <div className='mx-auto'>
-                <div className='flex flex-1 items-center justify-start'>
-                    {
-                        pageNav.map((item) => (
-                            <Link to={item.href} key={item.name}>
-                                <button >{item.name}</button>
+        <nav className="bg-white rounded-lg p-5">
+            <ul className="flex mx-5">
+                {
+                    pageNav.map((item) => (
+                        <li className="mr-3" key={item.name}>
+                            <Link className={`btn-nav ${item.active ? "btn-nav-active" : "btn-nav-selectable"}`}
+                                to={item.href}>
+                                {item.name}
                             </Link>
-                        ))
-                    }
-                </div>
-            </div>
+                        </li>
+                    ))
+                }
+                {
+                    (user ? <button className="btn-nav btn-nav-selectable bg-yellow-200" onClick={logout}>Logout</button> :
+                        <li className="mr-3">
+                            <Link
+                                className={`btn-nav ${location.pathname === "/login" ? "btn-nav-active" : "btn-nav-selectable"}`}
+                                to="/login">
+                                Login
+                            </Link>
+                        </li>)
+                }
+            </ul>
         </nav>
     )
 

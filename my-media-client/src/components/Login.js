@@ -1,7 +1,8 @@
-import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { authenticate } from "../services/authenticationService";
 import AuthContext from "./AuthContext";
+import Home from "./Home";
 
 function Login() {
 
@@ -12,7 +13,7 @@ function Login() {
 
     const { user, login } = useContext(AuthContext);
     const [errs, setErrs] = useState([]);
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     function handleChange(evt) {
         evt.preventDefault();
@@ -30,12 +31,12 @@ function Login() {
                 login(user);
                 navigate(-1);
             })
-            .catch(console.log);
+            .catch(setErrs);
     }
 
     return (
-        <div className="w-full max-w-xs">
-            <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div className="flex items-center justify-center">
+            <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-10 w-full max-w-xs m-5">
                 <div className="mb-6">
                     <label className="block mb-2" htmlFor="username">Username</label>
                     <input
@@ -51,7 +52,9 @@ function Login() {
                 </div>
                 <div className="flex items-center justify-between">
                     <button className="btn btn-blue" type="submit">Login</button>
-                    <button className="btn btn-yellow">Create Account</button>
+                    <Link to="/register">
+                        <button className="btn btn-yellow">Create Account</button>
+                    </Link>
                 </div>
             </form>
         </div>

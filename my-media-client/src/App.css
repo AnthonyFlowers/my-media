@@ -21,3 +21,20 @@
 .btn-yellow:hover {
     @apply bg-yellow-700
 }
+
+
+.btn-nav {
+    @apply inline-block border rounded py-1 px-3;
+}
+
+.btn-nav-selectable { 
+    @apply border-gray-100 hover:border-gray-200 text-black hover:bg-gray-200;
+}
+
+.btn-nav-active {
+    @apply border-gray-600 bg-gray-400 text-white;
+}
+
+body {
+    @apply bg-gray-300;
+}

@@ -25,10 +25,13 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST,
                         "/auth/create_account",
-                        "/auth",
-                        "/auth/refresh_token")
+                        "/auth")
                 .permitAll()
-                .antMatchers(HttpMethod.GET, "/api/movie").permitAll()
+                .antMatchers(HttpMethod.POST, "/auth/refresh_token")
+                .authenticated()
+                .antMatchers(HttpMethod.GET,
+                        "/api/movie",
+                        "/api/movie/all").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/movie/*").authenticated()
                 .antMatchers("/**").denyAll()
                 .and()

@@ -1,11 +1,13 @@
+import { SERVER_URL } from "./API";
+
 export const LOCAL_STORAGE_TOKEN_KEY = "mymedia-jwt-token";
-const AUTH_URL = "http://localhost:8080";
+const AUTH_URL = `${SERVER_URL}/auth`;
 
 function makeUser(body) {
     const sections = body.jwt.split(".");
     const json = atob(sections[1]);
     const user = JSON.parse(json);
-    localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, body.jwt_token);
+    localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, body.jwt);
     return user;
 }
 
@@ -18,11 +20,11 @@ export async function authenticate(credentials) {
         body: JSON.stringify(credentials)
     }
 
-    const response = await fetch(`${AUTH_URL}/auth`, init);
+    const response = await fetch(`${AUTH_URL}`, init);
     if (response.ok) {
         const body = await response.json();
         return makeUser(body);
-    } else if (response.status === 403){
+    } else if (response.status === 403) {
         return Promise.reject(["Could not login. Username/Password combination incorrect."]);
     }
 }
@@ -37,10 +39,10 @@ export async function register(credentials) {
     };
 
     const response = await fetch(`${AUTH_URL}/register`, init);
-    if(response.ok) {
+    if (response.ok) {
         const body = await response.json();
         return makeUser(body);
-    } else if (response.status === 400){
+    } else if (response.status === 400) {
         const body = await response.json();
         return Promise.reject([body]);
     } else if (response.status === 409) {
@@ -49,9 +51,9 @@ export async function register(credentials) {
     return Promise.reject(["Error registering user: " + response.status]);
 }
 
-export async function refresh(){
-    if(!localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)){
-        return Promise.resolve(["no key in storage"]);
+export async function refresh() {
+    if (!localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)) {
+        return Promise.reject(["no key in storage"]);
     }
     const init = {
         method: "POST",
@@ -59,12 +61,12 @@ export async function refresh(){
             "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`
         }
     }
-    const response = await fetch(`${AUTH_URL}/refresh`, init);
-    if(response.ok) {
+    const response = await fetch(`${AUTH_URL}/refresh_token`, init);
+    if (response.ok) {
         const body = await response.json();
         return makeUser(body);
     } else if (response.status === 403) {
-        return Promise.reject(["authentication error no refresh. token may have expired"]);
+        return Promise.reject(["authentication error not refreshed. token may have expired"]);
     }
     return Promise.reject(["there was a problem refreshing your token"]);
 }

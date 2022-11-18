@@ -34,6 +34,12 @@ public class MovieController {
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllMovies() {
+        List<Movie> movies = movieService.findAllMovies();
+        return new ResponseEntity<>(movies, HttpStatus.OK);
+    }
+
     @Transactional
     @PostMapping("/add")
     public ResponseEntity<?> addMovieToUser(@AuthenticationPrincipal AppUser appUser, @RequestBody Movie movie) {

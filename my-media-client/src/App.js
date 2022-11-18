@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import AuthContext from './components/AuthContext';
 import Home from './components/Home';
-import Login from './components/Login';
+import Login, { Logout } from './components/Login';
 import Movies from './components/Movies';
 import Navbar from './components/Navbar';
 import { LOCAL_STORAGE_TOKEN_KEY, refresh } from './services/authenticationService';
@@ -25,19 +25,22 @@ function App() {
     logout
   }
 
-  useEffect(()=> {
-    refresh()
-    .then(login)
-    .catch(()=>{
-      logout();
-  
-    })
+  useEffect(() => {
+    if (!refreshed) {
+      refresh()
+        .then(login)
+        .catch((ex) => {
+          logout();
+          console.log(ex);
+          setRefreshed(true);
+        });
+    }
   }, [refreshed]);
 
   return (
     <AuthContext.Provider value={auth}>
       <Router>
-        <div>
+        <div className="my-5 mx-10">
           <Navbar />
           <Routes>
             <Route path='/' element={<Home />} />
