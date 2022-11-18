@@ -1,23 +1,25 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthContext from './AuthContext';
 
-function Navbar() {
-    const { user, logout } = useContext(AuthContext);
 
-    const pageNav = [
+function Navbar() {
+    const defaultNav = [
         { name: 'Home', href: '/' },
         { name: 'Movies', href: '/movies' }
     ];
+    const { user, logout } = useContext(AuthContext);
+    const [ pageNav, setPageNav ] = useState(defaultNav);
 
-    const authNav = [
-        { name: 'Logout', href: '/logout' }
-    ];
-
-    const nonAuthNav = [
-        { name: 'Login', href: '/login' },
-        { name: 'Create Account', href: '/register' }
-    ];
+    useEffect(() => {
+        var nextPageNav = [...defaultNav].concat((user ? [
+            { name: 'Logout', href: '/logout' }
+        ] : [
+            { name: 'Login', href: '/login' },
+            { name: 'Create Account', href: '/register' }
+        ]));
+        setPageNav(nextPageNav);
+    }, [user]);
 
     return (
         <nav>

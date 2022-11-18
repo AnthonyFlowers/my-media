@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import AuthContext from './components/AuthContext';
 import Home from './components/Home';
+import Login from './components/Login';
 import Movies from './components/Movies';
 import Navbar from './components/Navbar';
-import { LOCAL_STORAGE_TOKEN_KEY } from './services/authenticationService';
+import { LOCAL_STORAGE_TOKEN_KEY, refresh } from './services/authenticationService';
 
 
 function App() {
@@ -24,6 +25,15 @@ function App() {
     logout
   }
 
+  useEffect(()=> {
+    refresh()
+    .then(login)
+    .catch(()=>{
+      logout();
+  
+    })
+  }, [refreshed]);
+
   return (
     <AuthContext.Provider value={auth}>
       <Router>
@@ -32,6 +42,7 @@ function App() {
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/movies' element={<Movies />} />
+            <Route path='/login' element={<Login />} />
           </Routes>
         </div>
       </Router>

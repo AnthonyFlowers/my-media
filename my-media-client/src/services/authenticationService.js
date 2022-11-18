@@ -2,7 +2,7 @@ export const LOCAL_STORAGE_TOKEN_KEY = "mymedia-jwt-token";
 const AUTH_URL = "http://localhost:8080";
 
 function makeUser(body) {
-    const sections = body.jwt_token.split(".");
+    const sections = body.jwt.split(".");
     const json = atob(sections[1]);
     const user = JSON.parse(json);
     localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, body.jwt_token);
@@ -18,12 +18,12 @@ export async function authenticate(credentials) {
         body: JSON.stringify(credentials)
     }
 
-    const response = await fetch(`${AUTH_URL}/authenticate`, init);
+    const response = await fetch(`${AUTH_URL}/auth`, init);
     if (response.ok) {
         const body = await response.json();
         return makeUser(body);
     } else if (response.status === 403){
-        return Promise.reject(["Could not login. Eamil/Password combination incorrect."]);
+        return Promise.reject(["Could not login. Username/Password combination incorrect."]);
     }
 }
 
@@ -44,7 +44,7 @@ export async function register(credentials) {
         const body = await response.json();
         return Promise.reject([body]);
     } else if (response.status === 409) {
-        return Promise.reject(["User with that email already exists."]);
+        return Promise.reject(["User with that username already exists."]);
     }
     return Promise.reject(["Error registering user: " + response.status]);
 }
