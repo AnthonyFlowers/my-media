@@ -20,3 +20,5 @@ select username, movie_name from app_user a join app_user_movie am join movie m
 select username, tv_show_name from app_user a join app_user_tv_show ats join tv_show ts
     on a.app_user_id = ats.app_user_id
     and ats.tv_show_id = ts.tv_show_id;
+
+select * from movie;

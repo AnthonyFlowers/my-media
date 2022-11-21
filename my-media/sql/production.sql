@@ -6,7 +6,8 @@ create table movie (
     movie_id int primary key auto_increment,
     movie_name varchar(256) not null,
     movie_year int,
-    movie_length int
+    movie_length int,
+    movie_overview varchar(2048)
 );
 
 create table tv_show (
