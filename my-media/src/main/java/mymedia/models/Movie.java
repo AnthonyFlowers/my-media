@@ -21,6 +21,8 @@ public class Movie {
     @Min(0)
     private int movieLength;
 
+    private String movieOverview;
+
     @ManyToMany
     @JoinTable(name = "app_user_movie",
             joinColumns = @JoinColumn(name = "movie_id"),
@@ -61,5 +63,13 @@ public class Movie {
 
     public void addUser(AppUser appUser) {
         users.add(appUser);
+    }
+
+    public String getMovieOverview() {
+        return movieOverview;
+    }
+
+    public void setMovieOverview(String movieOverview) {
+        this.movieOverview = movieOverview;
     }
 }
