@@ -3,13 +3,21 @@ import { LOCAL_STORAGE_TOKEN_KEY } from "./authenticationService"
 
 const movieApi = `${SERVER_URL}/api/movie`;
 
-export async function getMovies() {
-    const response = await fetch(movieApi);
+export async function getMovies(page) {
+    if (page == null) {
+        page = 1;
+    }
+    page = Math.max(0, page - 1)
+    const response = await fetch(`${movieApi}/${page}`);
     return movieQueryResponse(response, "error finding movies");
 }
 
-export async function getUserMovies() {
-    const response = await fetch(`${movieApi}/user`, {
+export async function getUserMovies(page) {
+    if (page == null) {
+        page = 1;
+    }
+    page = Math.max(0, page - 1)
+    const response = await fetch(`${movieApi}/user/${page}`, {
         headers: {
             "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`
         }

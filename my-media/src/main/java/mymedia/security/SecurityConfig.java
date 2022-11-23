@@ -29,10 +29,10 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/auth/refresh_token")
                 .authenticated()
                 .antMatchers(HttpMethod.GET,
-                        "/api/movie",
+                        "/api/movie/*",
                         "/api/movie/recent/*").permitAll()
                 .antMatchers("/api/movie/**").authenticated()
-//                .antMatchers("/**").denyAll()
+                .antMatchers("/**").denyAll()
                 .and()
                 .addFilter(new JwtRequestFilter(authenticationManager(authConfig), converter))
                 .sessionManagement()

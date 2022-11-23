@@ -25,25 +25,23 @@ public class MovieController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public ResponseEntity<?> getMovies() {
-        Result<Page<Movie>> result = movieService.findMoviesPaged(0);
+    @GetMapping("/{page}")
+    public ResponseEntity<?> getMovies(@PathVariable(required = false) Integer page) {
+        if(page == null){
+            page = 0;
+        }
+        Result<Page<Movie>> result = movieService.findMoviesPaged(page);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
         }
         return ErrorResponse.build(result);
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<?> getUserMovies(@AuthenticationPrincipal AppUser appUser) {
-        Page<Movie> movies = movieService.findUserMovies(0, appUser);
-        return new ResponseEntity<>(movies, HttpStatus.OK);
-    }
-
     @GetMapping("/user/{page}")
     public ResponseEntity<?> getUserMovies(
             @AuthenticationPrincipal AppUser appUser,
-            @PathVariable int page) {
+            @PathVariable(required = false) Integer page) {
+        page = page == null ? 0: page;
         Page<Movie> movies = movieService.findUserMovies(page, appUser);
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
