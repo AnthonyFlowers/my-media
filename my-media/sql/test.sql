@@ -102,29 +102,29 @@ insert into app_role (`name`) values
 delimiter //
 create procedure set_known_good_state()
 begin
-set sql_safe_updates = 0;
+	set sql_safe_updates = 0;
 
-delete from app_user_role;
-    alter table app_user_role auto_increment = 1;
-delete from app_user_movie;
-delete from app_user_tv_show;
-delete from app_user;
-    alter table app_user auto_increment = 1;
-delete from tv_show_season_tv_show;
-    alter table tv_show_season_tv_show auto_increment = 1;
-delete from tv_show_episode;
-    alter table tv_show_episode auto_increment = 1;
-delete from tv_show_season;
-    alter table tv_show_season auto_increment = 1;
-delete from tv_show;
-    alter table tv_show auto_increment = 1;
-delete from movie;
-    alter table movie auto_increment = 1;
+	delete from app_user_role;
+	alter table app_user_role auto_increment = 1;
+	delete from app_user_movie;
+	delete from app_user_tv_show;
+	delete from app_user;
+	alter table app_user auto_increment = 1;
+	delete from tv_show_season_tv_show;
+	alter table tv_show_season_tv_show auto_increment = 1;
+	delete from tv_show_episode;
+	alter table tv_show_episode auto_increment = 1;
+	delete from tv_show_season;
+	alter table tv_show_season auto_increment = 1;
+	delete from tv_show;
+	alter table tv_show auto_increment = 1;
+	delete from movie;
+	alter table movie auto_increment = 1;
 
-    insert into movie (movie_name, movie_year, movie_length) values
-        ('Iron Man', 2008, 126), -- test read
-        ('Iron Man 2', 2010, 125), -- test update
-        ('Iron Man 3', 2013, 130); -- test delete
+    insert into movie (movie_name, movie_year, movie_length, movie_overview) values
+        ('Iron Man', 2008, 126, 'After being held captive in an Afghan cave, billionaire engineer Tony Stark creates a unique weaponized suit of armor to fight evil.'), -- test read
+        ('Iron Man 2', 2010, 125, 'With the world now aware of his dual life as the armored superhero Iron Man, billionaire inventor Tony Stark faces pressure from the government, the press and the public to share his technology with the military. Unwilling to let go of his invention, Stark, with Pepper Potts and James ''Rhodey'' Rhodes at his side, must forge new alliances – and confront powerful enemies.'), -- test update
+        ('Iron Man 3', 2013, 130, 'When Tony Stark''s world is torn apart by a formidable terrorist called the Mandarin, he starts an odyssey of rebuilding and retribution.'); -- test delete
         -- test create ('Spider-Man', null, 121)
 
     insert into tv_show (tv_show_name) values

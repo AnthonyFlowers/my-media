@@ -1,5 +1,5 @@
 use my_media;
-use my_media_test;
+-- use my_media_test;
 call set_known_good_state();
 select * from app_user;
 select * from app_user_role;
@@ -20,5 +20,8 @@ select username, movie_name from app_user a join app_user_movie am join movie m
 select username, tv_show_name from app_user a join app_user_tv_show ats join tv_show ts
     on a.app_user_id = ats.app_user_id
     and ats.tv_show_id = ts.tv_show_id;
-
 select * from movie;
+select movie_id from movie
+where movie_name = "Iron Man"
+and movie_year = 2008;
+select count(*) from movie;

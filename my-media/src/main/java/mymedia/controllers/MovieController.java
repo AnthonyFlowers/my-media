@@ -5,14 +5,12 @@ import mymedia.domain.Result;
 import mymedia.models.Movie;
 import mymedia.security.AppUser;
 import mymedia.security.AppUserService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -29,15 +27,27 @@ public class MovieController {
     }
 
     @GetMapping
+    public ResponseEntity<?> getMovies() {
+        Result<Page<Movie>> result = movieService.findMoviesPaged(0);
+        if(result.isSuccess()) {
+            return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
+        }
+        return ErrorResponse.build(result);
+    }
+
+    @GetMapping("/user")
     public ResponseEntity<?> getUserMovies(@AuthenticationPrincipal AppUser appUser) {
         List<Movie> movies = movieService.findUserMovies(appUser);
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllMovies() {
-        List<Movie> movies = movieService.findAllMovies();
-        return new ResponseEntity<>(movies, HttpStatus.OK);
+    @GetMapping("/recent/{page}")
+    public ResponseEntity<?> getRecentMovies(@PathVariable("page") int page) {
+        Result<Page<Movie>> result = movieService.findMoviesPaged(page);
+        if(result.isSuccess()){
+            return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
+        }
+        return ErrorResponse.build(result);
     }
 
     @Transactional

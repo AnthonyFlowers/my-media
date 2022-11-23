@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -24,8 +25,8 @@ class MovieServiceTest {
     void shouldFindAllMovies() {
         List<Movie> movies = getMovieList();
         when(repository.findAll()).thenReturn(movies);
-        List<Movie> allMovies = service.findAllMovies();
-        assertEquals(movies, allMovies);
+        Page<Movie> allMovies = service.findAllMovies();
+        assertEquals(movies, allMovies.stream().toList());
     }
 
     private static List<Movie> getMovieList() {

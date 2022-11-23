@@ -15,14 +15,8 @@ delete from tv_show_season;
 alter table tv_show_season auto_increment = 1;
 delete from tv_show;
 alter table tv_show auto_increment = 1;
-delete from movie;
-alter table movie auto_increment = 1;
-
-insert into movie (movie_name, movie_year, movie_length) values
-    ('Iron Man', 2008, 126), -- test read
-    ('Iron Man 2', 2010, 125), -- test update
-    ('Iron Man 3', 2013, 130); -- test delete
-    -- test create ('Spider-Man', null, 121)
+-- delete from movie;
+-- alter table movie auto_increment = 1;
 
 insert into tv_show (tv_show_name) values
     ('Rick and Morty'), -- test read
@@ -61,7 +55,9 @@ insert into app_user (username, password_hash) values
     ('ashketchum', '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa');
 
 insert into app_user_movie (app_user_id, movie_id) values
-    (1, 1),
+    (1, (select movie_id from movie
+where movie_name = "Iron Man"
+and movie_year = 2008)),
     (1, 2),
     (2, 1);
 

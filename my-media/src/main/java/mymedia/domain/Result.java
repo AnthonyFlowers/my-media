@@ -7,8 +7,10 @@ public class Result<T> {
 
     private final List<String> messages = new ArrayList<>();
     private T payload;
+    private ResultType type = ResultType.SUCCESS;
 
-    public void addMessage(ActionStatus resultActionStatus, String message) {
+    public void addMessage(ResultType resultType, String message) {
+        type = resultType;
         messages.add(message);
     }
 
@@ -26,5 +28,9 @@ public class Result<T> {
 
     public T getPayload() {
         return payload;
+    }
+
+    public ResultType getType() {
+        return type;
     }
 }

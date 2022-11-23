@@ -3,8 +3,10 @@ package mymedia.domain;
 import mymedia.data.MovieRepository;
 import mymedia.models.Movie;
 import mymedia.security.AppUser;
-import mymedia.security.AppUserRepository;
 import mymedia.security.AppUserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Validator;
@@ -23,17 +25,36 @@ public class MovieService {
         this.validator = validator;
     }
 
-    public List<Movie> findAllMovies() {
-        return movieRepository.findAll();
+    public Result<Page<Movie>> findMoviesPaged(int pageNumber) {
+        Result<Page<Movie>> result = new Result<>();
+        if (pageNumber < 0) {
+            result.addMessage(ResultType.INVALID, "movie page index can not be negative");
+        }
+        if (result.isSuccess()) {
+            result.setPayload(movieRepository.findAll(PageRequest.of(
+                    pageNumber, 100,
+                    Sort.by(Sort.Direction.DESC, "movieYear")
+            )));
+        }
+        return result;
+    }
+
+    public Page<Movie> findAllMovies() {
+        return movieRepository.findAll(PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "movieYear")));
     }
 
     public List<Movie> findUserMovies(AppUser user) {
-        if(user == null) return findAllMovies();
         return movieRepository.findByUsers(user);
     }
 
     public Movie findById(int movieId) {
         return movieRepository.findById(movieId).orElse(null);
+    }
+
+    public List<Movie> findRecentMovies() {
+        return movieRepository.findAll(PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "movieYear")))
+                .stream()
+                .toList();
     }
 
     public void update(Movie movie) {

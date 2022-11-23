@@ -1,5 +1,5 @@
 @url = http://localhost:8080
-@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJteW1lZGlhIiwiYXBwX3VzZXJfaWQiOjEsImF1dGhvcml0aWVzIjoiQURNSU4iLCJzdWIiOiJqb2huc21pdGgiLCJleHAiOjE2Njg3MjI2Mzd9.inUEj9mja8ckBx8nTwJit1PFW4qxMqlJOmiiXNhYGTo
+@token = eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJteW1lZGlhIiwiYXBwX3VzZXJfaWQiOjEsImF1dGhvcml0aWVzIjoiQURNSU4iLCJzdWIiOiJqb2huc21pdGgiLCJleHAiOjE2NjkyMjY5NzN9.HgIY_vyScqOEkqIF18PWNR1wgb-doko3f6wCkHk0B4s
 
 ###
 
@@ -43,4 +43,7 @@ Content-Type: application/json
 
 ###
 
-GET
+GET {{url}}/api/movie/recent/1 HTTP/1.1
+# Authorization: Bearer {{token}}
+
+###

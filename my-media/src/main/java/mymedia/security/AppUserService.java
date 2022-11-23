@@ -1,17 +1,13 @@
 package mymedia.security;
 
-import mymedia.domain.ActionStatus;
+import mymedia.domain.ResultType;
 import mymedia.domain.Result;
-import mymedia.models.Movie;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.List;
 
 @Service
 public class AppUserService implements UserDetailsService {
@@ -55,7 +51,7 @@ public class AppUserService implements UserDetailsService {
         try {
             repository.save(user);
         } catch (DuplicateKeyException e){
-            result.addMessage(ActionStatus.INVALID, "That username already exists");
+            result.addMessage(ResultType.INVALID, "That username already exists");
         }
         if(result.isSuccess()) {
             result.setPayload(user);
@@ -67,19 +63,19 @@ public class AppUserService implements UserDetailsService {
     private Result<AppUser> validate(String username, String password) {
         Result<AppUser> result = new Result<>();
         if (username == null || username.isBlank()) {
-            result.addMessage(ActionStatus.INVALID, "username is required");
+            result.addMessage(ResultType.INVALID, "username is required");
             return result;
         }
         if (password == null) {
-            result.addMessage(ActionStatus.INVALID, "password is required");
+            result.addMessage(ResultType.INVALID, "password is required");
             return result;
         }
         if (username.length() > 50) {
-            result.addMessage(ActionStatus.INVALID, "username must be less than 50 characters");
+            result.addMessage(ResultType.INVALID, "username must be less than 50 characters");
         }
 
         if (!isValidPassword(password)) {
-            result.addMessage(ActionStatus.INVALID,
+            result.addMessage(ResultType.INVALID,
                     "password must be at least 8 characters, " +
                             "have one digit, a letter, and a non-digit/non-letter character");
         }

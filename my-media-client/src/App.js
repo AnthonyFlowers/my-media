@@ -6,6 +6,7 @@ import Login, { Logout } from './components/Login';
 import Movies from './components/Movies';
 import Navbar from './components/Navbar';
 import { LOCAL_STORAGE_TOKEN_KEY, refresh } from './services/authenticationService';
+import { getMovies, getRecentMovies, getUserMovies } from './services/movieService';
 
 
 function App() {
@@ -43,9 +44,13 @@ function App() {
         <div className="my-5 mx-10">
           <Navbar />
           <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/movies' element={<Movies />} />
-            <Route path='/login' element={<Login />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/movies" >
+              <Route path="/movies" element={<Movies movieQueury={getMovies} />} />
+              <Route path="/movies/user" element={<Movies movieQueury={getUserMovies} />} />
+              <Route path="/movies/recent" element={<Movies movieQueury={getRecentMovies} />} />
+            </Route>
+            <Route path="/login" element={<Login />} />
           </Routes>
         </div>
       </Router>

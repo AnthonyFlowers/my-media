@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,6 +48,10 @@ class MovieRepositoryTest {
         Movie movie = repository.findById(1).orElse(null);
         assertNotNull(movie);
         assertEquals("Iron Man", movie.getMovieName());
+        assertEquals("After being held captive in an Afghan cave, " +
+                "billionaire engineer Tony Stark creates a unique " +
+                "weaponized suit of armor to fight evil.",
+                movie.getMovieOverview());
     }
 
     @Test
@@ -69,4 +74,5 @@ class MovieRepositoryTest {
         Movie rm = repository.findById(3).orElse(null);
         assertNull(rm);
     }
+
 }
