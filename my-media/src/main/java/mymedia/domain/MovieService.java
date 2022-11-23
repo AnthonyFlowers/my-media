@@ -43,8 +43,8 @@ public class MovieService {
         return movieRepository.findAll(PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "movieYear")));
     }
 
-    public List<Movie> findUserMovies(AppUser user) {
-        return movieRepository.findByUsers(user);
+    public Page<Movie> findUserMovies(int page, AppUser user) {
+        return movieRepository.findByUsers(PageRequest.of(0, 100), user);
     }
 
     public Movie findById(int movieId) {

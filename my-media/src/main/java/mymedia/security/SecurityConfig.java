@@ -24,16 +24,15 @@ public class SecurityConfig {
         http.cors();
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST,
-                        "/auth/create_account",
-                        "/auth")
+                        "/auth/create_account", "/auth")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/auth/refresh_token")
                 .authenticated()
                 .antMatchers(HttpMethod.GET,
                         "/api/movie",
                         "/api/movie/recent/*").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/movie/*").authenticated()
-                .antMatchers("/**").denyAll()
+                .antMatchers("/api/movie/**").authenticated()
+//                .antMatchers("/**").denyAll()
                 .and()
                 .addFilter(new JwtRequestFilter(authenticationManager(authConfig), converter))
                 .sessionManagement()

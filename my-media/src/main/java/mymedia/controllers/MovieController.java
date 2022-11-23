@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 @Controller
 @RequestMapping("/api/movie")
@@ -29,7 +28,7 @@ public class MovieController {
     @GetMapping
     public ResponseEntity<?> getMovies() {
         Result<Page<Movie>> result = movieService.findMoviesPaged(0);
-        if(result.isSuccess()) {
+        if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
         }
         return ErrorResponse.build(result);
@@ -37,14 +36,22 @@ public class MovieController {
 
     @GetMapping("/user")
     public ResponseEntity<?> getUserMovies(@AuthenticationPrincipal AppUser appUser) {
-        List<Movie> movies = movieService.findUserMovies(appUser);
+        Page<Movie> movies = movieService.findUserMovies(0, appUser);
+        return new ResponseEntity<>(movies, HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{page}")
+    public ResponseEntity<?> getUserMovies(
+            @AuthenticationPrincipal AppUser appUser,
+            @PathVariable int page) {
+        Page<Movie> movies = movieService.findUserMovies(page, appUser);
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 
     @GetMapping("/recent/{page}")
-    public ResponseEntity<?> getRecentMovies(@PathVariable("page") int page) {
+    public ResponseEntity<?> getRecentMovies(@PathVariable int page) {
         Result<Page<Movie>> result = movieService.findMoviesPaged(page);
-        if(result.isSuccess()){
+        if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
         }
         return ErrorResponse.build(result);

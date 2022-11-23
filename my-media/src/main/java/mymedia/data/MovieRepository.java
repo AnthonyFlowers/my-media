@@ -13,5 +13,5 @@ import java.util.List;
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
-    List<Movie> findByUsers(AppUser user);
+    Page<Movie> findByUsers(Pageable pageable, AppUser user);
 }

@@ -51,7 +51,7 @@ public class JwtConverter {
                     .collect(Collectors.toList()));
             return user;
         } catch (JwtException e) {
-            e.printStackTrace();
+            System.out.println("Security: JWT token exception");
         }
         return null;
     }
