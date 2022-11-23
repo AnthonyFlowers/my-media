@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import AuthContext from './components/AuthContext';
 import Home from './components/Home';
-import Login, { Logout } from './components/Login';
+import Login from './components/Login';
 import Movies from './components/Movies';
 import Navbar from './components/Navbar';
 import { LOCAL_STORAGE_TOKEN_KEY, refresh } from './services/authenticationService';

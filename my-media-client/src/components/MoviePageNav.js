@@ -1,12 +1,5 @@
-import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
 
 function MoviePageNav({ pages, setParams }) {
-    const [searchParams, setSearchParams] = useSearchParams();
-
-    useEffect(() => {
-        console.log(pages);
-    }, []);
 
     function handleMoviePage(evt) {
         if (evt.target.value > pages.end || evt.target.value < pages.start) {

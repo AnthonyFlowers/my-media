@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { authenticate } from "../services/authenticationService";
 import AuthContext from "./AuthContext";
-import Home from "./Home";
 
 function Login() {
 
@@ -11,7 +10,7 @@ function Login() {
         password: ""
     });
 
-    const { user, login } = useContext(AuthContext);
+    const { login } = useContext(AuthContext);
     const [errs, setErrs] = useState([]);
     const navigate = useNavigate();
 
@@ -56,6 +55,9 @@ function Login() {
                         <button className="btn btn-yellow">Create Account</button>
                     </Link>
                 </div>
+                <div>{errs.map((e) => {
+                    return <p key={e}>{e}</p>
+                })}</div>
             </form>
         </div>
     )

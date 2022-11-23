@@ -6,7 +6,7 @@ export default function Movie({ movie }) {
             <div className="mt-2 mb-2">
                 <p className="text-gray-600">Length: {movie.movieLength} Minutes</p>
                 <p className="text-gray-600">Year: {movie.movieYear}</p>
-                <p>{movie.movieOverview}</p>
+                <p>Overview: {movie.movieOverview}</p>
             </div>
         </div>
     )
