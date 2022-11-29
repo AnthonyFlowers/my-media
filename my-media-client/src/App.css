@@ -26,6 +26,10 @@
 .btn-nav {
     @apply inline-block border rounded py-1 px-3;
 }
+nav > ul li {
+    @apply mr-3;
+
+}
 
 .btn-nav-selectable { 
     @apply border-gray-100 hover:border-gray-200 text-black hover:bg-gray-200;
