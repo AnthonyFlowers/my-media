@@ -43,6 +43,7 @@ function App() {
       <Router>
         <div className="my-5 mx-10">
           <Navbar />
+          <div className="bg-white rounded-lg p-5 my-5">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/movies" >
@@ -52,6 +53,7 @@ function App() {
             </Route>
             <Route path="/login" element={<Login />} />
           </Routes>
+          </div>
         </div>
       </Router>
     </AuthContext.Provider>

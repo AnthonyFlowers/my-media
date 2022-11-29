@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.Validator;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MovieService {
@@ -25,14 +26,18 @@ public class MovieService {
         this.validator = validator;
     }
 
-    public Result<Page<Movie>> findMoviesPaged(int pageNumber) {
+    public Result<Page<Movie>> findMoviesPaged(int pageNumber){
+        return findMoviesPaged(pageNumber, 100);
+    }
+
+    public Result<Page<Movie>> findMoviesPaged(int pageNumber, int perPage) {
         Result<Page<Movie>> result = new Result<>();
         if (pageNumber < 0) {
             result.addMessage(ResultType.INVALID, "movie page index can not be negative");
         }
         if (result.isSuccess()) {
             result.setPayload(movieRepository.findAll(PageRequest.of(
-                    pageNumber, 100,
+                    pageNumber, perPage,
                     Sort.by(Sort.Direction.DESC, "movieYear")
             )));
         }
@@ -59,5 +64,23 @@ public class MovieService {
 
     public void update(Movie movie) {
         movieRepository.save(movie);
+    }
+
+    public Result<Page<Movie>> findMoviesPaged(Map<String, String> query) {
+        Result<Page<Movie>> result = new Result<>();
+        int page = 0;
+        int pageSize = 10;
+        try{
+            if(query.containsKey("page")){
+                page = Integer.parseInt(query.get("page"));
+            }
+            if(query.containsKey("pageSize")){
+                pageSize = Integer.parseInt(query.get("pageSize"));
+            }
+        } catch (NumberFormatException e) {
+            result.addMessage(ResultType.INVALID, "Could not parse your query param");
+            return result;
+        }
+        return findMoviesPaged(page, pageSize);
     }
 }

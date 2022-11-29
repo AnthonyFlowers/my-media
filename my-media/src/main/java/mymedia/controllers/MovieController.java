@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/api/movie")
@@ -31,6 +32,15 @@ public class MovieController {
             page = 0;
         }
         Result<Page<Movie>> result = movieService.findMoviesPaged(page);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
+        }
+        return ErrorResponse.build(result);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getMovies(@RequestParam Map<String, String> query) {
+        Result<Page<Movie>> result = movieService.findMoviesPaged(query);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
         }

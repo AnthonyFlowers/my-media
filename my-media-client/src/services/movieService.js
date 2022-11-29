@@ -31,6 +31,12 @@ export async function getRecentMovies(page) {
     return movieQueryResponse(response, "error finding recent movies");
 }
 
+export async function getMoviesPageMovieCount(page, movieCount) {
+    page = Math.max(0, page - 1);
+    const response = await fetch(`${movieApi}?page=${page}&pageSize=${movieCount}`)
+    return movieQueryResponse(response, "error finding movies by page and movie count")
+}
+
 async function movieQueryResponse(response, errorMsg) {
     var errors = [];
     if (response.ok) {
