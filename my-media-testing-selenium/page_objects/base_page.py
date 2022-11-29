@@ -10,7 +10,7 @@ class BasePage:
     def __init__(self, driver: WebDriver):
         self.__selected_nav = (
             By.XPATH,
-            '//*[@id="root"]/div/nav/ul/li/a[@class="btn-nav btn-nav-active"]'
+            '//div[@id="root"]//a[@class="btn-nav btn-nav-active"]'
         )
         self._base_url = 'http://localhost:3000'
         self._driver = driver
