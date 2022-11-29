@@ -28,7 +28,8 @@ function Login() {
         authenticate(credentials)
             .then(user => {
                 login(user);
-                navigate(-1);
+                // will eventually navigate to a user page
+                navigate('/movies');
             })
             .catch(setErrs);
     }

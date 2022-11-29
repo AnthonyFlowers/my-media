@@ -31,7 +31,7 @@ function Movies({ movieQueury }) {
     }, [movieQueury, moviePage, searchParams]);
 
     return (
-        <div>
+        <div id="movies">
             <MoviePageNav pages={movieNavPages} setParams={setSearchParams} />
             <div className="grid md:grid-cols-1 lg:grid-cols-2 items-center justify-center py-4 lg:space-x-4 grid-auto-flow:row">
                 {
