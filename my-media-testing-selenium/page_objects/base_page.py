@@ -1,4 +1,5 @@
 from selenium.common import NoSuchElementException
+from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
@@ -7,6 +8,10 @@ from selenium.webdriver.support import expected_conditions as ec
 
 class BasePage:
     def __init__(self, driver: WebDriver):
+        self.__selected_nav = (
+            By.XPATH,
+            '//*[@id="root"]/div/nav/ul/li/a[@class="btn-nav btn-nav-active"]'
+        )
         self._base_url = 'http://localhost:3000'
         self._driver = driver
 
@@ -53,3 +58,6 @@ class BasePage:
     def _wait_until_element_is_clickable(self, locator: tuple, time: int = 5):
         wait = WebDriverWait(self._driver, time)
         wait.until(ec.element_to_be_clickable(locator))
+
+    def get_active_nav_name(self) -> str:
+        return self._get_text(self.__selected_nav, 3)

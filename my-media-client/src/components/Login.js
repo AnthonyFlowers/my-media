@@ -51,12 +51,12 @@ function Login() {
                         onChange={handleChange} value={credentials['password']} />
                 </div>
                 <div className="flex items-center justify-between">
-                    <button className="btn btn-blue" type="submit">Login</button>
+                    <button id="login" className="btn btn-blue" type="submit">Login</button>
                     <Link to="/register">
                         <button className="btn btn-yellow">Create Account</button>
                     </Link>
                 </div>
-                <div>{errs.map((e) => {
+                <div id="errorDiv">{errs.map((e) => {
                     return <p key={e}>{e}</p>
                 })}</div>
             </form>
