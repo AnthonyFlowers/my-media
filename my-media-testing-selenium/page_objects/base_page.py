@@ -1,9 +1,18 @@
+from enum import Enum
+
 from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
+
+
+class NavItems(Enum):
+    HOME = (By.XPATH, '//a[@href="/"]')
+    MOVIES = (By.XPATH, '//a[@href="/movies"]')
+    TV_SHOWS = (By.XPATH, '//a[@href="/tv-shows"]')
+    PROFILE = (By.XPATH, '//*/nav//*/a[@href="/profile"]')
 
 
 class BasePage:
@@ -60,4 +69,31 @@ class BasePage:
         wait.until(ec.element_to_be_clickable(locator))
 
     def get_active_nav_name(self) -> str:
-        return self._get_text(self.__selected_nav, 3)
+        return self._get_text(self.__selected_nav)
+
+    def navigate_to_movies(self):
+        self._click(NavItems.MOVIES.value)
+
+    @property
+    def expected_movie_url(self):
+        return f'{self._base_url}/movies'
+
+    def navigate_to_home(self):
+        self._click(NavItems.HOME.value)
+
+    @property
+    def expected_home_url(self):
+        return f'{self._base_url}/'
+
+    def navigate_to_tv_shows(self):
+        self._click(NavItems.TV_SHOWS.value)
+
+    @property
+    def expected_tv_show_url(self):
+        return f'{self._base_url}/tv-shows'
+
+    def is_nav_item_displayed(self, nav_element: NavItems) -> bool:
+        try:
+            return self._find(nav_element.value).is_displayed()
+        except NoSuchElementException:
+            return False

@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 
-from page_objects.base_page import BasePage
+from page_objects.base_page import BasePage, NavItems
 
 
 class LoggedInPage(BasePage):
@@ -15,3 +15,4 @@ class LoggedInPage(BasePage):
 
     def wait_for_movies(self, time: int = 10):
         super()._wait_until_element_is_visible(self.__movies_div, time)
+

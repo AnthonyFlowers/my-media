@@ -5,6 +5,7 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Movies from './components/Movies';
 import Navbar from './components/Navbar';
+import Profile from './components/Profile';
 import { LOCAL_STORAGE_TOKEN_KEY, refresh } from './services/authenticationService';
 import { getMovies, getRecentMovies, getUserMovies } from './services/movieService';
 
@@ -50,6 +51,9 @@ function App() {
               <Route path="/movies" element={<Movies movieQueury={getMovies} />} />
               <Route path="/movies/user" element={<Movies movieQueury={getUserMovies} />} />
               <Route path="/movies/recent" element={<Movies movieQueury={getRecentMovies} />} />
+            </Route>
+            <Route path="/profile">
+              <Route path="/profile" element={<Profile />} />
             </Route>
             <Route path="/login" element={<Login />} />
           </Routes>

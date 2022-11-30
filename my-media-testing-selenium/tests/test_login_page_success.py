@@ -1,5 +1,6 @@
 import pytest
 
+from page_objects.base_page import NavItems
 from page_objects.logged_in_page import LoggedInPage
 from page_objects.login_page import LoginPage
 
@@ -17,3 +18,5 @@ class TestLoginSuccess:
         logged_in_page.wait_for_movies(1)
         assert logged_in_page.get_active_nav_name() == 'Movies', \
             'the "Movies" nav element should be active'
+        assert logged_in_page.is_nav_item_displayed(NavItems.PROFILE), \
+            'after a successful login the profile nav item should be visible'

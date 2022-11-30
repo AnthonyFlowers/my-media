@@ -12,12 +12,10 @@ export async function getMovies(page) {
     return movieQueryResponse(response, "error finding movies");
 }
 
-export async function getUserMovies(page) {
-    if (page == null) {
-        page = 1;
-    }
-    page = Math.max(0, page - 1)
-    const response = await fetch(`${movieApi}/user/${page}`, {
+export async function getUserMovies(page = 1, pageSize = 10) {
+    page = Math.max(0, page - 1);
+    pageSize = Math.max(10, pageSize);
+    const response = await fetch(`${movieApi}/user?page=${page}&pageSize=${pageSize}`, {
         headers: {
             "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`
         }

@@ -42,3 +42,8 @@ nav > ul li {
 body {
     @apply bg-gray-300;
 }
+
+/* high contrast for designing */
+.watermelon {
+    @apply bg-red-400 border-2 border-green-400;
+}

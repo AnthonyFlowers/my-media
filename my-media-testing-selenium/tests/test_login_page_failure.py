@@ -1,5 +1,6 @@
 import pytest
 
+from page_objects.base_page import NavItems
 from page_objects.login_page import LoginPage
 
 
@@ -30,3 +31,5 @@ class TestLoginFailure:
             'unexpected url for login page'
         assert login_page.login_error_text == 'Could not login. Username/Password combination incorrect.', \
             'unexpected login error'
+        assert not login_page.is_nav_item_displayed(NavItems.PROFILE), \
+            'profile nav item should not be visible if not logged in'

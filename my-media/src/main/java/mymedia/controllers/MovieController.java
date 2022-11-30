@@ -47,12 +47,10 @@ public class MovieController {
         return ErrorResponse.build(result);
     }
 
-    @GetMapping("/user/{page}")
+    @GetMapping("/user")
     public ResponseEntity<?> getUserMovies(
-            @AuthenticationPrincipal AppUser appUser,
-            @PathVariable(required = false) Integer page) {
-        page = page == null ? 0: page;
-        Page<Movie> movies = movieService.findUserMovies(page, appUser);
+            @AuthenticationPrincipal AppUser appUser, @RequestParam Map<String, String> query) {
+        Page<Movie> movies = movieService.findUserMovies(query, appUser);
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 

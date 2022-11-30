@@ -1,5 +1,5 @@
 
-export default function Movie({ movie }) {
+function Movie({ movie }) {
     return (
         <div className="bg-gray-100 p-10 my-2 rounded-lg shadow-md">
             <h1 className="text-xl font-bold">{movie.movieName}</h1>
@@ -12,6 +12,8 @@ export default function Movie({ movie }) {
     )
 }
 
+export default Movie;
+
 export function SmallMovie({ movie }) {
     return (
         <div>
@@ -22,5 +24,11 @@ export function SmallMovie({ movie }) {
                 <p>Overview: {movie.movieOverview}</p>
             </div>
         </div>
+    )
+}
+
+export function ListMovie({movie}) {
+    return (
+        <li>{movie.movieName}, Year: {movie.movieYear}, Length: {movie.movieLength}</li>
     )
 }

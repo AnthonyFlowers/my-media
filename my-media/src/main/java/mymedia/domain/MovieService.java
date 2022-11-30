@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Validator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,8 +49,11 @@ public class MovieService {
         return movieRepository.findAll(PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "movieYear")));
     }
 
-    public Page<Movie> findUserMovies(int page, AppUser user) {
-        return movieRepository.findByUsers(PageRequest.of(0, 100), user);
+    public Page<Movie> findUserMovies(Map<String, String> query, AppUser user) {
+        Map<MovieQueryParam, Integer> parsedQuery = parseMovieParams(query);
+        int page = parsedQuery.getOrDefault(MovieQueryParam.PAGE, 0);
+        int pageSize = parsedQuery.getOrDefault(MovieQueryParam.PAGE_SIZE, 100);
+        return movieRepository.findByUsers(PageRequest.of(page, pageSize), user);
     }
 
     public Movie findById(int movieId) {
@@ -68,19 +72,19 @@ public class MovieService {
 
     public Result<Page<Movie>> findMoviesPaged(Map<String, String> query) {
         Result<Page<Movie>> result = new Result<>();
-        int page = 0;
-        int pageSize = 10;
-        try{
-            if(query.containsKey("page")){
-                page = Integer.parseInt(query.get("page"));
-            }
-            if(query.containsKey("pageSize")){
-                pageSize = Integer.parseInt(query.get("pageSize"));
-            }
-        } catch (NumberFormatException e) {
-            result.addMessage(ResultType.INVALID, "Could not parse your query param");
-            return result;
-        }
+        Map<MovieQueryParam, Integer> parsedQuery = parseMovieParams(query);
+        int page = parsedQuery.getOrDefault(MovieQueryParam.PAGE, 0);
+        int pageSize = parsedQuery.getOrDefault(MovieQueryParam.PAGE_SIZE, 10);
         return findMoviesPaged(page, pageSize);
+    }
+
+    private Map<MovieQueryParam, Integer> parseMovieParams(Map<String, String> query) {
+        Map<MovieQueryParam, Integer> parsedQuery = new HashMap<>();
+        for (MovieQueryParam param : MovieQueryParam.values()) {
+            if(query.containsKey(param.getUrlParam())){
+                parsedQuery.put(param, Integer.parseInt(query.get(param.getUrlParam())));
+            }
+        }
+        return parsedQuery;
     }
 }

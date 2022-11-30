@@ -32,7 +32,10 @@ public class SecurityConfig {
                         "/api/movie*",
                         "/api/movie/*",
                         "/api/movie/recent/*").permitAll()
-                .antMatchers("/api/movie/**").authenticated()
+                .antMatchers(
+                        "/api/movie/*",
+                        "/api/movie/user"
+                ).authenticated()
                 .antMatchers("/**").denyAll()
                 .and()
                 .addFilter(new JwtRequestFilter(authenticationManager(authConfig), converter))
