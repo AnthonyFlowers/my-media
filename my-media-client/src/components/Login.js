@@ -29,7 +29,7 @@ function Login() {
             .then(user => {
                 login(user);
                 // will eventually navigate to a user page
-                navigate('/movies');
+                navigate('/profile');
             })
             .catch(setErrs);
     }

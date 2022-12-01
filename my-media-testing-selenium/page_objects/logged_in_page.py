@@ -6,13 +6,13 @@ from page_objects.base_page import BasePage, NavItems
 class LoggedInPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
-        self.__movies_div = (By.XPATH, '//*[@id="movies"]')
+        self.__profile_locator = (By.XPATH, )
         self._url = f'{self._base_url}/movies'
 
     @property
     def expected_url(self) -> str:
         return self._url
 
-    def wait_for_movies(self, time: int = 10):
-        super()._wait_until_element_is_visible(self.__movies_div, time)
+    def wait_for_profile_nav_item(self, time: int = 3):
+        super()._wait_until_element_is_visible(NavItems.PROFILE.value)
 
