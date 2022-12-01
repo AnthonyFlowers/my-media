@@ -1,0 +1,557 @@
+{
+	"info": {
+		"_postman_id": "4feffad6-5e70-498e-b8c2-80b1309a1fb5",
+		"name": "my-media",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24723095"
+	},
+	"item": [
+		{
+			"name": "get-movies",
+			"item": [
+				{
+					"name": "get movies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Returns paged content\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.be.an(\"object\");\r",
+									"    pm.expect(response[\"content\"]).to.be.an(\"array\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/movie",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"movie"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get 10 movies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Shoul return more than 0 movies\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const movies = response[\"content\"];\r",
+									"    pm.expect(movies).lengthOf.above(0);\r",
+									"    const movie = movies[0];\r",
+									"    if (movie){\r",
+									"        pm.collectionVariables.set(\"movieId\", movie.movieId);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/movie?page=0&pageSize=10",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"movie"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "create-account",
+			"item": [
+				{
+					"name": "create account",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Should create new user\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const jwt = response[\"jwt\"];\r",
+									"    pm.expect(jwt).to.be.a(\"string\");\r",
+									"    if (jwt) {\r",
+									"        const request = JSON.parse(pm.request.body);\r",
+									"        const newUsername = request['username'];\r",
+									"        const newPassword = request['password'];\r",
+									"        pm.collectionVariables.set(\"newUsername\", newUsername);\r",
+									"        pm.collectionVariables.set(\"newPassword\", newPassword);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept-encoding": true,
+							"connection": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{$randomUserName}}\",\r\n    \"password\": \"{{$randomPassword}}!1a\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseAuthUrl}}/create_account",
+							"host": [
+								"{{baseAuthUrl}}"
+							],
+							"path": [
+								"create_account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get auth token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Should get jwt token from api\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const jwt = response[\"jwt\"];\r",
+									"    pm.expect(jwt).to.be.a(\"string\");\r",
+									"    if (jwt) {\r",
+									"        pm.collectionVariables.set(\"accessToken\", jwt);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"accept-encoding": true,
+							"connection": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{newUsername}}\",\r\n    \"password\": \"{{newPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseAuthUrl}}",
+							"host": [
+								"{{baseAuthUrl}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh auth token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Should get a new jwt token on refresh\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const jwt = response[\"jwt\"];\r",
+									"    pm.expect(jwt).to.be.a(\"string\");\r",
+									"    pm.collectionVariables.set(\"accessToken\", jwt);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"connection": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"{{newUsername}}\",\r\n    \"password\": \"{{newPassword}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseAuthUrl}}",
+							"host": [
+								"{{baseAuthUrl}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{accessToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "add-movie",
+			"item": [
+				{
+					"name": "get movie",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Should get a single movie\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response).to.be.an(\"object\");\r",
+									"    const movies = response[\"content\"];\r",
+									"    pm.expect(movies.length).to.eql(1);\r",
+									"    const movie = movies[0];\r",
+									"    if (movie) {\r",
+									"        pm.collectionVariables.set(\"movieId\", movie.movieId);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/movie?page=0&pageSize=1",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"movie"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "pageSize",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add movie to new user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {\r",
+									"    pm.response.to.have.status(204);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"movieId\": {{movieId}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseAPIUrl}}/movie/add",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"movie",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get user movies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"New user should have more than 1 movie\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const movies = response[\"content\"];\r",
+									"    pm.expect(movies).lengthOf.greaterThan(0);\r",
+									"    const movie = movies[0];\r",
+									"    pm.expect(movie).to.be.an(\"object\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/movie/user",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"movie",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{accessToken}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseAPIUrl",
+			"value": "http://localhost:8080/api"
+		},
+		{
+			"key": "baseAuthUrl",
+			"value": "http://localhost:8080/auth",
+			"type": "string"
+		},
+		{
+			"key": "adminUsername",
+			"value": "admin username",
+			"type": "string"
+		},
+		{
+			"key": "adminPassword",
+			"value": "admin password",
+			"type": "string"
+		},
+		{
+			"key": "movieId",
+			"value": ""
+		},
+		{
+			"key": "accessToken",
+			"value": "access token"
+		},
+		{
+			"key": "newUsername",
+			"value": ""
+		},
+		{
+			"key": "newPassword",
+			"value": ""
+		}
+	]
+}

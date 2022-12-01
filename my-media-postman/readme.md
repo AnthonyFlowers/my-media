@@ -21,3 +21,6 @@
 3. Generate access key if needed
 4. Copy and use the access url in place of the collection name
 `newman run https://api.postman.com/collections/\[collection_identifier\]?access_key=\[access_key\]`
+
+## My Tests
+- Any tests in the my-media-postman directory will use collection variables for handling api location and user details
