@@ -1,7 +1,7 @@
 package mymedia.controllers;
 
-import mymedia.domain.ResultType;
 import mymedia.domain.Result;
+import mymedia.domain.ResultType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

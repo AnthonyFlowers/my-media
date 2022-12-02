@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtConverter {
-    private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private final String ISSUER = "mymedia";
     private final int EXPIRATION_MINUTES = 60;
     private final int EXPIRATION_MILLIS = EXPIRATION_MINUTES * 60 * 1000;
@@ -47,7 +47,7 @@ public class JwtConverter {
 
             AppUser user = new AppUser(userId, username, null, true);
             user.setRoles(Arrays.stream(authorities.split(","))
-                    .map(a -> new AppRole(0, a.toString()))
+                    .map(a -> new AppRole(0, a))
                     .collect(Collectors.toList()));
             return user;
         } catch (JwtException e) {

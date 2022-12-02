@@ -1,7 +1,7 @@
 package mymedia.security;
 
-import mymedia.domain.ResultType;
 import mymedia.domain.Result;
+import mymedia.domain.ResultType;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -37,7 +37,7 @@ public class AppUserService implements UserDetailsService {
         AppUser user = new AppUser(0, username, password, true);
         user.addRole(new AppRole(2, "USER"));
         user = repository.save(user);
-        if(result.isSuccess()){
+        if (result.isSuccess()) {
             result.setPayload(user);
         }
         return result;
@@ -45,15 +45,15 @@ public class AppUserService implements UserDetailsService {
 
     public Result<AppUser> update(AppUser user) {
         Result<AppUser> result = validate(user.getUsername(), user.getPassword());
-        if(user.getPassword() != null) {
+        if (user.getPassword() != null) {
             user.setPassword(encoder.encode(user.getPassword()));
         }
         try {
             repository.save(user);
-        } catch (DuplicateKeyException e){
+        } catch (DuplicateKeyException e) {
             result.addMessage(ResultType.INVALID, "That username already exists");
         }
-        if(result.isSuccess()) {
+        if (result.isSuccess()) {
             result.setPayload(user);
         }
         return result;

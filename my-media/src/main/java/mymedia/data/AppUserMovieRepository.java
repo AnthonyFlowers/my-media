@@ -1,7 +1,6 @@
 package mymedia.data;
 
 import mymedia.models.AppUserMovie;
-import mymedia.models.Movie;
 import mymedia.security.AppUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

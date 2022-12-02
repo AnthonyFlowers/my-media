@@ -29,7 +29,7 @@ public class MovieController {
 
     @GetMapping("/{page}")
     public ResponseEntity<?> getMovies(@PathVariable(required = false) Integer page) {
-        if(page == null){
+        if (page == null) {
             page = 0;
         }
         Result<Page<Movie>> result = movieService.findMovies(page);
@@ -67,11 +67,8 @@ public class MovieController {
 
     @Transactional
     @PostMapping("/add")
-    public ResponseEntity<?> addMovieToUser(@AuthenticationPrincipal AppUser appUser, @RequestBody Movie movie) {
+    public ResponseEntity<?> createUserMovieEntry(@AuthenticationPrincipal AppUser appUser, @RequestBody Movie movie) {
         movieService.createUserEntry(appUser, movie);
-//        movie = movieService.findById(movie.getMovieId());
-//        movie.addUser(appUser);
-//        movieService.update(movie);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

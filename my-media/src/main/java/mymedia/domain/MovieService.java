@@ -31,7 +31,7 @@ public class MovieService {
         this.validator = validator;
     }
 
-    public Result<Page<Movie>> findMovies(int pageNumber){
+    public Result<Page<Movie>> findMovies(int pageNumber) {
         return findMovies(pageNumber, 100);
     }
 
@@ -82,7 +82,7 @@ public class MovieService {
     private Map<MovieQueryParam, Integer> parseMovieParams(Map<String, String> query) {
         Map<MovieQueryParam, Integer> parsedQuery = new HashMap<>();
         for (MovieQueryParam param : MovieQueryParam.values()) {
-            if(query.containsKey(param.getUrlParam())){
+            if (query.containsKey(param.getUrlParam())) {
                 parsedQuery.put(param, Integer.parseInt(query.get(param.getUrlParam())));
             }
         }
