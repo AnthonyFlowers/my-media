@@ -12,10 +12,10 @@ function Profile() {
 
     useEffect(() => {
         getUserMovies()
-            .then((page)=> {
-                setUserMovies(page.content)
+            .then((page) => {
+                setUserMovies(page["content"]);
             })
-            .catch(setErrs)
+            .catch(setErrs);
     }, [user]);
 
     return (
@@ -45,7 +45,7 @@ function Profile() {
                         <ul>
                             {
                                 userMovies.map((m, i) => {
-                                    return <ListMovie key={i} movie={m} />
+                                    return <ListMovie key={i} m={m} />
                                 })
                             }
                         </ul>

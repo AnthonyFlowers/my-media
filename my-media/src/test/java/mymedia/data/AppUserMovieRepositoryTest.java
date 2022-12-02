@@ -71,4 +71,13 @@ class AppUserMovieRepositoryTest {
         assertEquals(4, savedUserMovie.getAppUserMovieId());
     }
 
+    @Test
+    void shouldUpdateEntryForJohnsmith() {
+        AppUserMovie userMovie = userMovieRepository.findByUserUsername(
+                Pageable.ofSize(1), "johnsmith").getContent().get(0);
+        userMovie.setWatched(true);
+        AppUserMovie savedMovie = userMovieRepository.save(userMovie);
+        assertTrue(savedMovie.isWatched());
+    }
+
 }

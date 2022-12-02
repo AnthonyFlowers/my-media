@@ -68,7 +68,14 @@ public class MovieController {
     @Transactional
     @PostMapping("/add")
     public ResponseEntity<?> createUserMovieEntry(@AuthenticationPrincipal AppUser appUser, @RequestBody Movie movie) {
-        movieService.createUserEntry(appUser, movie);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        AppUserMovie userMovie = movieService.createUserEntry(appUser, movie);
+        return new ResponseEntity<>(userMovie, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUserMovieEntry(
+            @AuthenticationPrincipal AppUser appUser, @RequestBody AppUserMovie userMovie) {
+        movieService.updateUserMovie(userMovie);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -44,10 +44,28 @@ export async function addMovieToUser(movie) {
         },
         body: JSON.stringify(movie)
     });
-    if(response.status === 204) {
-        return Promise.resolve("added movie");
+    if (response.status === 201) {
+        return Promise.resolve("created movie entry");
     }
     return Promise.reject(["could not add movie :("]);
+}
+
+
+export async function updateUserMovie(movie) {
+    const userMovie = {
+        movie: movie,
+        appUserMovieId: movie["appUserMovieId"],
+        watched: movie["watched"]
+    }
+    const response = await fetch(`${movieApi}/watch`, {
+        method: "PUT",
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userMovie)
+    });
+    // if(response.)
 }
 
 async function movieQueryResponse(response, errorMsg) {
@@ -68,10 +86,12 @@ async function userMovieQueryResponse(response, errorMsg) {
     var errors = [];
     if (response.ok) {
         const body = await response.json();
-        console.log(body);
         const movies = [];
         body["content"].forEach(userMovie => {
-            movies.push(userMovie["movie"]);
+            const movie = userMovie["movie"]
+            movie["entryId"] = userMovie["appUserMovieId"];
+            movie["watched"] = userMovie["watched"];
+            movies.push(movie);
         });
         return {
             content: movies,

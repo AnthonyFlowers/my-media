@@ -57,7 +57,7 @@ public class MovieService {
         Map<MovieQueryParam, Integer> parsedQuery = parseMovieParams(query);
         int page = parsedQuery.getOrDefault(MovieQueryParam.PAGE, 0);
         int pageSize = parsedQuery.getOrDefault(MovieQueryParam.PAGE_SIZE, 100);
-        return appUserMovieRepository.findMoviesByUser(PageRequest.of(page, pageSize), user);
+        return appUserMovieRepository.findAppUserMoviesByUser(PageRequest.of(page, pageSize), user);
     }
 
     public Movie findById(int movieId) {
@@ -89,10 +89,14 @@ public class MovieService {
         return parsedQuery;
     }
 
-    public void createUserEntry(AppUser user, Movie movie) {
+    public AppUserMovie createUserEntry(AppUser user, Movie movie) {
         AppUserMovie appUserMovie = new AppUserMovie();
         appUserMovie.setMovie(movie);
         appUserMovie.setUser(user);
-        appUserMovieRepository.save(appUserMovie);
+        return appUserMovieRepository.save(appUserMovie);
+    }
+
+    public void updateUserMovie(AppUserMovie userMovie) {
+        appUserMovieRepository.save(userMovie);
     }
 }

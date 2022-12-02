@@ -12,5 +12,5 @@ public interface AppUserMovieRepository extends JpaRepository<AppUserMovie, Inte
 
     Page<AppUserMovie> findByUserUsername(Pageable pageable, String username);
 
-    Page<AppUserMovie> findMoviesByUser(Pageable pageable, AppUser user);
+    Page<AppUserMovie> findAppUserMoviesByUser(Pageable pageable, AppUser user);
 }

@@ -1,10 +1,12 @@
+import { useState } from "react";
 import { addMovieToUser } from "../services/movieService";
 
 function Movie({ movie }) {
     function handleAdd() {
         addMovieToUser(movie)
-            .then(() =>{
+            .then((msg) => {
                 // show success message
+                console.log(msg)
             })
             .catch(console.log);
     }
@@ -24,21 +26,26 @@ function Movie({ movie }) {
 
 export default Movie;
 
-export function SmallMovie({ movie }) {
+export function SmallUserMovie({ movie }) {
+
     return (
-        <div>
-            <div className="m-2 text-gray-600 border">
-                <p className="font-bold">{movie.movieName}</p>
-                <p className="">Length: {movie.movieLength} Minutes</p>
-                <p className="">Year: {movie.movieYear}</p>
-                <p>Overview: {movie.movieOverview}</p>
-            </div>
+        <div className="m-2 text-gray-600 border">
+            <p className="font-bold">{movie.movieName}</p>
+            <p className="">Length: {movie.movieLength} Minutes</p>
+            <p className="">Year: {movie.movieYear}</p>
+            <p>Overview: {movie.movieOverview}</p>
         </div>
     )
 }
 
-export function ListMovie({movie}) {
+export function ListMovie({ m }) {
+    const [movie, setMovie] = useState(m);
+    function toggleWatched() {
+        const nextMovie = { ...movie };
+        nextMovie["watched"] = !nextMovie["watched"];
+        setMovie(nextMovie);
+    }
     return (
-        <li>{movie.movieName}, Year: {movie.movieYear}, Length: {movie.movieLength}</li>
+        <li><input type="checkbox" value={movie.watched}/>{movie.movieName}, Year: {movie.movieYear}, Length: {movie.movieLength}</li>
     )
 }
