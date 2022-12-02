@@ -27,11 +27,6 @@ public class AppUser implements UserDetails {
             joinColumns = @JoinColumn(name = "app_user_id"),
             inverseJoinColumns = @JoinColumn(name = "app_role_id"))
     private List<AppRole> roles;
-    @ManyToMany
-    @JoinTable(name = "app_user_movie",
-            joinColumns = @JoinColumn(name = "app_user_id"),
-            inverseJoinColumns = @JoinColumn(name = "movie_id"))
-    private List<Movie> movies;
 
     public AppUser() {
         this.roles = new ArrayList<>();
@@ -116,10 +111,4 @@ public class AppUser implements UserDetails {
         this.roles.add(user);
     }
 
-    public List<Movie> getMovies() {
-        return movies;
-    }
-    public void setMovies(List<Movie> movies) {
-        this.movies = movies;
-    }
 }

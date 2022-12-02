@@ -1,6 +1,8 @@
 package mymedia.domain;
 
+import mymedia.data.AppUserMovieRepository;
 import mymedia.data.MovieRepository;
+import mymedia.models.AppUserMovie;
 import mymedia.models.Movie;
 import mymedia.security.AppUser;
 import mymedia.security.AppUserService;
@@ -16,12 +18,15 @@ import java.util.Map;
 @Service
 public class MovieService {
     private final MovieRepository movieRepository;
+    private final AppUserMovieRepository appUserMovieRepository;
     private final AppUserService userService;
     private final Validator validator;
 
 
-    public MovieService(MovieRepository movieRepository, AppUserService userService, Validator validator) {
+    public MovieService(MovieRepository movieRepository, AppUserMovieRepository appUserMovieRepository,
+                        AppUserService userService, Validator validator) {
         this.movieRepository = movieRepository;
+        this.appUserMovieRepository = appUserMovieRepository;
         this.userService = userService;
         this.validator = validator;
     }
@@ -48,11 +53,11 @@ public class MovieService {
         return findMovies(0).getPayload();
     }
 
-    public Page<Movie> findUserMovies(Map<String, String> query, AppUser user) {
+    public Page<AppUserMovie> findUserMovies(Map<String, String> query, AppUser user) {
         Map<MovieQueryParam, Integer> parsedQuery = parseMovieParams(query);
         int page = parsedQuery.getOrDefault(MovieQueryParam.PAGE, 0);
         int pageSize = parsedQuery.getOrDefault(MovieQueryParam.PAGE_SIZE, 100);
-        return movieRepository.findByUsers(PageRequest.of(page, pageSize), user);
+        return appUserMovieRepository.findMoviesByUser(PageRequest.of(page, pageSize), user);
     }
 
     public Movie findById(int movieId) {
@@ -60,7 +65,7 @@ public class MovieService {
     }
 
     public Page<Movie> findRecentMovies() {
-        return movieRepository.findAll(PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "movieYear")));
+        return movieRepository.findAll(PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "movieYear")));
     }
 
     public void update(Movie movie) {
@@ -82,5 +87,12 @@ public class MovieService {
             }
         }
         return parsedQuery;
+    }
+
+    public void createUserEntry(AppUser user, Movie movie) {
+        AppUserMovie appUserMovie = new AppUserMovie();
+        appUserMovie.setMovie(movie);
+        appUserMovie.setUser(user);
+        appUserMovieRepository.save(appUserMovie);
     }
 }

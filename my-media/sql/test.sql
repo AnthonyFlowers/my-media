@@ -107,6 +107,7 @@ begin
 	delete from app_user_role;
 	alter table app_user_role auto_increment = 1;
 	delete from app_user_movie;
+    alter table app_user_movie auto_increment = 1;
 	delete from app_user_tv_show;
 	delete from app_user;
 	alter table app_user auto_increment = 1;

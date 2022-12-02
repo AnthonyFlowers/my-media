@@ -12,6 +12,7 @@ function Home() {
     useEffect(() => {
         getMoviesPageMovieCount(moviePage, movieCount)
             .then((page) => {
+                console.log(page);
                 setMovies(page.content);
             })
             .catch(setErrs);

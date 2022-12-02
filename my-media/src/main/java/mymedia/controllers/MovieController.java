@@ -2,6 +2,7 @@ package mymedia.controllers;
 
 import mymedia.domain.MovieService;
 import mymedia.domain.Result;
+import mymedia.models.AppUserMovie;
 import mymedia.models.Movie;
 import mymedia.security.AppUser;
 import mymedia.security.AppUserService;
@@ -47,10 +48,11 @@ public class MovieController {
         return ErrorResponse.build(result);
     }
 
+    @Transactional
     @GetMapping("/user")
     public ResponseEntity<?> getUserMovies(
             @AuthenticationPrincipal AppUser appUser, @RequestParam Map<String, String> query) {
-        Page<Movie> movies = movieService.findUserMovies(query, appUser);
+        Page<AppUserMovie> movies = movieService.findUserMovies(query, appUser);
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 
@@ -66,9 +68,10 @@ public class MovieController {
     @Transactional
     @PostMapping("/add")
     public ResponseEntity<?> addMovieToUser(@AuthenticationPrincipal AppUser appUser, @RequestBody Movie movie) {
-        movie = movieService.findById(movie.getMovieId());
-        movie.addUser(appUser);
-        movieService.update(movie);
+        movieService.createUserEntry(appUser, movie);
+//        movie = movieService.findById(movie.getMovieId());
+//        movie.addUser(appUser);
+//        movieService.update(movie);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

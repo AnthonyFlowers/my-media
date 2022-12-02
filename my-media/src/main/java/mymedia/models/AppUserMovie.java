@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "app_user_movie")
-public class AppUserMovieDetails {
+public class AppUserMovie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,9 +14,9 @@ public class AppUserMovieDetails {
 
     @OneToOne
     @JoinColumn(name = "app_user_id", referencedColumnName = "app_user_id")
-    private AppUser appUser;
+    private AppUser user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
@@ -30,12 +30,8 @@ public class AppUserMovieDetails {
         this.appUserMovieId = appUserMovieId;
     }
 
-    public AppUser getAppUser() {
-        return appUser;
-    }
-
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
+    public void setUser(AppUser user) {
+        this.user = user;
     }
 
     public Movie getMovie() {

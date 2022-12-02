@@ -23,12 +23,6 @@ public class Movie {
 
     private String movieOverview;
 
-    @ManyToMany
-    @JoinTable(name = "app_user_movie",
-            joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "app_user_id"))
-    private List<AppUser> users;
-
     public int getMovieId() {
         return movieId;
     }
@@ -59,10 +53,6 @@ public class Movie {
 
     public void setMovieLength(int movieLength) {
         this.movieLength = movieLength;
-    }
-
-    public void addUser(AppUser appUser) {
-        users.add(appUser);
     }
 
     public String getMovieOverview() {

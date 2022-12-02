@@ -20,7 +20,7 @@ export async function getUserMovies(page = 1, pageSize = 10) {
             "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`
         }
     });
-    return movieQueryResponse(response, "error finding movies for the user");
+    return userMovieQueryResponse(response, "error finding movies for the user");
 }
 
 export async function getRecentMovies(page) {
@@ -63,3 +63,26 @@ async function movieQueryResponse(response, errorMsg) {
     errors.push(errorMsg);
     return Promise.reject(errors);
 }
+
+async function userMovieQueryResponse(response, errorMsg) {
+    var errors = [];
+    if (response.ok) {
+        const body = await response.json();
+        console.log(body);
+        const movies = [];
+        body["content"].forEach(userMovie => {
+            movies.push(userMovie["movie"]);
+        });
+        return {
+            content: movies,
+            pageable: body["pageable"]
+        };
+    } else if (response.status === 403) {
+        errors.push("authentication error")
+    } else if (response.status === 404) {
+        errors.push("404 not found")
+    }
+    errors.push(errorMsg);
+    return Promise.reject(errors);
+}
+
