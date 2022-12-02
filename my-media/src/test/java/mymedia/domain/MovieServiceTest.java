@@ -6,12 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.*;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -23,13 +24,13 @@ class MovieServiceTest {
 
     @Test
     void shouldFindAllMovies() {
-        List<Movie> movies = getMovieList();
-        when(repository.findAll()).thenReturn(movies);
+        Page<Movie> movies = getMovieList();
+        when(repository.findAll(any(PageRequest.class))).thenReturn(movies);
         Page<Movie> allMovies = service.findAllMovies();
-        assertEquals(movies, allMovies.stream().toList());
+        assertEquals(movies, allMovies);
     }
 
-    private static List<Movie> getMovieList() {
+    private static Page<Movie> getMovieList() {
         Movie ironMan = new Movie();
         ironMan.setMovieId(1);
         ironMan.setMovieName("Iron Man");
@@ -40,7 +41,7 @@ class MovieServiceTest {
         inception.setMovieName("Inception");
         inception.setMovieYear(2010);
         inception.setMovieLength(148);
-        return List.of(ironMan, inception);
+        return new PageImpl<>(List.of(ironMan, inception));
     }
 
 }

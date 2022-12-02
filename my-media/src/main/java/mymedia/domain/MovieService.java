@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.Validator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -27,11 +26,11 @@ public class MovieService {
         this.validator = validator;
     }
 
-    public Result<Page<Movie>> findMoviesPaged(int pageNumber){
-        return findMoviesPaged(pageNumber, 100);
+    public Result<Page<Movie>> findMovies(int pageNumber){
+        return findMovies(pageNumber, 100);
     }
 
-    public Result<Page<Movie>> findMoviesPaged(int pageNumber, int perPage) {
+    public Result<Page<Movie>> findMovies(int pageNumber, int perPage) {
         Result<Page<Movie>> result = new Result<>();
         if (pageNumber < 0) {
             result.addMessage(ResultType.INVALID, "movie page index can not be negative");
@@ -46,7 +45,7 @@ public class MovieService {
     }
 
     public Page<Movie> findAllMovies() {
-        return movieRepository.findAll(PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "movieYear")));
+        return findMovies(0).getPayload();
     }
 
     public Page<Movie> findUserMovies(Map<String, String> query, AppUser user) {
@@ -60,22 +59,19 @@ public class MovieService {
         return movieRepository.findById(movieId).orElse(null);
     }
 
-    public List<Movie> findRecentMovies() {
-        return movieRepository.findAll(PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "movieYear")))
-                .stream()
-                .toList();
+    public Page<Movie> findRecentMovies() {
+        return movieRepository.findAll(PageRequest.of(0, 100, Sort.by(Sort.Direction.DESC, "movieYear")));
     }
 
     public void update(Movie movie) {
         movieRepository.save(movie);
     }
 
-    public Result<Page<Movie>> findMoviesPaged(Map<String, String> query) {
-        Result<Page<Movie>> result = new Result<>();
+    public Result<Page<Movie>> findMovies(Map<String, String> query) {
         Map<MovieQueryParam, Integer> parsedQuery = parseMovieParams(query);
         int page = parsedQuery.getOrDefault(MovieQueryParam.PAGE, 0);
         int pageSize = parsedQuery.getOrDefault(MovieQueryParam.PAGE_SIZE, 10);
-        return findMoviesPaged(page, pageSize);
+        return findMovies(page, pageSize);
     }
 
     private Map<MovieQueryParam, Integer> parseMovieParams(Map<String, String> query) {

@@ -31,11 +31,15 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET,
                         "/api/movie*",
                         "/api/movie/*",
-                        "/api/movie/recent/*").permitAll()
+                        "/api/movie/recent/*")
+                .permitAll()
                 .antMatchers(
                         "/api/movie/*",
-                        "/api/movie/user"
-                ).authenticated()
+                        "/api/movie/user")
+                .authenticated()
+                .antMatchers(HttpMethod.POST,
+                        "/api/movie/add")
+                .authenticated()
                 .antMatchers("/**").denyAll()
                 .and()
                 .addFilter(new JwtRequestFilter(authenticationManager(authConfig), converter))

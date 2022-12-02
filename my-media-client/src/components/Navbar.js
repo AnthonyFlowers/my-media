@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import AuthContext from './AuthContext';
+import { isAdmin } from './AuthRouteAdmin';
 
 
 function Navbar() {
@@ -43,6 +44,18 @@ function Navbar() {
                     }
                 </div>
                 <div className="flex flex-row flex-grow justify-end">
+                    {
+                        user && isAdmin(user) ? <>
+                            <li>
+                                <Link
+                                    className={`btn-nav ${location.pathname === "/admin" ? "btn-nav-active" : "btn-nav-selectable"}`}
+                                    to="/admin"
+                                >
+                                    Admin
+                                </Link>
+                            </li>
+                        </>: <></>
+                    }
                     {
                         (user ? <>
                             <li>

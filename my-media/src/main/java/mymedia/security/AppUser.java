@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class AppUser implements UserDetails {
 
     @Id
+    @Column(name = "app_user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int appUserId;
     private String username;

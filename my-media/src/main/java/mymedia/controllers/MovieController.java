@@ -31,7 +31,7 @@ public class MovieController {
         if(page == null){
             page = 0;
         }
-        Result<Page<Movie>> result = movieService.findMoviesPaged(page);
+        Result<Page<Movie>> result = movieService.findMovies(page);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
         }
@@ -40,7 +40,7 @@ public class MovieController {
 
     @GetMapping
     public ResponseEntity<?> getMovies(@RequestParam Map<String, String> query) {
-        Result<Page<Movie>> result = movieService.findMoviesPaged(query);
+        Result<Page<Movie>> result = movieService.findMovies(query);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
         }
@@ -56,7 +56,7 @@ public class MovieController {
 
     @GetMapping("/recent/{page}")
     public ResponseEntity<?> getRecentMovies(@PathVariable int page) {
-        Result<Page<Movie>> result = movieService.findMoviesPaged(page);
+        Result<Page<Movie>> result = movieService.findMovies(page);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
         }

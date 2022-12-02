@@ -44,8 +44,8 @@ function Profile() {
                         <h3 className="text-2xl">Your Movies</h3>
                         <ul>
                             {
-                                userMovies.map((m) => {
-                                    return <ListMovie key={m.movieId} movie={m} />
+                                userMovies.map((m, i) => {
+                                    return <ListMovie key={i} movie={m} />
                                 })
                             }
                         </ul>

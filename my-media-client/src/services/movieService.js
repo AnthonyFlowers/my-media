@@ -35,6 +35,21 @@ export async function getMoviesPageMovieCount(page, movieCount) {
     return movieQueryResponse(response, "error finding movies by page and movie count")
 }
 
+export async function addMovieToUser(movie) {
+    const response = await fetch(`${movieApi}/add`, {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(movie)
+    });
+    if(response.status === 204) {
+        return Promise.resolve("added movie");
+    }
+    return Promise.reject(["could not add movie :("]);
+}
+
 async function movieQueryResponse(response, errorMsg) {
     var errors = [];
     if (response.ok) {

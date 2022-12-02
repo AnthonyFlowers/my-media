@@ -1,5 +1,14 @@
+import { addMovieToUser } from "../services/movieService";
 
 function Movie({ movie }) {
+    function handleAdd() {
+        addMovieToUser(movie)
+            .then(() =>{
+                // show success message
+            })
+            .catch(console.log);
+    }
+
     return (
         <div className="bg-gray-100 p-10 my-2 rounded-lg shadow-md">
             <h1 className="text-xl font-bold">{movie.movieName}</h1>
@@ -7,6 +16,7 @@ function Movie({ movie }) {
                 <p className="text-gray-600">Length: {movie.movieLength} Minutes</p>
                 <p className="text-gray-600">Year: {movie.movieYear}</p>
                 <p>Overview: {movie.movieOverview}</p>
+                <button onClick={handleAdd}>Add</button>
             </div>
         </div>
     )
