@@ -10,6 +10,7 @@ class LoginPage(BasePage):
         self.__login_button_locator = (By.XPATH, '//*[@id="login"]')
         self.__password_locator = (By.XPATH, '//*[@id="password"]')
         self.__username_locator = (By.XPATH, '//*[@id="username"]')
+        self.__login_form_locator = (By.XPATH, '//*[@id="loginForm"]')
         self.__url = f'{self._base_url}/login'
 
     def open(self):
@@ -22,6 +23,7 @@ class LoginPage(BasePage):
         super()._type(self.__password_locator, password)
 
     def execute_login(self, username: str, password: str):
+        super()._wait_until_element_is_visible(self.__login_form_locator, 2)
         super()._wait_until_element_is_visible(self.__username_locator, 1)
         self._type_username(username)
         super()._wait_until_element_is_visible(self.__password_locator, 1)

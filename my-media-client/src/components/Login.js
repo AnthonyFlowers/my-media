@@ -36,7 +36,9 @@ function Login() {
 
     return (
         <div className="flex items-center justify-center">
-            <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-10 w-full max-w-xs m-5">
+            <form id="loginForm"
+                onSubmit={handleSubmit}
+                className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mt-10 w-full max-w-xs m-5">
                 <div className="mb-6">
                     <label className="block mb-2" htmlFor="username">Username</label>
                     <input
