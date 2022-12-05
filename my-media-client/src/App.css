@@ -22,6 +22,14 @@
     @apply bg-yellow-700
 }
 
+.btn-green {
+    @apply bg-green-500 text-black;
+}
+
+.btn-green:hover {
+    @apply bg-green-700;
+}
+
 
 .btn-nav {
     @apply inline-block border rounded py-1 px-3;
@@ -43,7 +51,11 @@ body {
     @apply bg-gray-300;
 }
 
+.err-box {
+    @apply bg-red-400 my-2 p-3 rounded-lg list-disc list-inside;
+}
+
 /* high contrast for designing */
 .watermelon {
-    @apply bg-red-400 border-2 border-green-400;
+    @apply bg-red-500 border-2 border-green-400;
 }

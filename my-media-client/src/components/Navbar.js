@@ -54,7 +54,7 @@ function Navbar() {
                                     Admin
                                 </Link>
                             </li>
-                        </>: <></>
+                        </> : <></>
                     }
                     {
                         (user ? <>
@@ -67,15 +67,22 @@ function Navbar() {
                                 </Link>
                             </li>
                             <button className="btn-nav btn-nav-selectable bg-yellow-200 justify-self-end" onClick={logout}>Logout</button>
-                        </> :
+                        </> : <>
                             <li className="">
                                 <Link
-                                id="loginButton"
+                                    id="loginButton"
                                     className={`btn-nav ${location.pathname === "/login" ? "btn-nav-active" : "btn-nav-selectable"}`}
                                     to="/login">
                                     Login
                                 </Link>
-                            </li>)
+                            </li>
+                            <li>
+                                <Link to="/register">
+                                    <button className={`btn-nav ${location.pathname === "/register" ? "btn-nav-active" : "btn-nav-selectable"}`}>Create Account</button>
+                                </Link>
+                            </li>
+                        </>
+                        )
                     }
                 </div>
             </ul>

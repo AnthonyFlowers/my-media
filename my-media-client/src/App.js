@@ -3,6 +3,7 @@ import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import AuthContext from './components/AuthContext';
 import AuthRouteAdmin from './components/AuthRouteAdmin';
 import AuthRouteUser from './components/AuthRouteUser';
+import CreateAccount from './components/CreateAccount';
 import Home from './components/Home';
 import Login from './components/Login';
 import Movies from './components/Movies';
@@ -65,6 +66,7 @@ function App() {
               </Route>
 
               <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<CreateAccount/>} />
               <Route path="*" element={<p>404 not found!</p>} />
             </Routes>
           </div>

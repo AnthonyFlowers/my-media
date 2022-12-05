@@ -38,7 +38,7 @@ export async function register(credentials) {
         body: JSON.stringify(credentials)
     };
 
-    const response = await fetch(`${AUTH_URL}/register`, init);
+    const response = await fetch(`${AUTH_URL}/create_account`, init);
     if (response.ok) {
         const body = await response.json();
         return makeUser(body);
