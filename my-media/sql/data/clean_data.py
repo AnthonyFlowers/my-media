@@ -4,11 +4,12 @@ import numpy as np
 from sqlalchemy import create_engine
 import mysql.connector
 
+clean_data_csv = "movies_metadata_clean.csv"
 data_csv = "movies_metadata.csv"
 
 db_username = os.environ["DB_USERNAME"]
 db_password = os.environ["DB_PASSWORD"]
-host = "localhost"
+host = "192.168.0.70"
 database = "my_media"
 
 # https://realpython.com/python-data-cleaning-numpy-pandas/
@@ -26,7 +27,7 @@ def clean_data():
     df["release_date"] = df["release_date"].fillna(0).apply(int)
     df["runtime"] = df["runtime"].fillna(0).apply(int)
     # save cleaned data to csv
-    df.to_csv("movies_metadata_clean.csv", escapechar="\\", quotechar="'", encoding="utf8")
+    df.to_csv(clean_data_csv, escapechar="\\", quotechar="'", encoding="utf8")
     return df
 
 def save_dataframe_to_database(dataframe):
@@ -35,7 +36,7 @@ def save_dataframe_to_database(dataframe):
 
 def tranasfer_data_to_movies_table():
     mysql_conn = mysql.connector.connect(
-      host="localhost",
+      host=host,
       user=db_username,
       password=db_password,
       database=database
