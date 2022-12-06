@@ -45,10 +45,10 @@ export async function register(credentials) {
     } else if (response.status === 400) {
         const body = await response.json();
         return Promise.reject([body]);
-    } else if (response.status === 409) {
-        return Promise.reject(["User with that username already exists."]);
+    } else {
+        console.log(response);
+        return Promise.reject(["Error registering user"]);
     }
-    return Promise.reject(["Error registering user: " + response.status]);
 }
 
 export async function refresh() {

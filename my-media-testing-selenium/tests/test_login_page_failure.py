@@ -7,20 +7,18 @@ from page_objects.login_page import LoginPage
 class TestLoginFailure:
     @pytest.mark.fail
     @pytest.mark.login
-    @pytest.mark.parametrize(
-        'username, password, error_message', [
-            (
-                    'incorrectUser',
-                    'P@ssw0rd!',
-                    'Could not login. Username/Password combination incorrect.'
-            ),
-            (
-                    'johnsmith',
-                    'incorrectPassword',
-                    'Could not login. Username/Password combination incorrect.'
-            )
-        ]
-    )
+    @pytest.mark.parametrize('username, password, error_message', [
+        (
+                'incorrectUser',
+                'P@ssw0rd!',
+                'Could not login. Username/Password combination incorrect.'
+        ),
+        (
+                'johnsmith',
+                'incorrectPassword',
+                'Could not login. Username/Password combination incorrect.'
+        )
+    ])
     def test_login_failure(self, driver, username, password, error_message):
         login_page = LoginPage(driver)
         login_page.open()

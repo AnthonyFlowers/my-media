@@ -17,7 +17,7 @@ class TestRegisterSuccess:
         register_page.open()
         assert register_page.get_active_nav_name() == 'Create Account', \
             'The "Create Account" nav element should be active'
-        register_page.execute_registration(username, password)
+        register_page.execute_registration(username, password, password)
         registered_page = RegisteredPage(driver)
         registered_page.wait_for_user_profile()
         assert driver.current_url == registered_page.expected_url, \

@@ -8,7 +8,7 @@ from page_objects.base_page import BasePage
 class RegisterPage(BasePage):
     def __init__(self, driver):
         super().__init__(driver)
-        self.__error_message = (By.XPATH, '//*[@id="errorDiv"]/p')
+        self.__error_message_locator = (By.XPATH, '//*[@id="errors"]/li')
         self.__password_locator = (By.XPATH, '//*[@id="password"]')
         self.__password_confirm_locator = (By.XPATH, '//*[@id="passwordConfirm"]')
         self.__username_locator = (By.XPATH, '//*[@id="username"]')
@@ -20,11 +20,11 @@ class RegisterPage(BasePage):
     def expected_url(self) -> str:
         return self.__url
 
-    def execute_registration(self, username: str, password: str):
+    def execute_registration(self, username: str, password: str, password_confirm: str):
         super()._wait_until_element_is_visible(self.__registration_form_locator)
         self._type_username(username)
         self._type_password(password)
-        self._type_password_confirm(password)
+        self._type_password_confirm(password_confirm)
         super()._click(self.__registration_submit_button)
 
     def open(self):
@@ -38,3 +38,7 @@ class RegisterPage(BasePage):
 
     def _type_password_confirm(self, password):
         super()._type(self.__password_confirm_locator, password)
+
+    @property
+    def register_error_text(self):
+        return super()._get_text(self.__error_message_locator)

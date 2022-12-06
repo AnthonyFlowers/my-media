@@ -48,21 +48,21 @@ function CreateAccount() {
                         className="w-full shadow p-2"
                         id="username" name="username" placeholder="Username"
                         onChange={handleChange} value={credentials['username']}
-                        autocomplete="new-password" />
+                        autoComplete="new-password" />
                 </div>
                 <div className="mb-6">
                     <label className="block mb-2" htmlFor="password">Password</label>
                     <input className="w-full shadow p-2"
                         id="password" name="password" type="password" placeholder="********"
                         onChange={handleChange} value={credentials['password']}
-                        autocomplete="new-password" />
+                        autoComplete="new-password" />
                 </div>
                 <div className="mb-6">
                     <label className="block mb-2" htmlFor="passwordConfirm">Confirm Password</label>
                     <input className="w-full shadow p-2"
                         id="passwordConfirm" name="passwordConfirm" type="password" placeholder="********"
                         onChange={handleChange} value={credentials['passwordConfirm']}
-                        autocomplete="off" />
+                        autoComplete="off" />
                 </div>
                 <div className="flex items-center justify-between mx-8">
                     <button id="createAccount" className="btn btn-green" type="submit">Register</button>
@@ -73,7 +73,7 @@ function CreateAccount() {
                 </div>
                 {
                     errs.length > 0 ?
-                        <ul id="errorDiv" className="err-box">{errs.map((e) => {
+                        <ul id="errors" className="err-box">{errs.map((e) => {
                             return <li key={e}>{e}</li>
                         })}</ul> : <></>
                 }
