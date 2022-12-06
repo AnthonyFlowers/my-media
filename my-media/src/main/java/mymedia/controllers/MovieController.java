@@ -75,7 +75,7 @@ public class MovieController {
     @PutMapping("/update")
     public ResponseEntity<?> updateUserMovieEntry(
             @AuthenticationPrincipal AppUser appUser, @RequestBody AppUserMovie userMovie) {
-        movieService.updateUserMovie(userMovie);
+        movieService.updateUserMovie(userMovie, appUser);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

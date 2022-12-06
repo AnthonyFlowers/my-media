@@ -14,7 +14,7 @@ export async function getMovies(page) {
 
 export async function getUserMovies(page = 1, pageSize = 10) {
     page = Math.max(0, page - 1);
-    pageSize = Math.max(10, pageSize);
+    pageSize = Math.max(1, pageSize);
     const response = await fetch(`${movieApi}/user?page=${page}&pageSize=${pageSize}`, {
         headers: {
             "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`
@@ -51,13 +51,8 @@ export async function addMovieToUser(movie) {
 }
 
 
-export async function updateUserMovie(movie) {
-    const userMovie = {
-        movie: movie,
-        appUserMovieId: movie["appUserMovieId"],
-        watched: movie["watched"]
-    }
-    const response = await fetch(`${movieApi}/watch`, {
+export async function updateUserMovie(userMovie) {
+    const response = await fetch(`${movieApi}/update`, {
         method: "PUT",
         headers: {
             "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`,
@@ -65,7 +60,11 @@ export async function updateUserMovie(movie) {
         },
         body: JSON.stringify(userMovie)
     });
-    // if(response.)
+    if(response.ok) {
+        return Promise.resolve();
+    } else {
+        return Promise.reject(["could not update user movie"]);
+    }
 }
 
 async function movieQueryResponse(response, errorMsg) {
@@ -87,16 +86,8 @@ async function userMovieQueryResponse(response, errorMsg) {
     if (response.ok) {
         const body = await response.json();
         const movies = [];
-        body["content"].forEach(userMovie => {
-            const movie = userMovie["movie"]
-            movie["entryId"] = userMovie["appUserMovieId"];
-            movie["watched"] = userMovie["watched"];
-            movies.push(movie);
-        });
-        return {
-            content: movies,
-            pageable: body["pageable"]
-        };
+        console.log(body);
+        return body;
     } else if (response.status === 403) {
         errors.push("authentication error")
     } else if (response.status === 404) {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { addMovieToUser } from "../services/movieService";
+import { addMovieToUser, updateUserMovie } from "../services/movieService";
 
 function Movie({ movie }) {
     function handleAdd() {
@@ -39,13 +39,17 @@ export function SmallUserMovie({ movie }) {
 }
 
 export function ListMovie({ m }) {
-    const [movie, setMovie] = useState(m);
-    function toggleWatched() {
-        const nextMovie = { ...movie };
-        nextMovie["watched"] = !nextMovie["watched"];
+    const [userMovie, setMovie] = useState(m);
+
+    function toggleWatched(evt) {
+        const nextMovie = { ...userMovie };
+        nextMovie.watched = evt.target.checked;
         setMovie(nextMovie);
+        updateUserMovie(nextMovie);
     }
     return (
-        <li><input type="checkbox" value={movie.watched}/>{movie.movieName}, Year: {movie.movieYear}, Length: {movie.movieLength}</li>
+        <li><input type="checkbox" checked={userMovie.watched} onChange={toggleWatched} />
+            {userMovie.movie.movieName}, Year: {userMovie.movie.movieYear}, Length: {userMovie.movie.movieLength}
+        </li>
     )
 }

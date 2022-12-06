@@ -28,7 +28,6 @@ function Login() {
         authenticate(credentials)
             .then(user => {
                 login(user);
-                // will eventually navigate to a user page
                 navigate('/profile');
             })
             .catch(setErrs);

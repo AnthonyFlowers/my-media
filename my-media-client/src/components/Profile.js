@@ -52,12 +52,12 @@ function Profile() {
                             }
                         </ul>
                     </div>
-                    <div className="p-3 border rounded-md border-gray-400">
+                    {/* <div className="p-3 border rounded-md border-gray-400">
                         <h3 className="text-2xl">Your Shows</h3>
                         <ul>
                             <li>-- todo</li>
                         </ul>
-                    </div>
+                    </div> */}
                 </div>
                 <div>{errs.map((e) => { return <p>{e}</p>; })}</div>
             </div>

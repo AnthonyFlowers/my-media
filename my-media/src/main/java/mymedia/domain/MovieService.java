@@ -1,5 +1,6 @@
 package mymedia.domain;
 
+import mymedia.App;
 import mymedia.data.AppUserMovieRepository;
 import mymedia.data.MovieRepository;
 import mymedia.models.AppUserMovie;
@@ -96,7 +97,8 @@ public class MovieService {
         return appUserMovieRepository.save(appUserMovie);
     }
 
-    public void updateUserMovie(AppUserMovie userMovie) {
+    public void updateUserMovie(AppUserMovie userMovie, AppUser appUser) {
+        userMovie.setUser(appUser);
         appUserMovieRepository.save(userMovie);
     }
 }
