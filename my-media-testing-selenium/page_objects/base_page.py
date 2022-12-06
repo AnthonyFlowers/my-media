@@ -69,6 +69,7 @@ class BasePage:
         wait.until(ec.element_to_be_clickable(locator))
 
     def get_active_nav_name(self) -> str:
+        self._wait_until_element_is_visible(self.__selected_nav)
         return self._get_text(self.__selected_nav)
 
     def navigate_to_movies(self):

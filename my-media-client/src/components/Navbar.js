@@ -77,8 +77,10 @@ function Navbar() {
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/register">
-                                    <button className={`btn-nav ${location.pathname === "/register" ? "btn-nav-active" : "btn-nav-selectable"}`}>Create Account</button>
+                                <Link
+                                    className={`btn-nav ${location.pathname === "/register" ? "btn-nav-active" : "btn-nav-selectable"}`}
+                                    to="/register">
+                                    Create Account
                                 </Link>
                             </li>
                         </>

@@ -64,8 +64,8 @@ function CreateAccount() {
                         onChange={handleChange} value={credentials['passwordConfirm']}
                         autocomplete="off" />
                 </div>
-                <div className="flex items-center justify-between">
-                    <button id="createAccount" className="btn btn-green" type="submit">Create Account</button>
+                <div className="flex items-center justify-between mx-8">
+                    <button id="createAccount" className="btn btn-green" type="submit">Register</button>
                     <Link to="/login">
                         <button id="login" className="btn btn-blue">Login</button>
                     </Link>
