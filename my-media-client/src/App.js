@@ -33,7 +33,7 @@ function App() {
   useEffect(() => {
     if (!refreshed) {
       refresh()
-        .then((user) =>{
+        .then((user) => {
           login(user);
           setRefreshed(true);
         })
@@ -45,7 +45,7 @@ function App() {
     }
   }, [refreshed]);
 
-  return ( refreshed ?
+  return (refreshed ?
     <AuthContext.Provider value={auth}>
       <Router>
         <div className="my-5 mx-10">
@@ -66,13 +66,17 @@ function App() {
               </Route>
 
               <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<CreateAccount/>} />
+              <Route path="/register" element={<CreateAccount />} />
               <Route path="*" element={<p>404 not found!</p>} />
             </Routes>
           </div>
         </div>
       </Router>
-    </AuthContext.Provider> : <p>loading...</p>
+    </AuthContext.Provider> : <div className="flex justify-center items-center">
+      <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
+      </div>
+      <span className="visually-hidden">Loading...</span>
+    </div>
   );
 }
 

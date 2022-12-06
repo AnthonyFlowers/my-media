@@ -1,6 +1,5 @@
 package mymedia.domain;
 
-import mymedia.App;
 import mymedia.data.AppUserMovieRepository;
 import mymedia.data.MovieRepository;
 import mymedia.models.AppUserMovie;
@@ -23,6 +22,9 @@ public class MovieService {
     private final AppUserService userService;
     private final Validator validator;
 
+    private final int default_movie_count = 50;
+    private final int default_small_movie_count = 10;
+
 
     public MovieService(MovieRepository movieRepository, AppUserMovieRepository appUserMovieRepository,
                         AppUserService userService, Validator validator) {
@@ -33,7 +35,7 @@ public class MovieService {
     }
 
     public Result<Page<Movie>> findMovies(int pageNumber) {
-        return findMovies(pageNumber, 100);
+        return findMovies(pageNumber, default_movie_count);
     }
 
     public Result<Page<Movie>> findMovies(int pageNumber, int perPage) {
@@ -57,7 +59,7 @@ public class MovieService {
     public Page<AppUserMovie> findUserMovies(Map<String, String> query, AppUser user) {
         Map<MovieQueryParam, Integer> parsedQuery = parseMovieParams(query);
         int page = parsedQuery.getOrDefault(MovieQueryParam.PAGE, 0);
-        int pageSize = parsedQuery.getOrDefault(MovieQueryParam.PAGE_SIZE, 100);
+        int pageSize = parsedQuery.getOrDefault(MovieQueryParam.PAGE_SIZE, default_movie_count);
         return appUserMovieRepository.findAppUserMoviesByUser(PageRequest.of(page, pageSize), user);
     }
 
@@ -66,7 +68,8 @@ public class MovieService {
     }
 
     public Page<Movie> findRecentMovies() {
-        return movieRepository.findAll(PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "movieYear")));
+        return movieRepository.findAll(PageRequest.of(0,
+                default_small_movie_count, Sort.by(Sort.Direction.DESC, "movieYear")));
     }
 
     public void update(Movie movie) {
@@ -76,7 +79,8 @@ public class MovieService {
     public Result<Page<Movie>> findMovies(Map<String, String> query) {
         Map<MovieQueryParam, Integer> parsedQuery = parseMovieParams(query);
         int page = parsedQuery.getOrDefault(MovieQueryParam.PAGE, 0);
-        int pageSize = parsedQuery.getOrDefault(MovieQueryParam.PAGE_SIZE, 10);
+        int pageSize = parsedQuery.getOrDefault(MovieQueryParam.PAGE_SIZE,
+                default_small_movie_count);
         return findMovies(page, pageSize);
     }
 
