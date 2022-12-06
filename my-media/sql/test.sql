@@ -12,24 +12,17 @@ create table movie (
 
 create table tv_show (
     tv_show_id int primary key auto_increment,
-    tv_show_name varchar(256) not null
+    tv_show_name varchar(256) not null,
+    tv_show_overview varchar(2048),
+    tv_show_release_year int
 );
 
 create table tv_show_season (
     tv_show_season_id int primary key auto_increment,
     tv_show_id int not null,
-    tv_show_season_index int not null default 0
-);
-
-create table tv_show_season_tv_show (
-    tv_show_season_id int not null,
-    tv_show_id int not null,
-    primary key(tv_show_season_id, tv_show_id),
-    constraint fk_tv_show_season_tv_show_tv_show_season_tv_show_season_id
-        foreign key (tv_show_season_id)
-        references tv_show_season(tv_show_season_id),
-    constraint fk_tv_show_season_tv_show_tv_show_tv_show_id
-        foreign key (tv_show_id)
+    tv_show_season_index int not null default 0,
+    constraint fk_tv_show_season_tv_show_id_tv_show_tv_show_id
+		foreign key (tv_show_id)
         references tv_show(tv_show_id)
 );
 
@@ -63,12 +56,13 @@ create table app_user_movie (
         foreign key (movie_id)
         references movie(movie_id)
 );
-
+-- drop table app_user_tv_show;
 create table app_user_tv_show (
+	app_user_tv_show_id int,
     app_user_id int not null,
     tv_show_id int not null,
-    constraint pk_app_user_tv_show_u_id_tv_s_id
-        primary key (app_user_id, tv_show_id),
+    constraint pk_app_user_tv_show_app_user_tv_show_id
+        primary key (app_user_tv_show_id),
     constraint fk_app_user_tv_show_user_id
         foreign key (app_user_id)
         references app_user(app_user_id),
@@ -111,8 +105,6 @@ begin
 	delete from app_user_tv_show;
 	delete from app_user;
 	alter table app_user auto_increment = 1;
-	delete from tv_show_season_tv_show;
-	alter table tv_show_season_tv_show auto_increment = 1;
 	delete from tv_show_episode;
 	alter table tv_show_episode auto_increment = 1;
 	delete from tv_show_season;
