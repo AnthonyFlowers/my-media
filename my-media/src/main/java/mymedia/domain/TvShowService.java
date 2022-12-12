@@ -1,13 +1,14 @@
 package mymedia.domain;
 
 import mymedia.data.AppUserTvShowRepository;
+import mymedia.data.TvShowRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TvShowService {
-    private final AppUserTvShowRepository repository;
+    private final TvShowRepository repository;
 
-    public TvShowService(AppUserTvShowRepository repository) {
+    public TvShowService(TvShowRepository repository) {
         this.repository = repository;
     }
 }
