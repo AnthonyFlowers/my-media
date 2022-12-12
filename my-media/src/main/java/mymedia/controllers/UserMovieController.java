@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/api/movie")
+@RequestMapping("/api/user/movie")
 
 public class UserMovieController {
 
@@ -26,12 +26,12 @@ public class UserMovieController {
         this.movieService = movieService;
     }
 
-    @GetMapping("/user")
+    @GetMapping
     public ResponseEntity<?> getUserMovies(
             @AuthenticationPrincipal AppUser appUser,
-            @RequestParam Optional<Integer> page,
-            @RequestParam Optional<Integer> pageSize) {
-        Page<AppUserMovie> movies = movieService.findUserMovies(page.orElse(0), pageSize.orElse(10), appUser);
+            @RequestParam(required = false) int page,
+            @RequestParam(required = false) int pageSize) {
+        Page<AppUserMovie> movies = movieService.findUserMovies(page, pageSize, appUser);
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 

@@ -7,9 +7,6 @@ import mymedia.security.AppUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Optional;
 
 @Service
 public class UserMovieService {
@@ -22,7 +19,10 @@ public class UserMovieService {
 
     public Page<AppUserMovie> findUserMovies(int page, int pageSize, AppUser user) {
         return appUserMovieRepository.findByUserUsername(
-                PageRequest.of(page, pageSize),
+                PageRequest.of(
+                        Math.max(page, 0),
+                        pageSize <= 0 ? 10 : pageSize
+                ),
                 user.getUsername()
         );
     }
