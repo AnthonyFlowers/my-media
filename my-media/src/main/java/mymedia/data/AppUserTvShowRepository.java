@@ -1,14 +1,14 @@
 package mymedia.data;
 
-import mymedia.models.AppUserMovie;
+import mymedia.models.AppUserTvShow;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AppUserMovieRepository extends JpaRepository<AppUserMovie, Integer> {
+public interface AppUserTvShowRepository extends JpaRepository<AppUserTvShow, Integer> {
 
-    Page<AppUserMovie> findByUserUsername(Pageable pageable, String username);
+    Page<AppUserTvShow> findByUserUsername(Pageable pageable, String username);
 
 }

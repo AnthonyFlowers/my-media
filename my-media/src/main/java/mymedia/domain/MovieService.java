@@ -60,7 +60,7 @@ public class MovieService {
         Map<MovieQueryParam, Integer> parsedQuery = parseMovieParams(query);
         int page = parsedQuery.getOrDefault(MovieQueryParam.PAGE, 0);
         int pageSize = parsedQuery.getOrDefault(MovieQueryParam.PAGE_SIZE, default_movie_count);
-        return appUserMovieRepository.findAppUserMoviesByUser(PageRequest.of(page, pageSize), user);
+        return appUserMovieRepository.findByUserUsername(PageRequest.of(page, pageSize), user.getUsername());
     }
 
     public Movie findById(int movieId) {

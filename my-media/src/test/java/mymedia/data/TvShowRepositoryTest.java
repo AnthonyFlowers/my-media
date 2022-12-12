@@ -37,7 +37,7 @@ class TvShowRepositoryTest {
         TvShow tokyoGhoul = new TvShow();
         tokyoGhoul.setTvShowName("Tokyo Ghoul");
         TvShow show = repository.save(tokyoGhoul);
-        assertEquals(4, show.getTvShowId());
+        assertEquals(5, show.getTvShowId());
     }
 
     @Test
