@@ -12,8 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.Map;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/api/user/movie")
@@ -29,22 +27,25 @@ public class UserMovieController {
     @GetMapping
     public ResponseEntity<?> getUserMovies(
             @AuthenticationPrincipal AppUser appUser,
-            @RequestParam(required = false) int page,
-            @RequestParam(required = false) int pageSize) {
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Page<AppUserMovie> movies = movieService.findUserMovies(page, pageSize, appUser);
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 
     @Transactional
-    @PostMapping("/add")
-    public ResponseEntity<?> createUserMovieEntry(@AuthenticationPrincipal AppUser appUser, @RequestBody Movie movie) {
+    @PostMapping
+    public ResponseEntity<?> createUserMovieEntry(
+            @AuthenticationPrincipal AppUser appUser,
+            @RequestBody Movie movie) {
         AppUserMovie userMovie = movieService.createUserEntry(appUser, movie);
         return new ResponseEntity<>(userMovie, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<?> updateUserMovieEntry(
-            @AuthenticationPrincipal AppUser appUser, @RequestBody AppUserMovie userMovie) {
+            @AuthenticationPrincipal AppUser appUser,
+            @RequestBody AppUserMovie userMovie) {
         movieService.updateUserMovie(userMovie, appUser);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

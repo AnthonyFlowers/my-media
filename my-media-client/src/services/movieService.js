@@ -2,20 +2,21 @@ import { SERVER_URL } from "./API"
 import { LOCAL_STORAGE_TOKEN_KEY } from "./authenticationService"
 
 const movieApi = `${SERVER_URL}/api/movie`;
+const userMovieApi = `${SERVER_URL}/api/user/movie`;
 
 export async function getMovies(page) {
     if (page == null) {
         page = 1;
     }
     page = Math.max(0, page - 1)
-    const response = await fetch(`${movieApi}/${page}`);
+    const response = await fetch(`${movieApi}?page=${page}`);
     return movieQueryResponse(response, "error finding movies");
 }
 
 export async function getUserMovies(page = 1, pageSize = 10) {
     page = Math.max(0, page - 1);
     pageSize = Math.max(1, pageSize);
-    const response = await fetch(`${movieApi}/user?page=${page}&pageSize=${pageSize}`, {
+    const response = await fetch(`${userMovieApi}?page=${page}&pageSize=${pageSize}`, {
         headers: {
             "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`
         }
@@ -25,7 +26,7 @@ export async function getUserMovies(page = 1, pageSize = 10) {
 
 export async function getRecentMovies(page) {
     page = Math.max(0, page - 1);
-    const response = await fetch(`${movieApi}/recent/${page}`);
+    const response = await fetch(`${movieApi}/recent?page=${page}`);
     return movieQueryResponse(response, "error finding recent movies");
 }
 
@@ -36,11 +37,11 @@ export async function getMoviesPageMovieCount(page, movieCount) {
 }
 
 export async function addMovieToUser(movie) {
-    const response = await fetch(`${movieApi}/add`, {
+    const response = await fetch(`${userMovieApi}`, {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`,
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
         },
         body: JSON.stringify(movie)
     });
@@ -52,7 +53,7 @@ export async function addMovieToUser(movie) {
 
 
 export async function updateUserMovie(userMovie) {
-    const response = await fetch(`${movieApi}/update`, {
+    const response = await fetch(`${userMovieApi}`, {
         method: "PUT",
         headers: {
             "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`,

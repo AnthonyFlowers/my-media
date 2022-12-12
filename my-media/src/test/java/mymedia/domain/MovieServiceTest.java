@@ -27,7 +27,7 @@ class MovieServiceTest {
     void shouldFindAllMovies() {
         Page<Movie> movies = getMovieList();
         when(repository.findAll(any(PageRequest.class))).thenReturn(movies);
-        Page<Movie> allMovies = service.findAllMovies();
+        Page<Movie> allMovies = service.findMovies(0, 1);
         assertEquals(movies, allMovies);
     }
 

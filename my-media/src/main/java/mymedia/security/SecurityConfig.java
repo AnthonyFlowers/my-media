@@ -30,15 +30,9 @@ public class SecurityConfig {
                 .authenticated()
                 .antMatchers(HttpMethod.GET,
                         "/api/movie*",
-                        "/api/movie/*",
-                        "/api/movie/recent/*")
+                        "/api/movie/recent*")
                 .permitAll()
-                .antMatchers(
-                        "/api/movie/*",
-                        "/api/movie/user")
-                .authenticated()
-                .antMatchers(HttpMethod.POST,
-                        "/api/movie/add")
+                .antMatchers("/api/user/movie*")
                 .authenticated()
                 .antMatchers("/**").denyAll()
                 .and()

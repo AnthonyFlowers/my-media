@@ -21,15 +21,17 @@ public class MovieController {
 
     @GetMapping
     public ResponseEntity<?> getMovies(
-            @RequestParam(required = false) int page,
-            @RequestParam(required = false) int pageSize) {
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "50") int pageSize) {
         Page<Movie> movies = movieService.findMovies(page, pageSize);
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 
     @GetMapping("/recent")
-    public ResponseEntity<?> getRecentMovies(@RequestParam(required = false) int page) {
-        Page<Movie> movies = movieService.findRecentMovies(page);
+    public ResponseEntity<?> getRecentMovies(
+            @RequestParam(required = false, defaultValue = "0") Integer page,
+            @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+        Page<Movie> movies = movieService.findRecentMovies(page, pageSize);
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 }

@@ -8,7 +8,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Validator;
-import java.util.Optional;
 
 @Service
 public class MovieService {
@@ -24,24 +23,23 @@ public class MovieService {
 
     public Page<Movie> findMovies(int page, int pageSize) {
         return movieRepository.findAll(PageRequest.of(
-                Math.max(page, 0), pageSize < 0 ? 50 : pageSize,
+                Math.max(page, 0), pageSize < 0 ? defaultSmallPageSize : pageSize,
                 Sort.by(Sort.Direction.DESC, "movieYear")
-            ));
+        ));
     }
 
-    public Page<Movie> findAllMovies() {
-        return findMovies(0, defaultPageSize);
-    }
-
-    public Page<Movie> findRecentMovies(int page, int pageSize) {
+    public Page<Movie> findRecentMovies(Integer page, Integer pageSize) {
+        if (page == null || page < 0) {
+            page = 0;
+        }
+        if (pageSize == null || page <= 0) {
+            pageSize = defaultSmallPageSize;
+        }
         return movieRepository.findAll(PageRequest.of(
-                Math.max(page, 0),
-                pageSize, Sort.by(Sort.Direction.DESC, "movieYear"))
+                page,
+                pageSize,
+                Sort.by(Sort.Direction.DESC, "movieYear"))
         );
-    }
-
-    public Page<Movie> findRecentMovies(int page) {
-        return findRecentMovies(page, defaultPageSize);
     }
 
     public void update(Movie movie) {
