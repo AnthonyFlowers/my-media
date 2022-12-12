@@ -27,4 +27,3 @@ and movie_year = 2008;
 select count(*) from movie;
 
 select * from tv_show;
-select * from tv_show_season;

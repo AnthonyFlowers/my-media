@@ -14,27 +14,7 @@ create table tv_show (
     tv_show_id int primary key auto_increment,
     tv_show_name varchar(256) not null,
     tv_show_overview varchar(2048),
-    tv_show_release_year int
-);
-
-create table tv_show_season (
-    tv_show_season_id int primary key auto_increment,
-    tv_show_id int not null,
-    tv_show_season_index int not null default 0,
-    constraint fk_tv_show_season_tv_show_id_tv_show_tv_show_id
-		foreign key (tv_show_id)
-        references tv_show(tv_show_id)
-);
-
-create table tv_show_episode (
-    tv_show_episode_id int primary key auto_increment,
-    tv_show_season_id int not null,
-    tv_show_episode_index int default 0,
-    tv_show_episode_name varchar(256),
-    tv_show_episode_length int not null default 0,
-    constraint fk_tv_show_episode_tv_show_season_tv_show_season_id
-        foreign key (tv_show_season_id)
-        references tv_show_season(tv_show_season_id)
+    tv_show_release_year int not null
 );
 
 create table app_user (
@@ -56,13 +36,14 @@ create table app_user_movie (
         foreign key (movie_id)
         references movie(movie_id)
 );
--- drop table app_user_tv_show;
+
 create table app_user_tv_show (
-	app_user_tv_show_id int,
+	app_user_tv_show_id int primary key auto_increment,
     app_user_id int not null,
     tv_show_id int not null,
-    constraint pk_app_user_tv_show_app_user_tv_show_id
-        primary key (app_user_tv_show_id),
+    season int default 0,
+    episode int default 0,
+    watch_count int default 0,
     constraint fk_app_user_tv_show_user_id
         foreign key (app_user_id)
         references app_user(app_user_id),
