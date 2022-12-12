@@ -29,10 +29,14 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST, "/auth/refresh_token")
                 .authenticated()
                 .antMatchers(HttpMethod.GET,
+                        "/api/movie",
                         "/api/movie*",
+                        "/api/movie/recent",
                         "/api/movie/recent*")
                 .permitAll()
-                .antMatchers("/api/user/movie*")
+                .antMatchers("/api/user/movie",
+                        "/api/user/movie*",
+                        "/api/user/movie/*")
                 .authenticated()
                 .antMatchers("/**").denyAll()
                 .and()

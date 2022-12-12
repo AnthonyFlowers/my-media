@@ -17,6 +17,14 @@ public class UserMovieService {
         this.appUserMovieRepository = appUserMovieRepository;
     }
 
+    public AppUserMovie findByUserMovieIdAndUser(int userMovieId, AppUser user) {
+        return appUserMovieRepository.findByAppUserMovieIdAndUser(userMovieId, user);
+    }
+
+    public AppUserMovie findByUserMovieId(int userMovieId) {
+        return appUserMovieRepository.findById(userMovieId).orElse(null);
+    }
+
     public Page<AppUserMovie> findUserMovies(int page, int pageSize, AppUser user) {
         return appUserMovieRepository.findByUserUsername(
                 PageRequest.of(
@@ -34,8 +42,16 @@ public class UserMovieService {
         return appUserMovieRepository.save(appUserMovie);
     }
 
-    public void updateUserMovie(AppUserMovie userMovie, AppUser appUser) {
-        userMovie.setUser(appUser);
-        appUserMovieRepository.save(userMovie);
+    public Result<AppUserMovie> updateUserMovie(AppUserMovie userMovie, AppUser appUser) {
+        Result<AppUserMovie> result = new Result<>();
+        AppUserMovie foundAppUserMovie = findByUserMovieId(userMovie.getAppUserMovieId());
+        if (foundAppUserMovie != null) {
+            userMovie.setMovie(foundAppUserMovie.getMovie());
+            userMovie.setUser(appUser);
+            result.setPayload(appUserMovieRepository.save(userMovie));
+        } else {
+            result.addMessage(ResultType.NOT_FOUND, "Could not find that app user movie to update");
+        }
+        return result;
     }
 }

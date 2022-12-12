@@ -1,5 +1,6 @@
 package mymedia.controllers;
 
+import mymedia.domain.Result;
 import mymedia.domain.UserMovieService;
 import mymedia.models.AppUserMovie;
 import mymedia.models.Movie;
@@ -18,10 +19,10 @@ import javax.transaction.Transactional;
 
 public class UserMovieController {
 
-    private final UserMovieService movieService;
+    private final UserMovieService userMovieService;
 
-    public UserMovieController(UserMovieService movieService) {
-        this.movieService = movieService;
+    public UserMovieController(UserMovieService userMovieService) {
+        this.userMovieService = userMovieService;
     }
 
     @GetMapping
@@ -29,8 +30,16 @@ public class UserMovieController {
             @AuthenticationPrincipal AppUser appUser,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int pageSize) {
-        Page<AppUserMovie> movies = movieService.findUserMovies(page, pageSize, appUser);
+        Page<AppUserMovie> movies = userMovieService.findUserMovies(page, pageSize, appUser);
         return new ResponseEntity<>(movies, HttpStatus.OK);
+    }
+
+    @GetMapping("/{appUserMovieId}")
+    public ResponseEntity<?> getUserMovie(
+            @AuthenticationPrincipal AppUser appUser,
+            @PathVariable int appUserMovieId) {
+        AppUserMovie movie = userMovieService.findByUserMovieIdAndUser(appUserMovieId, appUser);
+        return new ResponseEntity<>(movie, HttpStatus.OK);
     }
 
     @Transactional
@@ -38,7 +47,7 @@ public class UserMovieController {
     public ResponseEntity<?> createUserMovieEntry(
             @AuthenticationPrincipal AppUser appUser,
             @RequestBody Movie movie) {
-        AppUserMovie userMovie = movieService.createUserEntry(appUser, movie);
+        AppUserMovie userMovie = userMovieService.createUserEntry(appUser, movie);
         return new ResponseEntity<>(userMovie, HttpStatus.CREATED);
     }
 
@@ -46,8 +55,10 @@ public class UserMovieController {
     public ResponseEntity<?> updateUserMovieEntry(
             @AuthenticationPrincipal AppUser appUser,
             @RequestBody AppUserMovie userMovie) {
-        movieService.updateUserMovie(userMovie, appUser);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        Result<AppUserMovie> result = userMovieService.updateUserMovie(userMovie, appUser);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return ErrorResponse.build(result);
     }
-
 }
