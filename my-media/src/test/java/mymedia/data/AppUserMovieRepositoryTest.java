@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -59,9 +60,9 @@ class AppUserMovieRepositoryTest {
     }
 
     @Test
-    void shouldCreateEntryForJanedoe() {
+    void shouldCreateAppUserMovieEntry() {
         AppUser user = userRepository.findByUsername("janedoe");
-        Movie movie = movieRepository.findById(1).orElse(null);
+        Movie movie = movieRepository.findById(2).orElse(null);
         assertNotNull(user);
         assertNotNull(movie);
         AppUserMovie userMovie = new AppUserMovie();
@@ -72,12 +73,48 @@ class AppUserMovieRepositoryTest {
     }
 
     @Test
+    void shouldNotCreateEntryDuplicateEntry() {
+        AppUser user = userRepository.findByUsername("janedoe");
+        Movie movie = movieRepository.findById(1).orElse(null);
+        assertNotNull(user);
+        assertNotNull(movie);
+        AppUserMovie userMovie = new AppUserMovie();
+        userMovie.setUser(user);
+        userMovie.setMovie(movie);
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            userMovieRepository.save(userMovie);
+        });
+    }
+
+    @Test
     void shouldUpdateEntryForJohnsmith() {
         AppUserMovie userMovie = userMovieRepository.findByUserUsername(
                 Pageable.ofSize(1), "johnsmith").getContent().get(0);
         userMovie.setWatched(true);
         AppUserMovie savedMovie = userMovieRepository.save(userMovie);
         assertTrue(savedMovie.isWatched());
+    }
+
+    @Test
+    void shouldIncrementEntry() {
+        AppUserMovie userMovie = userMovieRepository
+                .findByUserUsername(Pageable.ofSize(1), "johnsmith")
+                .getContent().get(0);
+        int watchCount = userMovie.getWatchCount();
+        userMovie.setWatchCount(watchCount + 1);
+        AppUserMovie savedMovie = userMovieRepository.save(userMovie);
+        assertEquals(watchCount + 1, savedMovie.getWatchCount());
+    }
+
+    @Test
+    void shouldDecrementEntry() {
+        AppUserMovie userMovie = userMovieRepository
+                .findByUserUsername(Pageable.ofSize(1), "johnsmith")
+                .getContent().get(0);
+        int watchCount = userMovie.getWatchCount();
+        userMovie.setWatchCount(watchCount - 1);
+        AppUserMovie savedMovie = userMovieRepository.save(userMovie);
+        assertEquals(watchCount - 1, savedMovie.getWatchCount());
     }
 
 }

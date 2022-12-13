@@ -28,13 +28,16 @@ create table app_user_movie (
 	app_user_movie_id int primary key auto_increment,
     app_user_id int not null,
     movie_id int not null,
+    watch_count int default 1,
     watched bool not null default false,
     constraint fk_app_user_movie_user_id
         foreign key (app_user_id)
         references app_user(app_user_id),
     constraint fk_app_user_movie_movie_id
         foreign key (movie_id)
-        references movie(movie_id)
+        references movie(movie_id),
+	constraint uq_user_id_movie_id
+		unique (app_user_id, movie_id)
 );
 
 create table app_user_tv_show (

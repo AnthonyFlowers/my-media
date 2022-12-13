@@ -20,6 +20,8 @@ public class AppUserMovie {
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
+    private int watchCount;
+
     private boolean watched;
 
     public int getAppUserMovieId() {
@@ -48,5 +50,13 @@ public class AppUserMovie {
 
     public void setWatched(boolean watched) {
         this.watched = watched;
+    }
+
+    public int getWatchCount() {
+        return watchCount;
+    }
+
+    public void setWatchCount(int watchCount) {
+        this.watchCount = watchCount;
     }
 }
