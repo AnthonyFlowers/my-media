@@ -59,4 +59,8 @@ public class AppUserMovie {
     public void setWatchCount(int watchCount) {
         this.watchCount = watchCount;
     }
+
+    public int getUserId() {
+        return user.getAppUserId();
+    }
 }

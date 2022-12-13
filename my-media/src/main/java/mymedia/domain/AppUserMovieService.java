@@ -45,12 +45,14 @@ public class AppUserMovieService {
     public Result<AppUserMovie> updateUserMovie(AppUserMovie userMovie, AppUser appUser) {
         Result<AppUserMovie> result = new Result<>();
         AppUserMovie foundAppUserMovie = findByUserMovieId(userMovie.getAppUserMovieId());
-        if (foundAppUserMovie != null) {
+        if (foundAppUserMovie == null) {
+            result.addMessage(ResultType.NOT_FOUND, "Could not find that movie entry to update");
+        } else if (foundAppUserMovie.getUserId() != appUser.getAppUserId()) {
+            result.addMessage(ResultType.INVALID, "You do not own that movie entry");
+        } else {
             userMovie.setMovie(foundAppUserMovie.getMovie());
             userMovie.setUser(appUser);
             result.setPayload(appUserMovieRepository.save(userMovie));
-        } else {
-            result.addMessage(ResultType.NOT_FOUND, "Could not find that app user movie to update");
         }
         return result;
     }
