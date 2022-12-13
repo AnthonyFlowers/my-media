@@ -60,7 +60,7 @@ class AppUserMovieRepositoryTest {
     }
 
     @Test
-    void shouldCreateAppUserMovieEntry() {
+    void shouldCreateAppUserMovie() {
         AppUser user = userRepository.findByUsername("janedoe");
         Movie movie = movieRepository.findById(2).orElse(null);
         assertNotNull(user);
@@ -73,8 +73,8 @@ class AppUserMovieRepositoryTest {
     }
 
     @Test
-    void shouldNotCreateEntryDuplicateEntry() {
-        AppUser user = userRepository.findByUsername("janedoe");
+    void shouldNotCreateAppUserMovieDuplicate() {
+        AppUser user = userRepository.findByUsername("johnsmith");
         Movie movie = movieRepository.findById(1).orElse(null);
         assertNotNull(user);
         assertNotNull(movie);
@@ -87,7 +87,7 @@ class AppUserMovieRepositoryTest {
     }
 
     @Test
-    void shouldUpdateEntryForJohnsmith() {
+    void shouldUpdateAppUserMovieWatchedStatus() {
         AppUserMovie userMovie = userMovieRepository.findByUserUsername(
                 Pageable.ofSize(1), "johnsmith").getContent().get(0);
         userMovie.setWatched(true);
@@ -96,7 +96,17 @@ class AppUserMovieRepositoryTest {
     }
 
     @Test
-    void shouldIncrementEntry() {
+    void shouldDeleteAppUserMovie() {
+        List<AppUserMovie> userMovies = userMovieRepository.findByUserUsername(
+                Pageable.unpaged(),
+                "janedoe").getContent();
+        assertFalse(userMovies.isEmpty());
+        AppUserMovie userMovie = userMovies.get(0);
+        userMovieRepository.delete(userMovie);
+    }
+
+    @Test
+    void shouldIncrementAppUserMovieWatchCount() {
         AppUserMovie userMovie = userMovieRepository
                 .findByUserUsername(Pageable.ofSize(1), "johnsmith")
                 .getContent().get(0);
@@ -107,7 +117,7 @@ class AppUserMovieRepositoryTest {
     }
 
     @Test
-    void shouldDecrementEntry() {
+    void shouldDecrementAppUserMovieWatchCount() {
         AppUserMovie userMovie = userMovieRepository
                 .findByUserUsername(Pageable.ofSize(1), "johnsmith")
                 .getContent().get(0);
