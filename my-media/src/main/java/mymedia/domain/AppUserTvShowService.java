@@ -4,11 +4,11 @@ import mymedia.data.AppUserTvShowRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserTvShowService {
+public class AppUserTvShowService {
 
     private final AppUserTvShowRepository userTvShowRepository;
 
-    public UserTvShowService(AppUserTvShowRepository userTvShowRepository) {
+    public AppUserTvShowService(AppUserTvShowRepository userTvShowRepository) {
         this.userTvShowRepository = userTvShowRepository;
     }
 }

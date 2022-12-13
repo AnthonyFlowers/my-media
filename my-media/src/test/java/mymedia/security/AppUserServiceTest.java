@@ -1,6 +1,7 @@
 package mymedia.security;
 
 import mymedia.domain.Result;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -24,7 +26,7 @@ class AppUserServiceTest {
     @Test
     void shouldFindUser() {
         AppUser user = getTestUser();
-        when(repository.findByUsername("johnsmith")).thenReturn(user);
+        when(repository.findByUsername(anyString())).thenReturn(user);
         UserDetails userDetails = service.loadUserByUsername("johnsmith");
         assertEquals(user.getUsername(), userDetails.getUsername());
     }
@@ -32,7 +34,7 @@ class AppUserServiceTest {
     @Test
     void shouldCreateUser() {
         AppUser user = getTestUser();
-        when(repository.save(any())).thenReturn(user);
+        when(repository.save(any(AppUser.class))).thenReturn(user);
         Result<AppUser> result = service.create("johnsmith", "P@ssw0rd");
         assertTrue(result.isSuccess());
         assertEquals(user, result.getPayload());
@@ -61,7 +63,7 @@ class AppUserServiceTest {
         assertEquals(1, result.getMessages().size());
     }
 
-    private static AppUser getTestUser() {
+    private AppUser getTestUser() {
         return new AppUser(1, "johnsmith",
                 "$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa",
                 true);

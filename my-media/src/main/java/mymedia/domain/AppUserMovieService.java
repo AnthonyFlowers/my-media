@@ -9,11 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserMovieService {
+public class AppUserMovieService {
 
     private final AppUserMovieRepository appUserMovieRepository;
 
-    public UserMovieService(AppUserMovieRepository appUserMovieRepository) {
+    public AppUserMovieService(AppUserMovieRepository appUserMovieRepository) {
         this.appUserMovieRepository = appUserMovieRepository;
     }
 
