@@ -47,7 +47,7 @@ public class AppUserMovieController {
     public ResponseEntity<?> createUserMovieEntry(
             @AuthenticationPrincipal AppUser appUser,
             @RequestBody Movie movie) {
-        AppUserMovie userMovie = appUserMovieService.createUserEntry(appUser, movie);
+        AppUserMovie userMovie = appUserMovieService.saveAppUserMovie(appUser, movie);
         return new ResponseEntity<>(userMovie, HttpStatus.CREATED);
     }
 
@@ -55,7 +55,7 @@ public class AppUserMovieController {
     public ResponseEntity<?> updateUserMovieEntry(
             @AuthenticationPrincipal AppUser appUser,
             @RequestBody AppUserMovie userMovie) {
-        Result<AppUserMovie> result = appUserMovieService.updateUserMovie(userMovie, appUser);
+        Result<AppUserMovie> result = appUserMovieService.updateAppUserMovie(userMovie, appUser);
         if (result.isSuccess()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

@@ -35,14 +35,14 @@ public class AppUserMovieService {
         );
     }
 
-    public AppUserMovie createUserEntry(AppUser user, Movie movie) {
+    public AppUserMovie saveAppUserMovie(AppUser user, Movie movie) {
         AppUserMovie appUserMovie = new AppUserMovie();
         appUserMovie.setMovie(movie);
         appUserMovie.setUser(user);
         return appUserMovieRepository.save(appUserMovie);
     }
 
-    public Result<AppUserMovie> updateUserMovie(AppUserMovie userMovie, AppUser appUser) {
+    public Result<AppUserMovie> updateAppUserMovie(AppUserMovie userMovie, AppUser appUser) {
         Result<AppUserMovie> result = new Result<>();
         AppUserMovie foundAppUserMovie = findByUserMovieId(userMovie.getAppUserMovieId());
         if (foundAppUserMovie == null) {
