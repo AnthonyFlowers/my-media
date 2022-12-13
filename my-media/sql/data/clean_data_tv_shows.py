@@ -51,14 +51,16 @@ def tranasfer_data_to_tables():
     where title is not null;
     """
     cursor.execute(sql)
-    # need to keep the temp table to create seasons for each show
-    # cursor.execute("drop table tv_shows_temp_table;")
+    mysql_conn.commit()
+    cursor.execute("drop table tv_shows_temp_table;")
+    mysql_conn.commit()
+    
     cursor.close()
     mysql_conn.close()
 
 def main():
-    # data_frame = clean_data()
-    # save_dataframe_to_database(data_frame)
+    data_frame = clean_data()
+    save_dataframe_to_database(data_frame)
     tranasfer_data_to_tables()
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ data_csv = "movies_metadata.csv"
 
 db_username = os.environ["DB_USERNAME"]
 db_password = os.environ["DB_PASSWORD"]
-host = "192.168.0.70"
+host = "localhost"
 database = "my_media"
 
 # https://realpython.com/python-data-cleaning-numpy-pandas/
@@ -51,7 +51,11 @@ def tranasfer_data_to_movies_table():
     where title is not null;
     """
     cursor.execute(sql)
+    mysql_conn.commit()
+    
     cursor.execute("drop table movies_metadata_temp_table;")
+    mysql_conn.commit()
+
     cursor.close()
     mysql_conn.close()
 
