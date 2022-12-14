@@ -48,7 +48,6 @@ class AppUserMovieServiceTest {
 
     @Test
     void shouldNotFindByUserMovieId() {
-        AppUserMovie expected = new AppUserMovie();
         when(repository.findById(anyInt()))
                 .thenReturn(Optional.empty());
         AppUserMovie actual = repository.findById(1).orElse(null);
@@ -113,8 +112,6 @@ class AppUserMovieServiceTest {
         expected.setMovie(movie);
         when(repository.findById(anyInt()))
                 .thenReturn(Optional.empty());
-        when(repository.save(any(AppUserMovie.class)))
-                .thenReturn(expected);
         Result<AppUserMovie> result = service.updateAppUserMovie(expected, user);
         assertFalse(result.isSuccess());
         List<String> messages = result.getMessages();
@@ -134,11 +131,35 @@ class AppUserMovieServiceTest {
         expected.setMovie(movie);
         when(repository.findById(anyInt()))
                 .thenReturn(Optional.of(expected));
-        when(repository.save(any(AppUserMovie.class)))
-                .thenReturn(expected);
         Result<AppUserMovie> result = service.updateAppUserMovie(expected, badUser);
         assertFalse(result.isSuccess());
         List<String> messages = result.getMessages();
         assertEquals("You do not own that movie entry", messages.get(0));
+    }
+
+    @Test
+    void shouldDeleteAppUserMovie() {
+        AppUser user = new AppUser();
+        user.setAppUserId(2);
+        AppUserMovie expected = new AppUserMovie();
+        expected.setAppUserMovieId(3);
+        expected.setUser(user);
+        when(repository.findById(anyInt()))
+                .thenReturn(Optional.of(expected));
+        assertTrue(service.deleteAppUserMovie(expected, user));
+    }
+
+    @Test
+    void shouldNotDeleteAppUserMovie() {
+        AppUser user = new AppUser();
+        user.setAppUserId(2);
+        AppUserMovie expected = new AppUserMovie();
+        expected.setAppUserMovieId(3);
+        expected.setUser(user);
+        AppUser badUser = new AppUser();
+        badUser.setAppUserId(3);
+        when(repository.findById(anyInt()))
+                .thenReturn(Optional.of(expected));
+        assertFalse(service.deleteAppUserMovie(expected, badUser));
     }
 }

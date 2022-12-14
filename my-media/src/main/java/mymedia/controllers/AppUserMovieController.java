@@ -1,7 +1,7 @@
 package mymedia.controllers;
 
-import mymedia.domain.Result;
 import mymedia.domain.AppUserMovieService;
+import mymedia.domain.Result;
 import mymedia.models.AppUserMovie;
 import mymedia.models.Movie;
 import mymedia.security.AppUser;
@@ -60,5 +60,15 @@ public class AppUserMovieController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return ErrorResponse.build(result);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteUserMovieEntry(
+            @AuthenticationPrincipal AppUser appUser,
+            @RequestBody AppUserMovie userMovie) {
+        if (appUserMovieService.deleteAppUserMovie(userMovie, appUser)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

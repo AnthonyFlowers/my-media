@@ -56,4 +56,13 @@ public class AppUserMovieService {
         }
         return result;
     }
+
+    public boolean deleteAppUserMovie(AppUserMovie userMovie, AppUser appUser) {
+        AppUserMovie foundAppUserMovie = findByUserMovieId(userMovie.getAppUserMovieId());
+        if(foundAppUserMovie.getUserId() == appUser.getAppUserId()) {
+            appUserMovieRepository.delete(foundAppUserMovie);
+            return true;
+        }
+        return false;
+    }
 }
