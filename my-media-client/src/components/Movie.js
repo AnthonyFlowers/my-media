@@ -54,10 +54,10 @@ export function ListMovie({ m, setUserMovies, setErr }) {
         deleteUserMovie(evt.target.value)
             .then(() => {
                 getUserMovies()
-                .then((page) => {
-                    setUserMovies(page["content"])
-                })
-                .catch(setErr);
+                    .then((page) => {
+                        setUserMovies(page["content"])
+                    })
+                    .catch(setErr);
             })
             .catch(setErr);
     }

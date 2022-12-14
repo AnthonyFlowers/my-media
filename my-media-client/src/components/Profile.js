@@ -47,7 +47,7 @@ function Profile() {
                         <ul>
                             {
                                 userMovies.map((m, i) => {
-                                    return <ListMovie key={i} m={m} setUserMovies={setUserMovies} />
+                                    return <ListMovie key={m.appUserMovieId} m={m} setUserMovies={setUserMovies} />
                                 })
                             }
                         </ul>
