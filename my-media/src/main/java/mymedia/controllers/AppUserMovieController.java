@@ -47,8 +47,11 @@ public class AppUserMovieController {
     public ResponseEntity<?> createUserMovieEntry(
             @AuthenticationPrincipal AppUser appUser,
             @RequestBody Movie movie) {
-        AppUserMovie userMovie = appUserMovieService.saveAppUserMovie(appUser, movie);
-        return new ResponseEntity<>(userMovie, HttpStatus.CREATED);
+        Result<AppUserMovie> result = appUserMovieService.saveAppUserMovie(appUser, movie);
+        if(result.isSuccess()){
+            return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
+        }
+        return ErrorResponse.build(result);
     }
 
     @PutMapping
@@ -57,7 +60,7 @@ public class AppUserMovieController {
             @RequestBody AppUserMovie userMovie) {
         Result<AppUserMovie> result = appUserMovieService.updateAppUserMovie(userMovie, appUser);
         if (result.isSuccess()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
         }
         return ErrorResponse.build(result);
     }
@@ -66,9 +69,10 @@ public class AppUserMovieController {
     public ResponseEntity<?> deleteUserMovieEntry(
             @AuthenticationPrincipal AppUser appUser,
             @RequestBody AppUserMovie userMovie) {
-        if (appUserMovieService.deleteAppUserMovie(userMovie, appUser)) {
+        Result<?> result = appUserMovieService.deleteAppUserMovie(userMovie, appUser);
+        if(result.isSuccess()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return ErrorResponse.build(result);
     }
 }

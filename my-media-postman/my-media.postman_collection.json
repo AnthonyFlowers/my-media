@@ -145,6 +145,7 @@
 									"        const newPassword = request['password'];\r",
 									"        pm.collectionVariables.set(\"newUsername\", newUsername);\r",
 									"        pm.collectionVariables.set(\"newPassword\", newPassword);\r",
+									"        pm.collectionVariables.set(\"accessToken\", jwt);\r",
 									"    }\r",
 									"});"
 								],
@@ -200,9 +201,6 @@
 									"    const response = pm.response.json();\r",
 									"    const jwt = response[\"jwt\"];\r",
 									"    pm.expect(jwt).to.be.a(\"string\");\r",
-									"    if (jwt) {\r",
-									"        pm.collectionVariables.set(\"accessToken\", jwt);\r",
-									"    }\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -297,16 +295,6 @@
 					"response": []
 				}
 			],
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "{{accessToken}}",
-						"type": "string"
-					}
-				]
-			},
 			"event": [
 				{
 					"listen": "prerequest",
@@ -329,320 +317,603 @@
 			]
 		},
 		{
-			"name": "user-add-movie",
+			"name": "auth",
 			"item": [
 				{
-					"name": "get movie",
-					"event": [
+					"name": "user-add-movie",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Should get a single movie\", function () {\r",
-									"    const response = pm.response.json();\r",
-									"    pm.expect(response).to.be.an(\"object\");\r",
-									"    const movies = response[\"content\"];\r",
-									"    pm.expect(movies.length).to.eql(1);\r",
-									"    const movie = movies[0];\r",
-									"    if (movie) {\r",
-									"        pm.collectionVariables.set(\"movieId\", movie.movieId);\r",
-									"    }\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseAPIUrl}}/movie?page=0&pageSize=1",
-							"host": [
-								"{{baseAPIUrl}}"
-							],
-							"path": [
-								"movie"
-							],
-							"query": [
+							"name": "create user movie entry",
+							"event": [
 								{
-									"key": "page",
-									"value": "0"
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"movieId\": {{movieId}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
 								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create user movie bad movie",
+							"event": [
 								{
-									"key": "pageSize",
-									"value": "1"
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
 								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "create user movie entry",
-					"event": [
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"movieId\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 201\", function () {\r",
-									"    pm.response.to.have.status(201);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
+							"name": "create user movie entry no auth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"movieId\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
 						}
 					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"movieId\": {{movieId}}\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"console.log(\"included\");"
+								]
 							}
 						},
-						"url": {
-							"raw": "{{baseAPIUrl}}/user/movie",
-							"host": [
-								"{{baseAPIUrl}}"
-							],
-							"path": [
-								"user",
-								"movie"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get user movies",
-					"event": [
 						{
 							"listen": "test",
 							"script": {
+								"type": "text/javascript",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"New user should have more than 1 movie\", function () {\r",
-									"    const response = pm.response.json();\r",
-									"    const movies = response[\"content\"];\r",
-									"    pm.expect(movies).lengthOf.greaterThan(0);\r",
-									"    const movie = movies[0];\r",
-									"    pm.expect(movie).to.be.an(\"object\");\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseAPIUrl}}/user/movie",
-							"host": [
-								"{{baseAPIUrl}}"
-							],
-							"path": [
-								"user",
-								"movie"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "{{accessToken}}",
-						"type": "string"
-					}
-				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			]
-		},
-		{
-			"name": "update-user-movie",
-			"item": [
-				{
-					"name": "get user movie",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Should find one user movie for the user\", function () {\r",
-									"    const response = pm.response.json();\r",
-									"    const userMovies = response[\"content\"];\r",
-									"    console.log(response);\r",
-									"    pm.expect(userMovies).lengthOf.above(0);\r",
-									"    const appUserMovie = userMovies[0];\r",
-									"    pm.expect(appUserMovie[\"watched\"]).to.be.false;\r",
-									"    if (appUserMovie) {\r",
-									"        pm.collectionVariables.set(\"appUserMovieId\", appUserMovie.appUserMovieId);\r",
-									"    }\r",
-									"});\r",
-									"\r",
 									""
-								],
-								"type": "text/javascript"
+								]
 							}
 						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseAPIUrl}}/user/movie",
-							"host": [
-								"{{baseAPIUrl}}"
-							],
-							"path": [
-								"user",
-								"movie"
-							]
-						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "update user movie",
-					"event": [
+					"name": "update-user-movie",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 204\", function () {\r",
-									"    pm.response.to.have.status(204);\r",
-									"});"
-								],
-								"type": "text/javascript"
-							}
+							"name": "update user movie",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Should return the updated AppUserMovie\"), function () {\r",
+											"    const appUserMovie = pm.response.json();\r",
+											"    pm.expect(appUserMovie).is.an(\"Object\");\r",
+											"    console.log(appUserMovie[\"watched\"]);\r",
+											"    pm.expect(appUserMovie[\"watched\"]).to.be.true;\r",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": {{appUserMovieId}},\r\n    \"watched\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user movie rewatch",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Updated user movie watchCount attribute should be 1\", function () {\r",
+											"    const response = pm.response.json();\r",
+											"    console.log(response);\r",
+											"    const appUserMovie = response;\r",
+											"    pm.expect(appUserMovie).is.an(\"Object\");\r",
+											"    console.log(appUserMovie[\"watchCount\"]);\r",
+											"    pm.expect(appUserMovie[\"watchCount\"]).to.eql(1);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": {{appUserMovieId}},\r\n    \"watchCount\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user movie rewatch",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": -1,\r\n    \"watchCount\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user movie watched",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": -1,\r\n    \"watched\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user movie no auth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": -1,\r\n    \"watched\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
 						}
 					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"appUserMovieId\": {{appUserMovieId}},\r\n    \"watched\": true\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"const movie = {",
+									"    movieId: pm.collectionVariables.get(\"movieId\")",
+									"};",
+									"",
+									"pm.sendRequest({",
+									"    url: `${pm.collectionVariables.get(\"baseAPIUrl\")}/user/movie`,",
+									"    method: \"POST\",",
+									"    header: {",
+									"        \"Content-Type\": \"application/json\",",
+									"        Authorization: `Bearer ${pm.collectionVariables.get(\"accessToken\")}`",
+									"    },",
+									"    body: JSON.stringify(movie)",
+									"}, (err, res) => {",
+									"    const appUserMovieId = res.json()[\"appUserMovieId\"];",
+									"    pm.collectionVariables.set(\"appUserMovieId\", appUserMovieId);",
+									"})"
+								]
 							}
 						},
-						"url": {
-							"raw": "{{baseAPIUrl}}/user/movie",
-							"host": [
-								"{{baseAPIUrl}}"
-							],
-							"path": [
-								"user",
-								"movie"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get updated user movie",
-					"event": [
 						{
 							"listen": "test",
 							"script": {
+								"type": "text/javascript",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Updated user movie watched attribute should be true\", function () {\r",
-									"    const response = pm.response.json();\r",
-									"    console.log(response);\r",
-									"    const appUserMovie = response;\r",
-									"    pm.expect(appUserMovie).is.an(\"Object\");\r",
-									"    console.log(appUserMovie[\"watched\"]);\r",
-									"    pm.expect(appUserMovie[\"watched\"]).to.be.true;\r",
-									"});"
-								],
-								"type": "text/javascript"
+									""
+								]
 							}
 						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseAPIUrl}}/user/movie/{{appUserMovieId}}",
-							"host": [
-								"{{baseAPIUrl}}"
+					]
+				},
+				{
+					"name": "delete-user-movie",
+					"item": [
+						{
+							"name": "delete user movie",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 204\", function () {\r",
+											"    pm.response.to.have.status(204);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"user",
-								"movie",
-								"{{appUserMovieId}}"
-							]
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": {{appUserMovieId}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete user movie error",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 404\", function () {\r",
+											"    pm.response.to.have.status(404);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete user movie no auth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 403\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": {{appUserMovieId}}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"const movie = {",
+									"    movieId: pm.collectionVariables.get(\"movieId\")",
+									"};",
+									"",
+									"pm.sendRequest({",
+									"    url: `${pm.collectionVariables.get(\"baseAPIUrl\")}/user/movie`,",
+									"    method: \"POST\",",
+									"    header: {",
+									"        \"Content-Type\": \"application/json\",",
+									"        Authorization: `Bearer ${pm.collectionVariables.get(\"accessToken\")}`",
+									"    },",
+									"    body: JSON.stringify(movie)",
+									"}, (err, res) => {",
+									"    const appUserMovieId = res.json()[\"appUserMovieId\"];",
+									"    pm.collectionVariables.set(\"appUserMovieId\", appUserMovieId);",
+									"})"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
 				}
 			],
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "{{accessToken}}",
-						"type": "string"
-					}
-				]
-			},
 			"event": [
 				{
 					"listen": "prerequest",
 					"script": {
 						"type": "text/javascript",
 						"exec": [
-							""
+							"const user = {",
+							"    username: pm.variables.replaceIn(\"{{$randomUserName}}\"),",
+							"    password: `${pm.variables.replaceIn(\"{{$randomPassword}}\")}!1a`",
+							"}",
+							"",
+							"pm.sendRequest({",
+							"    url: `${pm.collectionVariables.get(\"baseAuthUrl\")}/create_account`,",
+							"    method: \"POST\",",
+							"    header: {",
+							"        \"Content-Type\": \"application/json\",",
+							"    },",
+							"    body: JSON.stringify(user)",
+							"}, (err, res) => {",
+							"    pm.collectionVariables.set(\"newUsername\", user.username);",
+							"    pm.collectionVariables.set(\"newPassword\", user.password);",
+							"    const jwt = res.json()[\"jwt\"];",
+							"    pm.collectionVariables.set(\"accessToken\", jwt);",
+							"})"
 						]
 					}
 				},
@@ -658,6 +929,16 @@
 			]
 		}
 	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",
@@ -716,7 +997,8 @@
 		},
 		{
 			"key": "userMovieId",
-			"value": ""
+			"value": "",
+			"disabled": true
 		},
 		{
 			"key": "appUserMovieId",

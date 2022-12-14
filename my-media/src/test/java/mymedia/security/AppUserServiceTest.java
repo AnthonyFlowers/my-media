@@ -25,7 +25,8 @@ class AppUserServiceTest {
     @Test
     void shouldFindUser() {
         AppUser user = getTestUser();
-        when(repository.findByUsername(anyString())).thenReturn(user);
+        when(repository.findByUsername(anyString()))
+                .thenReturn(user);
         UserDetails userDetails = service.loadUserByUsername("johnsmith");
         assertEquals(user.getUsername(), userDetails.getUsername());
     }
@@ -33,7 +34,8 @@ class AppUserServiceTest {
     @Test
     void shouldCreateUser() {
         AppUser user = getTestUser();
-        when(repository.save(any(AppUser.class))).thenReturn(user);
+        when(repository.save(any(AppUser.class)))
+                .thenReturn(user);
         Result<AppUser> result = service.create("johnsmith", "P@ssw0rd");
         assertTrue(result.isSuccess());
         assertEquals(user, result.getPayload());
@@ -42,6 +44,15 @@ class AppUserServiceTest {
     @Test
     void shouldNotCreateUserInvalidPassword() {
         Result<AppUser> result = service.create("johnsmith", "password");
+        assertFalse(result.isSuccess());
+        assertEquals(1, result.getMessages().size());
+    }
+
+    @Test
+    void shouldNotCreateUserUsernameInUse() {
+        when(repository.findByUsername(anyString()))
+                .thenReturn(new AppUser());
+        Result<AppUser> result = service.create("johnsmith", "password12!");
         assertFalse(result.isSuccess());
         assertEquals(1, result.getMessages().size());
     }
@@ -56,7 +67,8 @@ class AppUserServiceTest {
     @Test
     void shouldNotUpdateUser() {
         AppUser user = getTestUser();
-        doThrow(new DuplicateKeyException("")).when(repository).save(user);
+        doThrow(new DuplicateKeyException(""))
+                .when(repository).save(user);
         Result<AppUser> result = service.update(user);
         assertFalse(result.isSuccess());
         assertEquals(1, result.getMessages().size());

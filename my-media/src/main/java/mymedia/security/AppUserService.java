@@ -66,6 +66,10 @@ public class AppUserService implements UserDetailsService {
             result.addMessage(ResultType.INVALID, "username is required");
             return result;
         }
+        if(repository.findByUsername(username) != null){
+            result.addMessage(ResultType.IN_USE, "username already in use");
+            return result;
+        }
         if (password == null) {
             result.addMessage(ResultType.INVALID, "password is required");
             return result;

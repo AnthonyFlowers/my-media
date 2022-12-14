@@ -35,11 +35,25 @@ public class AppUserMovieService {
         );
     }
 
-    public AppUserMovie saveAppUserMovie(AppUser user, Movie movie) {
+    public Result<AppUserMovie> saveAppUserMovie(AppUser user, Movie movie) {
+        Result<AppUserMovie> result = new Result<>();
+        if(movie == null) {
+            result.addMessage(ResultType.INVALID, "cannot create entry without movie");
+            return result;
+        }
+        AppUserMovie foundUserMovie = appUserMovieRepository.findByUserAppUserIdAndMovieMovieId(
+                user.getAppUserId(),
+                movie.getMovieId()
+        );
+        if (foundUserMovie != null) {
+            result.addMessage(ResultType.INVALID, "That user already has an entry for that movie");
+            return result;
+        }
         AppUserMovie appUserMovie = new AppUserMovie();
         appUserMovie.setMovie(movie);
         appUserMovie.setUser(user);
-        return appUserMovieRepository.save(appUserMovie);
+        result.setPayload(appUserMovieRepository.save(appUserMovie));
+        return result;
     }
 
     public Result<AppUserMovie> updateAppUserMovie(AppUserMovie userMovie, AppUser appUser) {
@@ -57,12 +71,17 @@ public class AppUserMovieService {
         return result;
     }
 
-    public boolean deleteAppUserMovie(AppUserMovie userMovie, AppUser appUser) {
+    public Result<?> deleteAppUserMovie(AppUserMovie userMovie, AppUser appUser) {
+        Result<?> result = new Result<>();
         AppUserMovie foundAppUserMovie = findByUserMovieId(userMovie.getAppUserMovieId());
-        if(foundAppUserMovie.getUserId() == appUser.getAppUserId()) {
-            appUserMovieRepository.delete(foundAppUserMovie);
-            return true;
+        if (foundAppUserMovie == null) {
+            result.addMessage(ResultType.NOT_FOUND, "Could not find that user movie entry");
+            return result;
         }
-        return false;
+        if (foundAppUserMovie.getUserId() != appUser.getAppUserId()) {
+            result.addMessage(ResultType.INVALID, "Could not update that user movie entry");
+        }
+        appUserMovieRepository.delete(foundAppUserMovie);
+        return result;
     }
 }

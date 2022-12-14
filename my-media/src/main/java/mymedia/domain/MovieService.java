@@ -45,4 +45,8 @@ public class MovieService {
     public void update(Movie movie) {
         movieRepository.save(movie);
     }
+
+    public Movie findByMovieId(int movieId) {
+        return movieRepository.findById(movieId).orElse(null);
+    }
 }

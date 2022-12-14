@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface AppUserMovieRepository extends JpaRepository<AppUserMovie, Integer> {
 
     Page<AppUserMovie> findByUserUsername(Pageable pageable, String username);
-    AppUserMovie findByAppUserMovieIdAndUser(int id, AppUser user);
+    AppUserMovie findByAppUserMovieIdAndUser(int appUserMovieId, AppUser user);
 
+    AppUserMovie findByUserAppUserIdAndMovieMovieId(int userId, int movieId);
 }

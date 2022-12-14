@@ -23,6 +23,8 @@ class AppUserMovieServiceTest {
 
     @MockBean
     AppUserMovieRepository repository;
+    @MockBean
+    MovieService movieService;
 
     @Autowired
     AppUserMovieService service;
@@ -76,7 +78,11 @@ class AppUserMovieServiceTest {
         expected.setMovie(movie);
         when(repository.save(any(AppUserMovie.class)))
                 .thenReturn(expected);
-        AppUserMovie actual = service.saveAppUserMovie(user, movie);
+        when(movieService.findByMovieId(anyInt()))
+                .thenReturn(movie);
+        Result<AppUserMovie> result = service.saveAppUserMovie(user, movie);
+        assertTrue(result.isSuccess());
+        AppUserMovie actual = result.getPayload();
         assertEquals(user.getAppUserId(), actual.getUserId());
         assertEquals(movie.getMovieId(), actual.getMovie().getMovieId());
     }
@@ -146,7 +152,9 @@ class AppUserMovieServiceTest {
         expected.setUser(user);
         when(repository.findById(anyInt()))
                 .thenReturn(Optional.of(expected));
-        assertTrue(service.deleteAppUserMovie(expected, user));
+        Result<?> result = service.deleteAppUserMovie(expected, user);
+        assertTrue(result.isSuccess());
+        assertEquals(0, result.getMessages().size());
     }
 
     @Test
@@ -160,6 +168,8 @@ class AppUserMovieServiceTest {
         badUser.setAppUserId(3);
         when(repository.findById(anyInt()))
                 .thenReturn(Optional.of(expected));
-        assertFalse(service.deleteAppUserMovie(expected, badUser));
+        Result<?> result = service.deleteAppUserMovie(expected, badUser);
+        assertFalse(result.isSuccess());
+        assertEquals(1, result.getMessages().size());
     }
 }
