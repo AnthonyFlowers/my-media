@@ -61,10 +61,28 @@ export async function updateUserMovie(userMovie) {
         },
         body: JSON.stringify(userMovie)
     });
-    if(response.ok) {
+    if (response.ok) {
         return Promise.resolve();
     } else {
         return Promise.reject(["could not update user movie"]);
+    }
+}
+
+export async function deleteUserMovie(userMovieId) {
+    const response = await fetch(`${userMovieApi}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "appUserMovieId": userMovieId
+        })
+    });
+    if (response.ok) {
+        return Promise.resolve();
+    } else {
+        return Promise.reject(["could not delete user movie"]);
     }
 }
 
@@ -87,7 +105,6 @@ async function userMovieQueryResponse(response, errorMsg) {
     if (response.ok) {
         const body = await response.json();
         const movies = [];
-        console.log(body);
         return body;
     } else if (response.status === 403) {
         errors.push("authentication error")
@@ -97,4 +114,3 @@ async function userMovieQueryResponse(response, errorMsg) {
     errors.push(errorMsg);
     return Promise.reject(errors);
 }
-

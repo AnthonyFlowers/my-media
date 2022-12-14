@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { addMovieToUser, updateUserMovie } from "../services/movieService";
+import { addMovieToUser, deleteUserMovie, getUserMovies, updateUserMovie } from "../services/movieService";
 
 function Movie({ movie }) {
     function handleAdd() {
@@ -18,6 +18,7 @@ function Movie({ movie }) {
                 <p className="text-gray-600">Length: {movie.movieLength} Minutes</p>
                 <p className="text-gray-600">Year: {movie.movieYear}</p>
                 <p>Overview: {movie.movieOverview}</p>
+                {/* check if movie already added */}
                 <button onClick={handleAdd}>Add</button>
             </div>
         </div>
@@ -38,7 +39,7 @@ export function SmallUserMovie({ movie }) {
     )
 }
 
-export function ListMovie({ m }) {
+export function ListMovie({ m, setUserMovies, setErr }) {
     const [userMovie, setMovie] = useState(m);
 
     function toggleWatched(evt) {
@@ -47,9 +48,32 @@ export function ListMovie({ m }) {
         setMovie(nextMovie);
         updateUserMovie(nextMovie);
     }
+
+    function handleDelete(evt) {
+        console.log(evt.target.value)
+        deleteUserMovie(evt.target.value)
+            .then(() => {
+                getUserMovies()
+                .then((page) => {
+                    setUserMovies(page["content"])
+                })
+                .catch(setErr);
+            })
+            .catch(setErr);
+    }
     return (
-        <li><input type="checkbox" checked={userMovie.watched} onChange={toggleWatched} />
+        <li>
+            <input type="checkbox"
+                checked={userMovie.watched}
+                onChange={toggleWatched}
+            />
             {userMovie.movie.movieName}, Year: {userMovie.movie.movieYear}, Length: {userMovie.movie.movieLength}
+            <button type="button"
+                className="btn-small btn-red"
+                value={userMovie.appUserMovieId}
+                onClick={handleDelete}>
+                Remove
+            </button>
         </li>
     )
 }
