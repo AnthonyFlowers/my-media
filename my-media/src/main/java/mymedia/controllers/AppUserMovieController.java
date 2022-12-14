@@ -48,7 +48,7 @@ public class AppUserMovieController {
             @AuthenticationPrincipal AppUser appUser,
             @RequestBody Movie movie) {
         Result<AppUserMovie> result = appUserMovieService.saveAppUserMovie(appUser, movie);
-        if(result.isSuccess()){
+        if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
         }
         return ErrorResponse.build(result);
@@ -70,7 +70,7 @@ public class AppUserMovieController {
             @AuthenticationPrincipal AppUser appUser,
             @RequestBody AppUserMovie userMovie) {
         Result<?> result = appUserMovieService.deleteAppUserMovie(userMovie, appUser);
-        if(result.isSuccess()){
+        if (result.isSuccess()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return ErrorResponse.build(result);

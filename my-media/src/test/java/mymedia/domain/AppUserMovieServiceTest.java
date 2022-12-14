@@ -78,8 +78,6 @@ class AppUserMovieServiceTest {
         expected.setMovie(movie);
         when(repository.save(any(AppUserMovie.class)))
                 .thenReturn(expected);
-        when(movieService.findByMovieId(anyInt()))
-                .thenReturn(movie);
         Result<AppUserMovie> result = service.saveAppUserMovie(user, movie);
         assertTrue(result.isSuccess());
         AppUserMovie actual = result.getPayload();

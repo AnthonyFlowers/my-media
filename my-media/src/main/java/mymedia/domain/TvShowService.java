@@ -1,6 +1,5 @@
 package mymedia.domain;
 
-import mymedia.data.AppUserTvShowRepository;
 import mymedia.data.TvShowRepository;
 import org.springframework.stereotype.Service;
 

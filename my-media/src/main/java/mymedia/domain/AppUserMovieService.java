@@ -37,7 +37,7 @@ public class AppUserMovieService {
 
     public Result<AppUserMovie> saveAppUserMovie(AppUser user, Movie movie) {
         Result<AppUserMovie> result = new Result<>();
-        if(movie == null) {
+        if (movie == null) {
             result.addMessage(ResultType.INVALID, "cannot create entry without movie");
             return result;
         }
