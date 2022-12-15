@@ -1,7 +1,10 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { addMovieToUser, deleteUserMovie, getUserMovies, updateUserMovie } from "../services/movieService";
+import AuthContext from "./AuthContext";
 
 function Movie({ movie }) {
+    const { user } = useContext(AuthContext);
+
     function handleAdd() {
         addMovieToUser(movie)
             .then((msg) => {
@@ -18,8 +21,11 @@ function Movie({ movie }) {
                 <p className="text-gray-600">Length: {movie.movieLength} Minutes</p>
                 <p className="text-gray-600">Year: {movie.movieYear}</p>
                 <p>Overview: {movie.movieOverview}</p>
-                {/* check if movie already added */}
-                <button onClick={handleAdd}>Add</button>
+                {/* check if movie already added and if logged in*/}
+                {
+                    user ? <button onClick={handleAdd}>Add</button> : <></>
+                }
+
             </div>
         </div>
     )

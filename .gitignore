@@ -38,6 +38,3 @@ target/
 
 # Node
 node_modules/
-
-# Tailwind
-output.css
