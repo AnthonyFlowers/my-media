@@ -9,8 +9,10 @@ import Login from './components/Login';
 import Movies from './components/Movies';
 import Navbar from './components/Navbar';
 import Profile from './components/Profile';
+import TvShows from './components/TvShows';
 import { LOCAL_STORAGE_TOKEN_KEY, refresh } from './services/authenticationService';
 import { getMovies, getRecentMovies } from './services/movieService';
+import { getTvShows } from './services/tvShowService';
 
 
 function App() {
@@ -56,6 +58,9 @@ function App() {
               <Route path="/movies" >
                 <Route path="/movies" element={<Movies movieQueury={getMovies} />} />
                 <Route path="/movies/recent" element={<Movies movieQueury={getRecentMovies} />} />
+              </Route>
+              <Route path="/tv-shows">
+                <Route path="/tv-shows" element={<TvShows tvShowQuery={getTvShows} />}></Route>
               </Route>
 
               <Route path="/profile">

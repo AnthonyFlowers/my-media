@@ -1,5 +1,5 @@
 
-function MoviePageNav({ pages, setParams }) {
+function MediaPageNav({ pages, setParams }) {
 
     function handleMoviePage(evt) {
         if (evt.target.value > pages.end || evt.target.value < pages.start) {
@@ -38,4 +38,4 @@ function MoviePageNav({ pages, setParams }) {
     )
 }
 
-export default MoviePageNav;
+export default MediaPageNav;

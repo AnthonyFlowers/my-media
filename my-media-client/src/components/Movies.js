@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Movie from "./Movie";
-import MoviePageNav from "./MoviePageNav";
+import MediaPageNav from "./MediaPageNav";
 
 function Movies({ movieQueury }) {
 
@@ -32,7 +32,7 @@ function Movies({ movieQueury }) {
 
     return (
         <div id="movies">
-            <MoviePageNav pages={movieNavPages} setParams={setSearchParams} />
+            <MediaPageNav pages={movieNavPages} setParams={setSearchParams} />
             <div className="grid md:grid-cols-1 lg:grid-cols-2 items-center justify-center py-4 lg:space-x-4 grid-auto-flow:row">
                 {
                     movies.map((m) => {
@@ -40,7 +40,7 @@ function Movies({ movieQueury }) {
                     })
                 }
             </div>
-            <MoviePageNav pages={movieNavPages} setParams={setSearchParams} />
+            <MediaPageNav pages={movieNavPages} setParams={setSearchParams} />
             <div className="">{errs.map((e) => { return <p key={e}>{e}</p> })}</div>
         </div>
     )
