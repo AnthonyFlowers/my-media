@@ -21,6 +21,7 @@ public class AppUserTvShow {
 
     private int season;
     private int episode;
+    private boolean watched;
     private int watchCount;
 
     public AppUserTvShow() {}
@@ -68,6 +69,14 @@ public class AppUserTvShow {
 
     public void setEpisode(int episode) {
         this.episode = episode;
+    }
+
+    public boolean isWatched() {
+        return watched;
+    }
+
+    public void setWatched(boolean watched) {
+        this.watched = watched;
     }
 
     public int getWatchCount() {

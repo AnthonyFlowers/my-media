@@ -46,6 +46,7 @@ create table app_user_tv_show (
     tv_show_id int not null,
     season int default 0,
     episode int default 0,
+    watched bool not null default false,
     watch_count int default 0,
     constraint fk_app_user_tv_show_user_id
         foreign key (app_user_id)

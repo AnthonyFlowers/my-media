@@ -67,7 +67,7 @@ function Profile() {
                         <ul>
                             {
                                 userTvShows.map((t) => {
-                                    return <ListTvShow key={t.appuserTvShowId} t={t} setUserTvShows={setUserTvShows} />
+                                    return <ListTvShow key={t.appUserTvShowId} t={t} setUserTvShows={setUserTvShows} />
                                 })
                             }
                         </ul>
