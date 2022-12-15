@@ -27,7 +27,7 @@ public class AppUserTvShowController {
             @AuthenticationPrincipal AppUser appUser,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int pageSize) {
-        Page<AppUserTvShow> userTvShows = service.findUserMovies(page, pageSize, appUser);
+        Page<AppUserTvShow> userTvShows = service.findUserTvShows(page, pageSize, appUser);
         return new ResponseEntity<>(userTvShows, HttpStatus.OK);
     }
 

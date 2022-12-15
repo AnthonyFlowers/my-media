@@ -138,7 +138,7 @@ class AppUserMovieServiceTest {
         Result<AppUserMovie> result = service.update(expected, badUser);
         assertFalse(result.isSuccess());
         List<String> messages = result.getMessages();
-        assertEquals("You do not own that movie entry", messages.get(0));
+        assertEquals("Could not update that movie entry", messages.get(0));
     }
 
     @Test

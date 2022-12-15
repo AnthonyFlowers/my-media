@@ -62,7 +62,7 @@ public class AppUserMovieService {
         if (foundAppUserMovie == null) {
             result.addMessage(ResultType.NOT_FOUND, "Could not find that movie entry to update");
         } else if (foundAppUserMovie.getUserId() != appUser.getAppUserId()) {
-            result.addMessage(ResultType.INVALID, "You do not own that movie entry");
+            result.addMessage(ResultType.INVALID, "Could not update that movie entry");
         } else {
             userMovie.setMovie(foundAppUserMovie.getMovie());
             userMovie.setUser(appUser);
@@ -75,11 +75,11 @@ public class AppUserMovieService {
         Result<?> result = new Result<>();
         AppUserMovie foundAppUserMovie = findByUserMovieId(userMovie.getAppUserMovieId());
         if (foundAppUserMovie == null) {
-            result.addMessage(ResultType.NOT_FOUND, "Could not find that user movie entry");
+            result.addMessage(ResultType.NOT_FOUND, "Could not find that movie entry");
             return result;
         }
         if (foundAppUserMovie.getUserId() != appUser.getAppUserId()) {
-            result.addMessage(ResultType.INVALID, "Could not update that user movie entry");
+            result.addMessage(ResultType.INVALID, "Could not delete that movie entry");
         } else {
             repository.delete(foundAppUserMovie);
         }

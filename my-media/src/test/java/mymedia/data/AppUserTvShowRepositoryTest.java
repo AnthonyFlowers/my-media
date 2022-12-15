@@ -56,7 +56,6 @@ class AppUserTvShowRepositoryTest {
         ).getContent().get(0);
         assertNotNull(userTvShow);
         assertEquals("Rick and Morty", userTvShow.getTvShow().getTvShowName());
-        assertEquals("johnsmith", userTvShow.getUser().getUsername());
     }
 
     @Test

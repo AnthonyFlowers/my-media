@@ -19,7 +19,7 @@ public class AppUserTvShowService {
     }
 
 
-    public Page<AppUserTvShow> findUserMovies(int page, int pageSize, AppUser appUser) {
+    public Page<AppUserTvShow> findUserTvShows(int page, int pageSize, AppUser appUser) {
         return repository.findByUserUsername(PageRequest.of(
                         Math.max(page, 0), pageSize < 0 ? defaultSmallPageSize : pageSize),
                 appUser.getUsername()
@@ -47,30 +47,30 @@ public class AppUserTvShowService {
 
     public Result<?> delete(AppUserTvShow userTvShow, AppUser appUser) {
         Result<?> result = new Result<>();
-        AppUserTvShow foundAppUserTvShow = findByUserMovieId(userTvShow.getAppUserTvShowId());
+        AppUserTvShow foundAppUserTvShow = findByUserTvShowId(userTvShow.getAppUserTvShowId());
         if (foundAppUserTvShow == null) {
-            result.addMessage(ResultType.NOT_FOUND, "Could not find that user movie entry");
+            result.addMessage(ResultType.NOT_FOUND, "Could not find that tv show entry");
             return result;
         }
         if (foundAppUserTvShow.getUserId() != appUser.getAppUserId()) {
-            result.addMessage(ResultType.INVALID, "Could not update that user movie entry");
+            result.addMessage(ResultType.INVALID, "Could not update that tv show entry");
         } else {
             repository.delete(foundAppUserTvShow);
         }
         return result;
     }
 
-    private AppUserTvShow findByUserMovieId(int appUserTvShowId) {
+    private AppUserTvShow findByUserTvShowId(int appUserTvShowId) {
         return repository.findById(appUserTvShowId).orElse(null);
     }
 
     public Result<AppUserTvShow> update(AppUserTvShow userTvShow, AppUser appUser) {
         Result<AppUserTvShow> result = new Result<>();
-        AppUserTvShow foundAppUserTvShow = findByUserMovieId(userTvShow.getAppUserTvShowId());
+        AppUserTvShow foundAppUserTvShow = findByUserTvShowId(userTvShow.getAppUserTvShowId());
         if (foundAppUserTvShow == null) {
-            result.addMessage(ResultType.NOT_FOUND, "Could not find that movie entry to update");
+            result.addMessage(ResultType.NOT_FOUND, "Could not find that tv show entry to update");
         } else if (foundAppUserTvShow.getUserId() != appUser.getAppUserId()) {
-            result.addMessage(ResultType.INVALID, "You do not own that movie entry");
+            result.addMessage(ResultType.INVALID, "Could not update that tv show entry");
         } else {
             userTvShow.setTvShow(foundAppUserTvShow.getTvShow());
             userTvShow.setUser(appUser);
