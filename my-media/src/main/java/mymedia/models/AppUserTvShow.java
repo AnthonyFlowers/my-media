@@ -23,6 +23,13 @@ public class AppUserTvShow {
     private int episode;
     private int watchCount;
 
+    public AppUserTvShow() {}
+
+    public AppUserTvShow(TvShow tvShow, AppUser appUser) {
+        this.tvShow = tvShow;
+        this.user = appUser;
+    }
+
     public int getAppUserTvShowId() {
         return appUserTvShowId;
     }
@@ -31,8 +38,8 @@ public class AppUserTvShow {
         this.appUserTvShowId = appUserTvShowId;
     }
 
-    public AppUser getUser() {
-        return user;
+    public int getUserId() {
+        return user.getAppUserId();
     }
 
     public void setUser(AppUser user) {

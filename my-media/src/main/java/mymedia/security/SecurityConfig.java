@@ -40,6 +40,10 @@ public class SecurityConfig {
                         "/api/tv-show",
                         "/api/tv-show?*"
                 ).permitAll()
+                .antMatchers("/api/user/tv-show",
+                        "/api/user/movie?*",
+                        "/api/user/movie/*")
+                .authenticated()
                 .antMatchers("/**").denyAll()
                 .and()
                 .addFilter(new JwtRequestFilter(authenticationManager(authConfig), converter))

@@ -67,7 +67,7 @@ public class AppUserService implements UserDetailsService {
             return result;
         }
         if(repository.findByUsername(username) != null){
-            result.addMessage(ResultType.IN_USE, "username already in use");
+            result.addMessage(ResultType.INVALID, "username already in use");
             return result;
         }
         if (password == null) {

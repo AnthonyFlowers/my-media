@@ -11,4 +11,5 @@ public interface AppUserTvShowRepository extends JpaRepository<AppUserTvShow, In
 
     Page<AppUserTvShow> findByUserUsername(Pageable pageable, String username);
 
+    AppUserTvShow findByUserAppUserIdAndTvShowTvShowId(int userId, int showId);
 }
