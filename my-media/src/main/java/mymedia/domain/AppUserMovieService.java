@@ -11,22 +11,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppUserMovieService {
 
-    private final AppUserMovieRepository appUserMovieRepository;
+    private final AppUserMovieRepository repository;
 
-    public AppUserMovieService(AppUserMovieRepository appUserMovieRepository) {
-        this.appUserMovieRepository = appUserMovieRepository;
+    public AppUserMovieService(AppUserMovieRepository repository) {
+        this.repository = repository;
     }
 
     public AppUserMovie findByUserMovieIdAndUser(int userMovieId, AppUser user) {
-        return appUserMovieRepository.findByAppUserMovieIdAndUser(userMovieId, user);
+        return repository.findByAppUserMovieIdAndUser(userMovieId, user);
     }
 
     public AppUserMovie findByUserMovieId(int userMovieId) {
-        return appUserMovieRepository.findById(userMovieId).orElse(null);
+        return repository.findById(userMovieId).orElse(null);
     }
 
     public Page<AppUserMovie> findUserMovies(int page, int pageSize, AppUser user) {
-        return appUserMovieRepository.findByUserUsername(
+        return repository.findByUserUsername(
                 PageRequest.of(
                         Math.max(page, 0),
                         pageSize <= 0 ? 10 : pageSize
@@ -35,13 +35,13 @@ public class AppUserMovieService {
         );
     }
 
-    public Result<AppUserMovie> saveAppUserMovie(AppUser user, Movie movie) {
+    public Result<AppUserMovie> create(AppUser user, Movie movie) {
         Result<AppUserMovie> result = new Result<>();
         if (movie == null) {
             result.addMessage(ResultType.INVALID, "cannot create entry without movie");
             return result;
         }
-        AppUserMovie foundUserMovie = appUserMovieRepository.findByUserAppUserIdAndMovieMovieId(
+        AppUserMovie foundUserMovie = repository.findByUserAppUserIdAndMovieMovieId(
                 user.getAppUserId(),
                 movie.getMovieId()
         );
@@ -52,11 +52,11 @@ public class AppUserMovieService {
         AppUserMovie appUserMovie = new AppUserMovie();
         appUserMovie.setMovie(movie);
         appUserMovie.setUser(user);
-        result.setPayload(appUserMovieRepository.save(appUserMovie));
+        result.setPayload(repository.save(appUserMovie));
         return result;
     }
 
-    public Result<AppUserMovie> updateAppUserMovie(AppUserMovie userMovie, AppUser appUser) {
+    public Result<AppUserMovie> update(AppUserMovie userMovie, AppUser appUser) {
         Result<AppUserMovie> result = new Result<>();
         AppUserMovie foundAppUserMovie = findByUserMovieId(userMovie.getAppUserMovieId());
         if (foundAppUserMovie == null) {
@@ -66,12 +66,12 @@ public class AppUserMovieService {
         } else {
             userMovie.setMovie(foundAppUserMovie.getMovie());
             userMovie.setUser(appUser);
-            result.setPayload(appUserMovieRepository.save(userMovie));
+            result.setPayload(repository.save(userMovie));
         }
         return result;
     }
 
-    public Result<?> deleteAppUserMovie(AppUserMovie userMovie, AppUser appUser) {
+    public Result<?> delete(AppUserMovie userMovie, AppUser appUser) {
         Result<?> result = new Result<>();
         AppUserMovie foundAppUserMovie = findByUserMovieId(userMovie.getAppUserMovieId());
         if (foundAppUserMovie == null) {
@@ -80,8 +80,9 @@ public class AppUserMovieService {
         }
         if (foundAppUserMovie.getUserId() != appUser.getAppUserId()) {
             result.addMessage(ResultType.INVALID, "Could not update that user movie entry");
+        } else {
+            repository.delete(foundAppUserMovie);
         }
-        appUserMovieRepository.delete(foundAppUserMovie);
         return result;
     }
 }

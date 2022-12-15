@@ -11,36 +11,70 @@ import org.springframework.stereotype.Service;
 @Service
 public class AppUserTvShowService {
 
-    private final AppUserTvShowRepository userTvShowRepository;
+    private final AppUserTvShowRepository repository;
     private final int defaultSmallPageSize = 10;
 
-    public AppUserTvShowService(AppUserTvShowRepository userTvShowRepository) {
-        this.userTvShowRepository = userTvShowRepository;
+    public AppUserTvShowService(AppUserTvShowRepository repository) {
+        this.repository = repository;
     }
 
 
     public Page<AppUserTvShow> findUserMovies(int page, int pageSize, AppUser appUser) {
-        return userTvShowRepository.findByUserUsername(PageRequest.of(
-                Math.max(page, 0), pageSize < 0 ? defaultSmallPageSize : pageSize),
+        return repository.findByUserUsername(PageRequest.of(
+                        Math.max(page, 0), pageSize < 0 ? defaultSmallPageSize : pageSize),
                 appUser.getUsername()
         );
     }
 
     public Result<AppUserTvShow> create(TvShow tvShow, AppUser appUser) {
         Result<AppUserTvShow> result = new Result<>();
-        if(tvShow == null){
+        if (tvShow == null) {
             result.addMessage(ResultType.INVALID, "cannot add an entry with a null TV Show");
             return result;
         }
-        AppUserTvShow found = userTvShowRepository.findByUserAppUserIdAndTvShowTvShowId(
+        AppUserTvShow found = repository.findByUserAppUserIdAndTvShowTvShowId(
                 appUser.getAppUserId(),
                 tvShow.getTvShowId()
         );
-        if(found != null) {
+        if (found != null) {
             result.addMessage(ResultType.INVALID, "user already has an entry for that TV Show");
         } else {
             AppUserTvShow appUserTvShow = new AppUserTvShow(tvShow, appUser);
-            result.setPayload(userTvShowRepository.save(appUserTvShow));
+            result.setPayload(repository.save(appUserTvShow));
+        }
+        return result;
+    }
+
+    public Result<?> delete(AppUserTvShow userTvShow, AppUser appUser) {
+        Result<?> result = new Result<>();
+        AppUserTvShow foundAppUserTvShow = findByUserMovieId(userTvShow.getAppUserTvShowId());
+        if (foundAppUserTvShow == null) {
+            result.addMessage(ResultType.NOT_FOUND, "Could not find that user movie entry");
+            return result;
+        }
+        if (foundAppUserTvShow.getUserId() != appUser.getAppUserId()) {
+            result.addMessage(ResultType.INVALID, "Could not update that user movie entry");
+        } else {
+            repository.delete(foundAppUserTvShow);
+        }
+        return result;
+    }
+
+    private AppUserTvShow findByUserMovieId(int appUserTvShowId) {
+        return repository.findById(appUserTvShowId).orElse(null);
+    }
+
+    public Result<AppUserTvShow> update(AppUserTvShow userTvShow, AppUser appUser) {
+        Result<AppUserTvShow> result = new Result<>();
+        AppUserTvShow foundAppUserTvShow = findByUserMovieId(userTvShow.getAppUserTvShowId());
+        if (foundAppUserTvShow == null) {
+            result.addMessage(ResultType.NOT_FOUND, "Could not find that movie entry to update");
+        } else if (foundAppUserTvShow.getUserId() != appUser.getAppUserId()) {
+            result.addMessage(ResultType.INVALID, "You do not own that movie entry");
+        } else {
+            userTvShow.setTvShow(foundAppUserTvShow.getTvShow());
+            userTvShow.setUser(appUser);
+            result.setPayload(repository.save(userTvShow));
         }
         return result;
     }

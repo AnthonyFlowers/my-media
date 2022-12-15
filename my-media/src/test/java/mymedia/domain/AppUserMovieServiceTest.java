@@ -78,7 +78,7 @@ class AppUserMovieServiceTest {
         expected.setMovie(movie);
         when(repository.save(any(AppUserMovie.class)))
                 .thenReturn(expected);
-        Result<AppUserMovie> result = service.saveAppUserMovie(user, movie);
+        Result<AppUserMovie> result = service.create(user, movie);
         assertTrue(result.isSuccess());
         AppUserMovie actual = result.getPayload();
         assertEquals(user.getAppUserId(), actual.getUserId());
@@ -98,7 +98,7 @@ class AppUserMovieServiceTest {
                 .thenReturn(Optional.of(expected));
         when(repository.save(any(AppUserMovie.class)))
                 .thenReturn(expected);
-        Result<AppUserMovie> result = service.updateAppUserMovie(expected, user);
+        Result<AppUserMovie> result = service.update(expected, user);
         assertTrue(result.isSuccess());
         assertNotNull(result.getPayload());
         AppUserMovie actual = result.getPayload();
@@ -116,7 +116,7 @@ class AppUserMovieServiceTest {
         expected.setMovie(movie);
         when(repository.findById(anyInt()))
                 .thenReturn(Optional.empty());
-        Result<AppUserMovie> result = service.updateAppUserMovie(expected, user);
+        Result<AppUserMovie> result = service.update(expected, user);
         assertFalse(result.isSuccess());
         List<String> messages = result.getMessages();
         assertEquals("Could not find that movie entry to update", messages.get(0));
@@ -135,7 +135,7 @@ class AppUserMovieServiceTest {
         expected.setMovie(movie);
         when(repository.findById(anyInt()))
                 .thenReturn(Optional.of(expected));
-        Result<AppUserMovie> result = service.updateAppUserMovie(expected, badUser);
+        Result<AppUserMovie> result = service.update(expected, badUser);
         assertFalse(result.isSuccess());
         List<String> messages = result.getMessages();
         assertEquals("You do not own that movie entry", messages.get(0));
@@ -150,7 +150,7 @@ class AppUserMovieServiceTest {
         expected.setUser(user);
         when(repository.findById(anyInt()))
                 .thenReturn(Optional.of(expected));
-        Result<?> result = service.deleteAppUserMovie(expected, user);
+        Result<?> result = service.delete(expected, user);
         assertTrue(result.isSuccess());
         assertEquals(0, result.getMessages().size());
     }
@@ -166,7 +166,7 @@ class AppUserMovieServiceTest {
         badUser.setAppUserId(3);
         when(repository.findById(anyInt()))
                 .thenReturn(Optional.of(expected));
-        Result<?> result = service.deleteAppUserMovie(expected, badUser);
+        Result<?> result = service.delete(expected, badUser);
         assertFalse(result.isSuccess());
         assertEquals(1, result.getMessages().size());
     }

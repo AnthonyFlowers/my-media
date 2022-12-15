@@ -45,7 +45,40 @@ export async function addTvShowToUser(tvShow) {
         body: JSON.stringify(tvShow)
     });
     if (response.status === 201) {
-        return Promise.resolve("created movie entry");
+        return Promise.resolve("created tv show entry");
     }
-    return Promise.reject(["could not add movie :("]);
+    return Promise.reject(["could not add tv show :("]);
+}
+
+export async function deleteUserTvShow(userTvShowId) {
+    const response = await fetch(`${userTvShowApi}`, {
+        method: "DELETE",
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            "appUserTvShowId": userTvShowId
+        })
+    });
+    if (response.ok) {
+        return Promise.resolve("deleted tv show entry");
+    }
+    return Promise.reject(["could not delete tv show :("]);
+}
+
+export async function updateUserTvShow(userTvShow) {
+    const response = await fetch(`${userTvShowApi}`, {
+        method: "PUT",
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userTvShow)
+    });
+    if (response.ok) {
+        return Promise.resolve();
+    } else {
+        return Promise.reject(["could not update user movie"]);
+    }
 }

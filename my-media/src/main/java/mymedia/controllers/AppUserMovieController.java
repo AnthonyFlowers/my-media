@@ -12,17 +12,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
-
 @Controller
 @RequestMapping("/api/user/movie")
-
 public class AppUserMovieController {
 
-    private final AppUserMovieService appUserMovieService;
+    private final AppUserMovieService service;
 
-    public AppUserMovieController(AppUserMovieService appUserMovieService) {
-        this.appUserMovieService = appUserMovieService;
+    public AppUserMovieController(AppUserMovieService service) {
+        this.service = service;
     }
 
     @GetMapping
@@ -30,7 +27,7 @@ public class AppUserMovieController {
             @AuthenticationPrincipal AppUser appUser,
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "10") int pageSize) {
-        Page<AppUserMovie> movies = appUserMovieService.findUserMovies(page, pageSize, appUser);
+        Page<AppUserMovie> movies = service.findUserMovies(page, pageSize, appUser);
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 
@@ -38,16 +35,15 @@ public class AppUserMovieController {
     public ResponseEntity<?> getUserMovie(
             @AuthenticationPrincipal AppUser appUser,
             @PathVariable int appUserMovieId) {
-        AppUserMovie movie = appUserMovieService.findByUserMovieIdAndUser(appUserMovieId, appUser);
+        AppUserMovie movie = service.findByUserMovieIdAndUser(appUserMovieId, appUser);
         return new ResponseEntity<>(movie, HttpStatus.OK);
     }
 
-    @Transactional
     @PostMapping
     public ResponseEntity<?> createUserMovieEntry(
             @AuthenticationPrincipal AppUser appUser,
             @RequestBody Movie movie) {
-        Result<AppUserMovie> result = appUserMovieService.saveAppUserMovie(appUser, movie);
+        Result<AppUserMovie> result = service.create(appUser, movie);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
         }
@@ -58,7 +54,7 @@ public class AppUserMovieController {
     public ResponseEntity<?> updateUserMovieEntry(
             @AuthenticationPrincipal AppUser appUser,
             @RequestBody AppUserMovie userMovie) {
-        Result<AppUserMovie> result = appUserMovieService.updateAppUserMovie(userMovie, appUser);
+        Result<AppUserMovie> result = service.update(userMovie, appUser);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
         }
@@ -69,7 +65,7 @@ public class AppUserMovieController {
     public ResponseEntity<?> deleteUserMovieEntry(
             @AuthenticationPrincipal AppUser appUser,
             @RequestBody AppUserMovie userMovie) {
-        Result<?> result = appUserMovieService.deleteAppUserMovie(userMovie, appUser);
+        Result<?> result = service.delete(userMovie, appUser);
         if (result.isSuccess()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

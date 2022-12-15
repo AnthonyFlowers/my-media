@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { addTvShowToUser, getUserTvShows } from "../services/tvShowService";
+import { addTvShowToUser, deleteUserTvShow, getUserTvShows, updateUserTvShow } from "../services/tvShowService";
 import AuthContext from "./AuthContext";
 
 export default function TvShow({ tvShow }) {
@@ -36,20 +36,19 @@ export function ListTvShow({ t, setUserTvShows, setErr }) {
         const nextUserTvShow = { ...userTvShow };
         nextUserTvShow.watched = evt.target.checked;
         setUserTvShow(nextUserTvShow);
-        // updateUserTvShow(nextUserTvShow);
+        updateUserTvShow(nextUserTvShow);
     }
 
     function handleDelete(evt) {
-        console.log(evt.target.value)
-        // deleteUserTvShow(evt.target.value)
-        //     .then(() => {
-        //         getUserTvShows()
-        //             .then((page) => {
-        //                 setUserTvShows(page["content"])
-        //             })
-        //             .catch(setErr);
-        //     })
-        //     .catch(setErr);
+        deleteUserTvShow(evt.target.value)
+            .then(() => {
+                getUserTvShows()
+                    .then((page) => {
+                        setUserTvShows(page["content"])
+                    })
+                    .catch(setErr);
+            })
+            .catch(setErr);
     }
     return (
         <li>

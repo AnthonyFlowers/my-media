@@ -26,7 +26,7 @@ public class AppUserTvShowController {
     public ResponseEntity<?> getAppUserTvShows(
             @AuthenticationPrincipal AppUser appUser,
             @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "10") int pageSize){
+            @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Page<AppUserTvShow> userTvShows = service.findUserMovies(page, pageSize, appUser);
         return new ResponseEntity<>(userTvShows, HttpStatus.OK);
     }
@@ -37,8 +37,32 @@ public class AppUserTvShowController {
             @RequestBody TvShow tvShow
     ) {
         Result<AppUserTvShow> result = service.create(tvShow, appUser);
-        if(result.isSuccess()) {
+        if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
+        }
+        return ErrorResponse.build(result);
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateAppUserTvShow(
+            @AuthenticationPrincipal AppUser appUser,
+            @RequestBody AppUserTvShow userTvShow
+    ) {
+        Result<AppUserTvShow> result = service.update(userTvShow, appUser);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
+        }
+        return ErrorResponse.build(result);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteAppUserTvShow(
+            @AuthenticationPrincipal AppUser appUser,
+            @RequestBody AppUserTvShow userTvShow
+    ) {
+        Result<?> result = service.delete(userTvShow, appUser);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return ErrorResponse.build(result);
     }
