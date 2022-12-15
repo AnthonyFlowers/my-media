@@ -23,21 +23,23 @@ public class SecurityConfig {
         http.csrf().disable();
         http.cors();
         http.authorizeRequests()
-                .antMatchers(HttpMethod.POST,
-                        "/auth/create_account", "/auth")
+                .antMatchers(HttpMethod.POST, "/auth/create_account", "/auth")
                 .permitAll()
                 .antMatchers(HttpMethod.POST, "/auth/refresh_token")
                 .authenticated()
                 .antMatchers(HttpMethod.GET,
                         "/api/movie",
-                        "/api/movie*",
+                        "/api/movie?*",
                         "/api/movie/recent",
-                        "/api/movie/recent*")
-                .permitAll()
+                        "/api/movie/recent*").permitAll()
                 .antMatchers("/api/user/movie",
-                        "/api/user/movie*",
+                        "/api/user/movie?*",
                         "/api/user/movie/*")
                 .authenticated()
+                .antMatchers(HttpMethod.GET,
+                        "/api/tv-show",
+                        "/api/tv-show?*"
+                ).permitAll()
                 .antMatchers("/**").denyAll()
                 .and()
                 .addFilter(new JwtRequestFilter(authenticationManager(authConfig), converter))
