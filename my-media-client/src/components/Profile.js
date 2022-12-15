@@ -1,12 +1,15 @@
 import { useContext, useEffect, useState } from "react";
 import { getUserMovies } from "../services/movieService";
+import { getUserTvShows } from "../services/tvShowService";
 import AuthContext from "./AuthContext";
 import { ListMovie } from "./Movie";
+import { ListTvShow } from "./TvShow";
 
 function Profile() {
 
     const { user } = useContext(AuthContext);
     const [userMovies, setUserMovies] = useState([]);
+    const [userTvShows, setUserTvShows] = useState([]);
     const [errs, setErrs] = useState([])
 
 
@@ -16,6 +19,11 @@ function Profile() {
                 setUserMovies(page["content"]);
             })
             .catch(setErrs);
+        getUserTvShows()
+        .then((page) => {
+            setUserTvShows(page["content"]);
+        })
+        .catch(setErrs);
     }, []);
 
     return (
@@ -39,25 +47,31 @@ function Profile() {
                         </ul>
                     </div>
                 </div>
-                <div className="gird-cols-1 col-span-2 p-3 rounded-lg border-4 border-gray-500">
+                <div className="grid-cols-1 col-span-2 p-3 rounded-lg border-4 border-gray-500">
                     <div
                         id="profileMovieList"
                         className="p-3 border rounded-md border-gray-400">
                         <h3 className="text-2xl">Your Movies</h3>
                         <ul>
                             {
-                                userMovies.map((m, i) => {
+                                userMovies.map((m) => {
                                     return <ListMovie key={m.appUserMovieId} m={m} setUserMovies={setUserMovies} />
                                 })
                             }
                         </ul>
                     </div>
-                    {/* <div className="p-3 border rounded-md border-gray-400">
+                    <div
+                        id="profileTvShowList"
+                        className="p-3 border rounded-md border-gray-400">
                         <h3 className="text-2xl">Your Shows</h3>
                         <ul>
-                            <li>-- todo</li>
+                            {
+                                userTvShows.map((t) => {
+                                    return <ListTvShow key={t.appuserTvShowId} t={t} setUserTvShows={setUserTvShows} />
+                                })
+                            }
                         </ul>
-                    </div> */}
+                    </div>
                 </div>
                 <div>{errs.map((e) => { return <p>{e}</p>; })}</div>
             </div>

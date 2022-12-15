@@ -640,10 +640,6 @@ video {
   display: grid;
 }
 
-.contents {
-  display: contents;
-}
-
 .h-8 {
   height: 2rem;
 }
@@ -685,6 +681,10 @@ video {
 
 .grid-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
 .grid-rows-3 {

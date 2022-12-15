@@ -1,12 +1,17 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { addTvShowToUser, getUserTvShows } from "../services/tvShowService";
 import AuthContext from "./AuthContext";
 
-function TvShow({ tvShow }) {
+export default function TvShow({ tvShow }) {
     const { user } = useContext(AuthContext);
 
     function handleAdd() {
-        // impl
-        alert("to impl");
+        addTvShowToUser(tvShow)
+            .then((msg) => {
+                // show success message
+                console.log(msg);
+            })
+            .catch(console.log);
     }
 
     return (
@@ -24,4 +29,41 @@ function TvShow({ tvShow }) {
     )
 }
 
-export default TvShow;
+export function ListTvShow({ t, setUserTvShows, setErr }) {
+    const [userTvShow, setUserTvShow] = useState(t);
+
+    function toggleWatched(evt) {
+        const nextUserTvShow = { ...userTvShow };
+        nextUserTvShow.watched = evt.target.checked;
+        setUserTvShow(nextUserTvShow);
+        // updateUserTvShow(nextUserTvShow);
+    }
+
+    function handleDelete(evt) {
+        console.log(evt.target.value)
+        // deleteUserTvShow(evt.target.value)
+        //     .then(() => {
+        //         getUserTvShows()
+        //             .then((page) => {
+        //                 setUserTvShows(page["content"])
+        //             })
+        //             .catch(setErr);
+        //     })
+        //     .catch(setErr);
+    }
+    return (
+        <li>
+            <input type="checkbox"
+                checked={userTvShow.watched}
+                onChange={toggleWatched}
+            />
+            {userTvShow.tvShow.tvShowName}, Year: {userTvShow.tvShow.releaseYear}, Season: {userTvShow.season}, Episode: {userTvShow.episode}
+            <button type="button"
+                className="btn-small btn-red"
+                value={userTvShow.appUserTvShowId}
+                onClick={handleDelete}>
+                Remove
+            </button>
+        </li>
+    )
+}
