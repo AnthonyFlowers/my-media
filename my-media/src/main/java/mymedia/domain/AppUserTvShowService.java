@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 public class AppUserTvShowService {
 
     private final AppUserTvShowRepository repository;
+    private final TvShowService tvShowService;
     private final int defaultSmallPageSize = 10;
 
-    public AppUserTvShowService(AppUserTvShowRepository repository) {
+    public AppUserTvShowService(AppUserTvShowRepository repository, TvShowService tvShowService) {
         this.repository = repository;
+        this.tvShowService = tvShowService;
     }
 
 
@@ -27,10 +29,22 @@ public class AppUserTvShowService {
     }
 
     public Result<AppUserTvShow> create(TvShow tvShow, AppUser appUser) {
+        Result<AppUserTvShow> result = verifyTvShowEntry(tvShow, appUser);
+        if (result.isSuccess()) {
+            AppUserTvShow appUserTvShow = new AppUserTvShow(tvShow, appUser);
+            result.setPayload(repository.save(appUserTvShow));
+        }
+        return result;
+    }
+
+    private Result<AppUserTvShow> verifyTvShowEntry(TvShow tvShow, AppUser appUser) {
         Result<AppUserTvShow> result = new Result<>();
         if (tvShow == null) {
-            result.addMessage(ResultType.INVALID, "cannot add an entry with a null TV Show");
+            result.addMessage(ResultType.INVALID, "Cannot add an entry with a null TV Show");
             return result;
+        }
+        if (tvShowService.findById(tvShow.getTvShowId()) == null) {
+            result.addMessage(ResultType.NOT_FOUND, "Could not find that TV Show");
         }
         AppUserTvShow found = repository.findByUserAppUserIdAndTvShowTvShowId(
                 appUser.getAppUserId(),
@@ -38,9 +52,6 @@ public class AppUserTvShowService {
         );
         if (found != null) {
             result.addMessage(ResultType.INVALID, "user already has an entry for that TV Show");
-        } else {
-            AppUserTvShow appUserTvShow = new AppUserTvShow(tvShow, appUser);
-            result.setPayload(repository.save(appUserTvShow));
         }
         return result;
     }

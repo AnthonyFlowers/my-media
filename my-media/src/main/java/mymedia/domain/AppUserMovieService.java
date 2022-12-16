@@ -12,9 +12,11 @@ import org.springframework.stereotype.Service;
 public class AppUserMovieService {
 
     private final AppUserMovieRepository repository;
+    private final MovieService movieService;
 
-    public AppUserMovieService(AppUserMovieRepository repository) {
+    public AppUserMovieService(AppUserMovieRepository repository, MovieService movieService) {
         this.repository = repository;
+        this.movieService = movieService;
     }
 
     public AppUserMovie findByUserMovieIdAndUser(int userMovieId, AppUser user) {
@@ -36,10 +38,24 @@ public class AppUserMovieService {
     }
 
     public Result<AppUserMovie> create(AppUser user, Movie movie) {
+        Result<AppUserMovie> result = verifyMovieEntry(user, movie);
+        if (result.isSuccess()) {
+            AppUserMovie appUserMovie = new AppUserMovie();
+            appUserMovie.setMovie(movie);
+            appUserMovie.setUser(user);
+            result.setPayload(repository.save(appUserMovie));
+        }
+        return result;
+    }
+
+    private Result<AppUserMovie> verifyMovieEntry(AppUser user, Movie movie) {
         Result<AppUserMovie> result = new Result<>();
         if (movie == null) {
-            result.addMessage(ResultType.INVALID, "cannot create entry without movie");
+            result.addMessage(ResultType.INVALID, "Can not add null movie entry");
             return result;
+        }
+        if (movieService.findById(movie.getMovieId()) == null) {
+            result.addMessage(ResultType.NOT_FOUND, "Could not find that movie");
         }
         AppUserMovie foundUserMovie = repository.findByUserAppUserIdAndMovieMovieId(
                 user.getAppUserId(),
@@ -49,10 +65,6 @@ public class AppUserMovieService {
             result.addMessage(ResultType.INVALID, "That user already has an entry for that movie");
             return result;
         }
-        AppUserMovie appUserMovie = new AppUserMovie();
-        appUserMovie.setMovie(movie);
-        appUserMovie.setUser(user);
-        result.setPayload(repository.save(appUserMovie));
         return result;
     }
 

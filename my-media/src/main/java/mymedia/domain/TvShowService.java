@@ -23,4 +23,8 @@ public class TvShowService {
                 Sort.by(Sort.Direction.DESC, "releaseYear"))
         );
     }
+
+    public TvShow findById(int tvShowId) {
+        return repository.findById(tvShowId).orElse(null);
+    }
 }

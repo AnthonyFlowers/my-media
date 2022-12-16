@@ -2,6 +2,7 @@ use my_media;
 use my_media_test;
 call set_known_good_state();
 select * from app_user;
+select * from app_user_movie;
 select * from app_user_role;
 select * from app_role;
 select * from tv_show;
@@ -20,3 +21,4 @@ and movie_year = 2008;
 select count(*) from movie;
 
 select * from tv_show;
+select count(*) from app_user;
