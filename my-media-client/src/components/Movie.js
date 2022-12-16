@@ -15,18 +15,17 @@ function Movie({ movie }) {
     }
 
     return (
-        <div className="bg-gray-100 p-10 my-2 rounded-lg shadow-md">
+        <div className="media-card-lg group">
             <h1 className="text-xl font-bold">{movie.movieName}</h1>
-            <div className="mt-2 mb-2">
-                <p className="text-gray-600">Length: {movie.movieLength} Minutes</p>
-                <p className="text-gray-600">Year: {movie.movieYear}</p>
-                <p>Overview: {movie.movieOverview}</p>
-                {/* check if movie already added and if logged in*/}
-                {
-                    user ? <button onClick={handleAdd}>Add</button> : <></>
-                }
-
+            <div className="details">
+                <p className="attribute">Length: {movie.movieLength} Minutes</p>
+                <p className="attribute">Year: {movie.movieYear}</p>
+                <p className="overview group-hover:h-auto">Overview: {movie.movieOverview}</p>
             </div>
+            {/* check if movie already added and if logged in*/}
+            {
+                user ? <button className="btn-media-add" onClick={handleAdd}>Add</button> : <></>
+            }
         </div>
     )
 }

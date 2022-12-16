@@ -67,6 +67,31 @@ body {
     @apply bg-red-400 my-2 p-3 rounded-lg list-disc list-inside;
 }
 
+.btn-media-add {
+    @apply btn btn-green mt-4 w-min;
+}
+
+.media-container-lg {
+    @apply grid md:grid-cols-1 lg:grid-cols-2 py-4;
+}
+
+.media-card-lg { 
+    @apply grid grid-cols-1 m-2 bg-gray-100 p-8 rounded-lg shadow-md content-start;
+    @apply hover:overflow-visible;
+}
+
+.media-card-lg .details {
+    @apply my-2;
+}
+
+.media-card-lg .overview {
+    @apply min-h-[3rem] h-12 duration-500 text-clip overflow-hidden mb-4;
+}
+
+.media-card-lg .attribute {
+    @apply text-gray-600;
+}
+
 /* high contrast for designing */
 .watermelon {
     @apply bg-red-500 border-2 border-green-400;

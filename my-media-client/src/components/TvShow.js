@@ -15,14 +15,14 @@ export default function TvShow({ tvShow }) {
     }
 
     return (
-        <div className="bg-gray-100 p-10 my-2 rounded-lg shadow-md">
+        <div className="media-card-lg group">
             <h1 className="text-xl font-bold">{tvShow.tvShowName}</h1>
-            <div className="mt-2 mb-2">
-                <p className="text-gray-600">Year: {tvShow.releaseYear}</p>
-                <p>Overview: {tvShow.overview}</p>
+            <div className="details">
+                <p className="attribute">Year: {tvShow.releaseYear}</p>
+                <p className="overview group-hover:h-auto">Overview: {tvShow.overview}</p>
                 {/* check if TvShow already added */}
                 {
-                    user ? <button onClick={handleAdd}>Add</button> : <></>
+                    user ? <button className="btn-media-add" onClick={handleAdd}>Add</button> : <></>
                 }
             </div>
         </div>

@@ -33,7 +33,7 @@ function TvShows({ tvShowQuery }) {
     return (
         <div id="tvShows">
             <MediaPageNav pages={tvShowNavPages} setParams={setSearchParams} />
-            <div className="grid md:grid-cols-1 lg:grid-cols-2 items-center justify-center py-4 lg:space-x-4 grid-auto-flow:row">
+            <div className="media-container-lg">
                 {
                     tvShows.map((t) => {
                         return <TvShow key={t.tvShowId} tvShow={t} />

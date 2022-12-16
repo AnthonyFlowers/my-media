@@ -33,7 +33,7 @@ function Movies({ movieQueury }) {
     return (
         <div id="movies">
             <MediaPageNav pages={movieNavPages} setParams={setSearchParams} />
-            <div className="grid md:grid-cols-1 lg:grid-cols-2 items-center justify-center py-4 lg:space-x-4 grid-auto-flow:row">
+            <div className="media-container-lg">
                 {
                     movies.map((m) => {
                         return <Movie key={m.movieId} movie={m} />;
