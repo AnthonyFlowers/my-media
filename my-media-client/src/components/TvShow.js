@@ -29,7 +29,7 @@ export default function TvShow({ tvShow }) {
     )
 }
 
-export function ListTvShow({ t, setUserTvShows, setErr }) {
+export function ListTvShow({ t, setUserTvShows, setErrs }) {
     const [userTvShow, setUserTvShow] = useState(t);
 
     function toggleWatched(evt) {
@@ -46,17 +46,41 @@ export function ListTvShow({ t, setUserTvShows, setErr }) {
                     .then((page) => {
                         setUserTvShows(page["content"])
                     })
-                    .catch(setErr);
+                    .catch(setErrs);
             })
-            .catch(setErr);
+            .catch(setErrs);
     }
+
+    function handleSeasonChange(evt) {
+        const nextValue = evt.target.value;
+        if(nextValue > 100 || nextValue < 0){
+            return;
+        }
+        const nextUserTvShow = { ...userTvShow };
+        nextUserTvShow[evt.target.name] = evt.target.value;
+        updateUserTvShow(nextUserTvShow)
+            .then(() => {
+                getUserTvShows()
+                    .then((page) => {
+                        setUserTvShows(page["content"]);
+                        setUserTvShow(nextUserTvShow);
+                    })
+            })
+            .catch((err) => {
+                setErrs(err);
+            });
+    }
+
     return (
         <li>
             <input type="checkbox"
                 checked={userTvShow.watched}
                 onChange={toggleWatched}
             />
-            {userTvShow.tvShow.tvShowName}, Year: {userTvShow.tvShow.releaseYear}, Season: {userTvShow.season}, Episode: {userTvShow.episode}
+            {userTvShow.tvShow.tvShowName},
+            Year: {userTvShow.tvShow.releaseYear},
+            Season: <input name="season" type="number" value={userTvShow.season} onChange={handleSeasonChange} />,
+            Episode: <input name="episode" type="number" max="100" value={userTvShow.episode} onChange={handleSeasonChange} />
             <button type="button"
                 className="btn-small btn-red"
                 value={userTvShow.appUserTvShowId}

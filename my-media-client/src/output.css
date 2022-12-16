@@ -648,6 +648,15 @@ video {
   width: 100%;
 }
 
+.w-min {
+  width: -webkit-min-content;
+  width: min-content;
+}
+
+.w-auto {
+  width: auto;
+}
+
 .max-w-xs {
   max-width: 20rem;
 }

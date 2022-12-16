@@ -77,7 +77,7 @@ export async function updateUserTvShow(userTvShow) {
         body: JSON.stringify(userTvShow)
     });
     if (response.ok) {
-        return Promise.resolve();
+        return Promise.resolve(response);
     } else {
         return Promise.reject(["could not update user movie"]);
     }
