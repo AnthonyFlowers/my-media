@@ -3,6 +3,7 @@ package mymedia.models;
 import mymedia.security.AppUser;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 @Entity
 @Table(name = "app_user_movie")
@@ -20,8 +21,8 @@ public class AppUserMovie {
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
+    @Min(value = 0, message = "Minimum watch count can not be less than 0")
     private int watchCount;
-
     private boolean watched;
 
     public int getAppUserMovieId() {

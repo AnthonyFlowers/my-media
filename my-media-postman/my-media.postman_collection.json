@@ -179,7 +179,6 @@
 									"    const tvShows = response[\"content\"];\r",
 									"    pm.expect(tvShows).lengthOf.above(0);\r",
 									"    const tvShow = tvShows[0];\r",
-									"    console.log(tvShows);\r",
 									"    if (tvShow){\r",
 									"        pm.collectionVariables.set(\"tvShowId\", tvShow.tvShowId);\r",
 									"    }\r",
@@ -570,7 +569,7 @@
 							"script": {
 								"type": "text/javascript",
 								"exec": [
-									"console.log(\"included\");"
+									""
 								]
 							}
 						},
@@ -599,11 +598,11 @@
 											"    pm.response.to.have.status(200);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Should return the updated AppUserMovie\"), function () {\r",
+											"pm.test(\"Should return the updated AppUserMovie\", function () {\r",
 											"    const appUserMovie = pm.response.json();\r",
-											"    pm.expect(appUserMovie).is.an(\"Object\");\r",
+											"    pm.expect(appUserMovie).is.an(\"object\");\r",
 											"    pm.expect(appUserMovie[\"watched\"]).to.be.true;\r",
-											"}"
+											"});"
 										],
 										"type": "text/javascript"
 									}
@@ -647,10 +646,8 @@
 											"\r",
 											"pm.test(\"Updated user movie watchCount attribute should be 1\", function () {\r",
 											"    const response = pm.response.json();\r",
-											"    console.log(response);\r",
 											"    const appUserMovie = response;\r",
 											"    pm.expect(appUserMovie).is.an(\"Object\");\r",
-											"    console.log(appUserMovie[\"watchCount\"]);\r",
 											"    pm.expect(appUserMovie[\"watchCount\"]).to.eql(1);\r",
 											"});"
 										],
@@ -664,6 +661,53 @@
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"appUserMovieId\": {{appUserMovieId}},\r\n    \"watchCount\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/movie",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"movie"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user movie bad rewatch value",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"expectedError = \"Minimum watch count can not be less than 0\";\r",
+											"pm.test(\"Should return error: \" + expectedError, function () {\r",
+											"    const response = pm.response.json();\r",
+											"    const errorMsg = response[0];\r",
+											"    pm.expect(errorMsg).is.a(\"string\");\r",
+											"    pm.expect(errorMsg).eqls(\"Minimum watch count can not be less than 0\");\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserMovieId\": {{appUserMovieId}},\r\n    \"watchCount\": -1\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1044,7 +1088,7 @@
 											"});\r",
 											"\r",
 											"pm.test(\"Should get an AppUserTvShow with a set id\", () => {\r",
-											"     const appUserTvShow = pm.response.json();\r",
+											"    const appUserTvShow = pm.response.json();\r",
 											"    pm.expect(appUserTvShow).is.an(\"Object\");\r",
 											"    pm.expect(appUserTvShow[\"appUserTvShowId\"]).is.not.null;\r",
 											"});"
@@ -1167,7 +1211,7 @@
 					"name": "user-update-user-tv-show",
 					"item": [
 						{
-							"name": "update user tv-show",
+							"name": "update user tv-show watched",
 							"event": [
 								{
 									"listen": "test",
@@ -1177,12 +1221,11 @@
 											"    pm.response.to.have.status(200);\r",
 											"});\r",
 											"\r",
-											"pm.test(\"Should return the updated AppUserTvShow\"), function () {\r",
+											"pm.test(\"Should return the updated AppUserTvShow\", function () {\r",
 											"    const appUserMovie = pm.response.json();\r",
-											"    pm.expect(appUserMovie).is.an(\"Object\");\r",
-											"    console.log(appUserMovie);\r",
+											"    pm.expect(appUserMovie).is.an(\"object\");\r",
 											"    pm.expect(appUserMovie[\"watched\"]).to.be.true;\r",
-											"}"
+											"})"
 										],
 										"type": "text/javascript"
 									}
@@ -1223,7 +1266,337 @@
 							"response": []
 						},
 						{
-							"name": "update user tv-show error",
+							"name": "update user tv-show rewatchCount",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Should return the updated AppUserTvShow\", function () {\r",
+											"    const appUserMovie = pm.response.json();\r",
+											"    pm.expect(appUserMovie).to.be.an(\"object\");\r",
+											"    pm.expect(appUserMovie[\"watchCount\"]).to.equal(1);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": {{appUserTvShowId}},\r\n    \"watchCount\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user tv-show season",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Should return the updated AppUserTvShow\", function () {\r",
+											"    const appUserMovie = pm.response.json();\r",
+											"    pm.expect(appUserMovie).to.be.an(\"object\");\r",
+											"    pm.expect(appUserMovie[\"season\"]).to.equal(1);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": {{appUserTvShowId}},\r\n    \"season\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user tv-show episode",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Should return the updated AppUserTvShow\", function () {\r",
+											"    const appUserMovie = pm.response.json();\r",
+											"    pm.expect(appUserMovie).to.be.an(\"object\");\r",
+											"    pm.expect(appUserMovie[\"episode\"]).to.equal(1);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": {{appUserTvShowId}},\r\n    \"episode\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user tv-show bad season",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"expectedError = \"Minimum season number can not be less than 0\"\r",
+											"pm.test(\"Should return error: \" + expectedError, function () {\r",
+											"    const errors = pm.response.json();\r",
+											"    pm.expect(errors).to.be.an(\"array\");\r",
+											"    pm.expect(errors).to.include(expectedError);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": {{appUserTvShowId}},\r\n    \"season\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user tv-show bad episode",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"expectedError = \"Minimum episode number can not be less than 0\"\r",
+											"pm.test(\"Should return the updated AppUserTvShow\", function () {\r",
+											"    const errors = pm.response.json();\r",
+											"    pm.expect(errors).to.be.an(\"array\");\r",
+											"    pm.expect(errors).to.include(expectedError);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": {{appUserTvShowId}},\r\n    \"episode\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user tv-show bad rewatch",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"expectedError = \"Minimum watch count can not be less than 0\";\r",
+											"pm.test(\"Should return error: \" + expectedError, function () {\r",
+											"    const errors = pm.response.json();\r",
+											"    pm.expect(errors).is.an(\"array\");\r",
+											"    pm.expect(errors).to.include(expectedError);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"appUserTvShowId\": {{appUserTvShowId}},\r\n    \"watchCount\": -1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseAPIUrl}}/user/tv-show",
+									"host": [
+										"{{baseAPIUrl}}"
+									],
+									"path": [
+										"user",
+										"tv-show"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user tv-show not found",
 							"event": [
 								{
 									"listen": "test",
@@ -1344,7 +1717,6 @@
 									"    body: JSON.stringify(tvShow)",
 									"}, (err, res) => {",
 									"    const appUserTvShowId = res.json()[\"appUserTvShowId\"];",
-									"    console.log(appUserTvShowId);",
 									"    pm.collectionVariables.set(\"appUserTvShowId\", appUserTvShowId);",
 									"});"
 								]
@@ -1535,7 +1907,6 @@
 									"    body: JSON.stringify(tvShow)",
 									"}, (err, res) => {",
 									"    const appUserTvShowId = res.json()[\"appUserTvShowId\"];",
-									"    console.log(appUserTvShowId);",
 									"    pm.collectionVariables.set(\"appUserTvShowId\", appUserTvShowId);",
 									"});"
 								]

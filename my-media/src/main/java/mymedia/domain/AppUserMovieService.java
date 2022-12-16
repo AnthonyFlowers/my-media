@@ -8,15 +8,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Validator;
+
 @Service
 public class AppUserMovieService {
 
     private final AppUserMovieRepository repository;
     private final MovieService movieService;
+    private final Validator validator;
 
-    public AppUserMovieService(AppUserMovieRepository repository, MovieService movieService) {
+    public AppUserMovieService(AppUserMovieRepository repository, MovieService movieService, Validator validator) {
         this.repository = repository;
         this.movieService = movieService;
+        this.validator = validator;
     }
 
     public AppUserMovie findByUserMovieIdAndUser(int userMovieId, AppUser user) {
@@ -43,7 +47,11 @@ public class AppUserMovieService {
             AppUserMovie appUserMovie = new AppUserMovie();
             appUserMovie.setMovie(movie);
             appUserMovie.setUser(user);
-            result.setPayload(repository.save(appUserMovie));
+            validator.validate(appUserMovie).forEach((vi) ->
+                    result.addMessage(ResultType.INVALID, vi.getMessage()));
+            if (result.isSuccess()) {
+                result.setPayload(repository.save(appUserMovie));
+            }
         }
         return result;
     }
@@ -78,7 +86,11 @@ public class AppUserMovieService {
         } else {
             userMovie.setMovie(foundAppUserMovie.getMovie());
             userMovie.setUser(appUser);
-            result.setPayload(repository.save(userMovie));
+            validator.validate(userMovie).forEach((vi) ->
+                    result.addMessage(ResultType.INVALID, vi.getMessage()));
+            if (result.isSuccess()) {
+                result.setPayload(repository.save(userMovie));
+            }
         }
         return result;
     }

@@ -8,16 +8,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Validator;
+
 @Service
 public class AppUserTvShowService {
 
     private final AppUserTvShowRepository repository;
     private final TvShowService tvShowService;
+    private final Validator validator;
     private final int defaultSmallPageSize = 10;
 
-    public AppUserTvShowService(AppUserTvShowRepository repository, TvShowService tvShowService) {
+    public AppUserTvShowService(AppUserTvShowRepository repository, TvShowService tvShowService, Validator validator) {
         this.repository = repository;
         this.tvShowService = tvShowService;
+        this.validator = validator;
     }
 
 
@@ -32,7 +36,11 @@ public class AppUserTvShowService {
         Result<AppUserTvShow> result = verifyTvShowEntry(tvShow, appUser);
         if (result.isSuccess()) {
             AppUserTvShow appUserTvShow = new AppUserTvShow(tvShow, appUser);
-            result.setPayload(repository.save(appUserTvShow));
+            validator.validate(appUserTvShow).forEach((vi) ->
+                    result.addMessage(ResultType.INVALID, vi.getMessage()));
+            if (result.isSuccess()) {
+                result.setPayload(repository.save(appUserTvShow));
+            }
         }
         return result;
     }
@@ -85,7 +93,11 @@ public class AppUserTvShowService {
         } else {
             userTvShow.setTvShow(foundAppUserTvShow.getTvShow());
             userTvShow.setUser(appUser);
-            result.setPayload(repository.save(userTvShow));
+            validator.validate(userTvShow).forEach((vi) ->
+                    result.addMessage(ResultType.INVALID, vi.getMessage()));
+            if (result.isSuccess()) {
+                result.setPayload(repository.save(userTvShow));
+            }
         }
         return result;
     }
