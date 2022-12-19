@@ -1,13 +1,15 @@
+import { useSearchParams } from "react-router-dom";
 
-function MediaPageNav({ pages, setParams }) {
+function MediaPageNav({ pages }) {
+
+    const [searchParams, setSearchParams] = useSearchParams();
 
     function handleMoviePage(evt) {
         if (evt.target.value > pages.end || evt.target.value < pages.start) {
             return;
         }
-        setParams({
-            page: evt.target.value
-        });
+        searchParams.set("page", evt.target.value);
+        setSearchParams(searchParams);
     }
     return (
         <ul className="flex justify-center my-2 grid-rows-3 gap-4">

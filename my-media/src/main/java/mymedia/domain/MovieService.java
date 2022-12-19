@@ -25,21 +25,23 @@ public class MovieService {
     }
 
     public Page<Movie> findMovies(int page, int pageSize) {
+        page = Math.max(page - 1, 0);
+        pageSize = pageSize <= 0 ? defaultSmallPageSize : pageSize;
         return movieRepository.findAll(PageRequest.of(
-                Math.max(page, 0), pageSize < 0 ? defaultSmallPageSize : pageSize,
+                page, pageSize,
                 Sort.by(Sort.Direction.DESC, "movieYear")
         ));
     }
 
     public Page<Movie> findRecentMovies(Integer page, Integer pageSize) {
-        if (page == null || page < 0) {
-            page = 0;
+        if (page == null || page < 1) {
+            page = 1;
         }
-        if (pageSize == null || page <= 0) {
+        if (pageSize == null || pageSize <= 0) {
             pageSize = defaultSmallPageSize;
         }
         return movieRepository.findAll(PageRequest.of(
-                page,
+                page - 1,
                 pageSize,
                 Sort.by(Sort.Direction.DESC, "movieYear"))
         );
@@ -55,5 +57,9 @@ public class MovieService {
 
     public Page<Movie> search(String nameQuery) {
         return movieRepository.findByMovieNameContainsIgnoreCase(smallPr, nameQuery);
+    }
+
+    public Page<Movie> search(int page, int pageSize, String title) {
+        return movieRepository.findByMovieNameContainsIgnoreCase(PageRequest.of(page - 1, pageSize), title);
     }
 }

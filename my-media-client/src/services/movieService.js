@@ -4,17 +4,24 @@ import { LOCAL_STORAGE_TOKEN_KEY } from "./authenticationService"
 const movieApi = `${SERVER_URL}/api/movie`;
 const userMovieApi = `${SERVER_URL}/api/user/movie`;
 
-export async function getMovies(page) {
+export async function getMovies(page = 1) {
     if (page == null) {
         page = 1;
     }
-    page = Math.max(0, page - 1)
+    page = Math.max(1, page)
     const response = await fetch(`${movieApi}?page=${page}`);
     return movieQueryResponse(response, "error finding movies");
 }
+export async function getMoviesSearch(name, page = 1) {
+    if (name == null || name === "") {
+        return getMovies(page)
+    }
+    const response = await fetch(`${movieApi}?page=${page}&title=${name}`);
+    return movieQueryResponse(response, "error searching for movies");
+}
 
 export async function getUserMovies(page = 1, pageSize = 10) {
-    page = Math.max(0, page - 1);
+    page = Math.max(1, page);
     pageSize = Math.max(1, pageSize);
     const response = await fetch(`${userMovieApi}?page=${page}&pageSize=${pageSize}`, {
         headers: {

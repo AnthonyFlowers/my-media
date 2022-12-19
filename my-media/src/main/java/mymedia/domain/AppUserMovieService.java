@@ -34,7 +34,7 @@ public class AppUserMovieService {
     public Page<AppUserMovie> findUserMovies(int page, int pageSize, AppUser user) {
         return repository.findByUserUsername(
                 PageRequest.of(
-                        Math.max(page, 0),
+                        Math.max(page - 1, 0),
                         pageSize <= 0 ? 10 : pageSize
                 ),
                 user.getUsername()

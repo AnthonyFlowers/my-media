@@ -25,7 +25,7 @@ public class AppUserMovieController {
     @GetMapping
     public ResponseEntity<?> getUserMovies(
             @AuthenticationPrincipal AppUser appUser,
-            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Page<AppUserMovie> movies = service.findUserMovies(page, pageSize, appUser);
         return new ResponseEntity<>(movies, HttpStatus.OK);
