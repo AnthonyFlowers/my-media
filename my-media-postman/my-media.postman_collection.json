@@ -95,6 +95,96 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "search for movie",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"const searchTerm = pm.collectionVariables.get(\"goodMovieSearchTerm\");\r",
+									"\r",
+									"pm.test(\"Should return more than 0 movies containing \" + searchTerm, function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const movies = response[\"content\"];\r",
+									"    pm.expect(movies).lengthOf.above(0);\r",
+									"    for(var movie of movies) {\r",
+									"        pm.expect(movie.movieName).contains(searchTerm);\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/movie/search?name={{goodMovieSearchTerm}}",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"movie",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{goodMovieSearchTerm}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search for movie bad terms",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Should return 0 movies\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const movies = response[\"content\"];\r",
+									"    pm.expect(movies).lengthOf.below(1);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/movie/search?name={{badMovieSearchTerm}}",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"movie",
+								"search"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "{{badMovieSearchTerm}}"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			],
 			"auth": {
@@ -2045,6 +2135,14 @@
 		{
 			"key": "appUserTvShowId",
 			"value": ""
+		},
+		{
+			"key": "goodMovieSearchTerm",
+			"value": "the"
+		},
+		{
+			"key": "badMovieSearchTerm",
+			"value": "zyxwabcd"
 		}
 	]
 }

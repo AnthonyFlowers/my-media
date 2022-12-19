@@ -31,17 +31,15 @@ public class SecurityConfig {
                         "/api/movie",
                         "/api/movie?*",
                         "/api/movie/recent",
-                        "/api/movie/recent*").permitAll()
+                        "/api/movie/search").permitAll()
                 .antMatchers("/api/user/movie",
-                        "/api/user/movie?*",
                         "/api/user/movie/*")
                 .authenticated()
                 .antMatchers(HttpMethod.GET,
-                        "/api/tv-show",
-                        "/api/tv-show?*"
+                        "/api/tv-show"
                 ).permitAll()
                 .antMatchers("/api/user/tv-show",
-                        "/api/user/movie?*",
+                        "/api/user/movie",
                         "/api/user/movie/*")
                 .authenticated()
                 .antMatchers("/**").denyAll()

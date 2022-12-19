@@ -34,4 +34,12 @@ public class MovieController {
         Page<Movie> movies = movieService.findRecentMovies(page, pageSize);
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> getMoviesSearch(
+            @RequestParam String name
+    ) {
+        Page<Movie> movies = movieService.search(name);
+        return new ResponseEntity<>(movies, HttpStatus.OK);
+    }
 }
