@@ -1,10 +1,13 @@
 package mymedia.data;
 
+import mymedia.models.Movie;
 import mymedia.models.TvShow;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,6 +21,7 @@ class TvShowRepositoryTest {
     TvShowRepository repository;
 
     private boolean isSetUp = false;
+    private PageRequest pr = PageRequest.of(0, 10);
 
     @BeforeEach
     public void setUp() {
@@ -67,5 +71,17 @@ class TvShowRepositoryTest {
 
         TvShow rm = repository.findById(3).orElse(null);
         assertNull(rm);
+    }
+
+    @Test
+    void shouldSearchForRickAndMorty() {
+        Page<TvShow> tvShowPage = repository.findByTvShowNameContainsIgnoreCase(pr, "Rick");
+        assertTrue(tvShowPage.hasContent());
+    }
+
+    @Test
+    void shouldNotFindATvShow() {
+        Page<TvShow> tvShowPage = repository.findByTvShowNameContainsIgnoreCase(pr, "zyxwabcd");
+        assertFalse(tvShowPage.hasContent());
     }
 }

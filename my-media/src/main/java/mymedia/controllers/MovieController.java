@@ -25,7 +25,7 @@ public class MovieController {
             @RequestParam(required = false, defaultValue = "50") int pageSize,
             @RequestParam(required = false) String title) {
         Page<Movie> movies;
-        if (title != null) {
+        if (title != null && !title.isBlank()) {
             movies = movieService.search(page, pageSize, title);
         } else {
             movies = movieService.findMovies(page, pageSize);

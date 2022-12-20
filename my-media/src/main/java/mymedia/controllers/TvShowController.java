@@ -1,7 +1,6 @@
 package mymedia.controllers;
 
 import mymedia.domain.TvShowService;
-import mymedia.models.Movie;
 import mymedia.models.TvShow;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,8 +23,14 @@ public class TvShowController {
     @GetMapping
     public ResponseEntity<?> getTvShows(
             @RequestParam(required = false, defaultValue = "0") int page,
-            @RequestParam(required = false, defaultValue = "50") int pageSize) {
-        Page<TvShow> tvShows = service.findTvShows(page, pageSize);
+            @RequestParam(required = false, defaultValue = "50") int pageSize,
+            @RequestParam(required = false) String title) {
+        Page<TvShow> tvShows;
+        if (title != null && !title.isBlank()) {
+            tvShows = service.search(page, pageSize, title);
+        } else {
+            tvShows = service.findTvShows(page, pageSize);
+        }
         return new ResponseEntity<>(tvShows, HttpStatus.OK);
     }
 }
