@@ -26,10 +26,22 @@ public class TvShowService {
         return repository.findById(tvShowId).orElse(null);
     }
 
-    public Page<TvShow> search(int page, int pageSize, String title) {
-        return repository.findByTvShowNameContainsIgnoreCase(
-                PageRequest.of(page - 1, pageSize),
-                title
-        );
+    public Result<Page<TvShow>> search(int page, int pageSize, String title) {
+        Result<Page<TvShow>> result = new Result<>();
+        if (title == null || title.isBlank()) {
+            result.addMessage(ResultType.INVALID, "can not search with null or blank title");
+        }
+        if (result.isSuccess()) {
+            Page<TvShow> tvShows = repository.findByTvShowNameContainsIgnoreCase(
+                    PageRequest.of(page - 1, pageSize),
+                    title
+            );
+            if (tvShows.isEmpty()) {
+                result.addMessage(ResultType.NOT_FOUND, "did not find any results");
+            } else {
+                result.setPayload(tvShows);
+            }
+        }
+        return result;
     }
 }

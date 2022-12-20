@@ -29,7 +29,7 @@ class TvShowServiceTest {
         Page<TvShow> expected = getTvShows();
         when(repository.findAll(any(PageRequest.class)))
                 .thenReturn(expected);
-        Page<TvShow> actual = service.findTvShows(0, 50);
+        Page<TvShow> actual = service.findTvShows(1, 50);
         assertEquals(expected.getSize(), actual.getSize());
     }
 

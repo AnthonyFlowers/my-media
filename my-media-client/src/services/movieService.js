@@ -16,7 +16,7 @@ export async function getMoviesSearch(title, page = 1) {
     if (title == null || title === "") {
         return getMovies(page)
     }
-    const response = await fetch(`${movieApi}?page=${page}&title=${title}`);
+    const response = await fetch(`${movieApi}/search?page=${page}&title=${title}`);
     return movieQueryResponse(response, "error searching for movies");
 }
 

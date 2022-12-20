@@ -1,6 +1,7 @@
 package mymedia.controllers;
 
 import mymedia.domain.MovieService;
+import mymedia.domain.Result;
 import mymedia.models.Movie;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,12 +25,7 @@ public class MovieController {
             @RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "50") int pageSize,
             @RequestParam(required = false) String title) {
-        Page<Movie> movies;
-        if (title != null && !title.isBlank()) {
-            movies = movieService.search(page, pageSize, title);
-        } else {
-            movies = movieService.findMovies(page, pageSize);
-        }
+        Page<Movie> movies = movieService.findMovies(page, pageSize);
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 
@@ -43,9 +39,13 @@ public class MovieController {
 
     @GetMapping("/search")
     public ResponseEntity<?> getMoviesSearch(
-            @RequestParam String name
-    ) {
-        Page<Movie> movies = movieService.search(name);
-        return new ResponseEntity<>(movies, HttpStatus.OK);
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "50") int pageSize,
+            @RequestParam(required = false) String title) {
+        Result<Page<Movie>> result = movieService.search(page, pageSize, title);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(result.getPayload(), HttpStatus.OK);
+        }
+        return ErrorResponse.build(result);
     }
 }

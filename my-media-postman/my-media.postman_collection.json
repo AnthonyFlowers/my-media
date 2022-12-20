@@ -108,12 +108,12 @@
 									"});\r",
 									"const searchTerm = pm.collectionVariables.get(\"goodMovieSearchTerm\");\r",
 									"\r",
-									"pm.test(\"Should return more than 0 movies containing \" + searchTerm, function () {\r",
+									"pm.test(\"Should return more than 0 movies containing '\" + searchTerm + \"'\", function () {\r",
 									"    const response = pm.response.json();\r",
 									"    const movies = response[\"content\"];\r",
 									"    pm.expect(movies).lengthOf.above(0);\r",
 									"    for(var movie of movies) {\r",
-									"        pm.expect(movie.movieName).contains(searchTerm);\r",
+									"        pm.expect(movie.movieName.toLowerCase()).contains(searchTerm.toLowerCase());\r",
 									"    }\r",
 									"});"
 								],
@@ -125,7 +125,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseAPIUrl}}/movie/search?name={{goodMovieSearchTerm}}",
+							"raw": "{{baseAPIUrl}}/movie/search?title={{goodMovieSearchTerm}}",
 							"host": [
 								"{{baseAPIUrl}}"
 							],
@@ -135,7 +135,7 @@
 							],
 							"query": [
 								{
-									"key": "name",
+									"key": "title",
 									"value": "{{goodMovieSearchTerm}}"
 								}
 							]
@@ -150,14 +150,8 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test(\"Should return 0 movies\", function () {\r",
-									"    const response = pm.response.json();\r",
-									"    const movies = response[\"content\"];\r",
-									"    pm.expect(movies).lengthOf.below(1);\r",
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -168,7 +162,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseAPIUrl}}/movie/search?name={{badMovieSearchTerm}}",
+							"raw": "{{baseAPIUrl}}/movie/search?title={{badMovieSearchTerm}}",
 							"host": [
 								"{{baseAPIUrl}}"
 							],
@@ -178,7 +172,7 @@
 							],
 							"query": [
 								{
-									"key": "name",
+									"key": "title",
 									"value": "{{badMovieSearchTerm}}"
 								}
 							]
@@ -282,7 +276,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseAPIUrl}}/tv-show?page=0&pageSize=10",
+							"raw": "{{baseAPIUrl}}/tv-show?page=1&pageSize=10",
 							"host": [
 								"{{baseAPIUrl}}"
 							],
@@ -292,11 +286,96 @@
 							"query": [
 								{
 									"key": "page",
-									"value": "0"
+									"value": "1"
 								},
 								{
 									"key": "pageSize",
 									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search for tv-show",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const searchTerm = pm.collectionVariables.get(\"goodTvShowSearchTerm\");\r",
+									"\r",
+									"pm.test(\"Shoul return more than 0 tv-shows containing '\" + searchTerm + \"'\", function () {\r",
+									"    const response = pm.response.json();\r",
+									"    const tvShows = response[\"content\"];\r",
+									"    pm.expect(tvShows).lengthOf.above(0);\r",
+									"    for(var tvShow of tvShows) {\r",
+									"        pm.expect(tvShow.tvShowName.toLowerCase()).contains(searchTerm.toLowerCase());\r",
+									"    }\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/tv-show/search?title={{goodTvShowSearchTerm}}",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"tv-show",
+								"search"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "{{goodTvShowSearchTerm}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search for tv-show bad terms",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseAPIUrl}}/tv-show/search?title={{badTvShowSearchTerm}}",
+							"host": [
+								"{{baseAPIUrl}}"
+							],
+							"path": [
+								"tv-show",
+								"search"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "{{badTvShowSearchTerm}}"
 								}
 							]
 						}
@@ -2143,6 +2222,14 @@
 		{
 			"key": "badMovieSearchTerm",
 			"value": "zyxwabcd"
+		},
+		{
+			"key": "goodTvShowSearchTerm",
+			"value": "a"
+		},
+		{
+			"key": "badTvShowSearchTerm",
+			"value": "zyxwabcd 123"
 		}
 	]
 }

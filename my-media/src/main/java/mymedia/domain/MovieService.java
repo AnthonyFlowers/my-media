@@ -55,11 +55,22 @@ public class MovieService {
         return movieRepository.findById(movieId).orElse(null);
     }
 
-    public Page<Movie> search(String nameQuery) {
-        return movieRepository.findByMovieNameContainsIgnoreCase(smallPr, nameQuery);
-    }
-
-    public Page<Movie> search(int page, int pageSize, String title) {
-        return movieRepository.findByMovieNameContainsIgnoreCase(PageRequest.of(page - 1, pageSize), title);
+    public Result<Page<Movie>> search(int page, int pageSize, String title) {
+        Result<Page<Movie>> result = new Result<>();
+        if (title == null || title.isBlank()) {
+            result.addMessage(ResultType.INVALID, "can not search with null or blank title");
+        }
+        if (result.isSuccess()) {
+            Page<Movie> movies = movieRepository.findByMovieNameContainsIgnoreCase(
+                    PageRequest.of(page - 1, pageSize),
+                    title
+            );
+            if (movies.isEmpty()) {
+                result.addMessage(ResultType.NOT_FOUND, "did not find any results");
+            } else {
+                result.setPayload(movies);
+            }
+        }
+        return result;
     }
 }

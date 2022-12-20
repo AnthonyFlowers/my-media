@@ -15,7 +15,7 @@ export async function getTvShowsSearch(title, page = 1) {
     if (title == null || title === "") {
         return getTvShows(page)
     }
-    const response = await fetch(`${tvShowApi}?page=${page}&title=${title}`);
+const response = await fetch(`${tvShowApi}/search?page=${page}&title=${title}`);
     return tvShowQueryResponse(response, "error searching for tv shows");
 }
 
