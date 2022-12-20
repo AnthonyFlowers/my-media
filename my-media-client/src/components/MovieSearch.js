@@ -12,11 +12,11 @@ function Movies() {
         current: 1,
         end: 1
     });
-    const [queryParams, setQueryParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const [errs, setErrs] = useState([]);
 
     useEffect(() => {
-        getMoviesSearch(queryParams.get("name"), queryParams.get("page"))
+        getMoviesSearch(searchParams.get("title"), searchParams.get("page"))
             .then((page) => {
                 setMovies(page.content);
                 let nextMovieNavPages = {
@@ -27,7 +27,7 @@ function Movies() {
                 setMovieNavPages(nextMovieNavPages);
             })
             .catch(setErrs);
-    }, [queryParams]);
+    }, [searchParams]);
 
 
     return (

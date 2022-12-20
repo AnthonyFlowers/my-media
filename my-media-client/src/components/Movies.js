@@ -5,7 +5,7 @@ import MediaPageNav from "./MediaPageNav";
 
 function Movies({ movieQueury }) {
 
-    const [urlParams, setUrlParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
     const [movies, setMovies] = useState([]);
     const [movieNavPages, setMovieNavPages] = useState({
@@ -21,7 +21,7 @@ function Movies({ movieQueury }) {
         movieQueury(moviePage)
             .then((page) => {
                 setMovies(page.content);
-                setMoviePage(urlParams.get("page"));
+                setMoviePage(searchParams.get("page"));
                 let nextMovieNavPages = {
                     start: 1,
                     current: page.pageable.pageNumber + 1,
@@ -30,7 +30,7 @@ function Movies({ movieQueury }) {
                 setMovieNavPages(nextMovieNavPages);
             })
             .catch(setErrs);
-    }, [movieQueury, moviePage, urlParams]);
+    }, [movieQueury, moviePage, searchParams]);
 
     function handleChange(evt) {
         setSearch(evt.target.value);
@@ -38,14 +38,16 @@ function Movies({ movieQueury }) {
 
     function handleSearchSubmit(evt) {
         evt.preventDefault();
-        navigate(`/movies/search?page=1&name=${search}`);
+        navigate(`/movies/search?page=1&title=${search}`);
     }
     return (
         <div id="movies">
             <div id="movieSearch">
-                <form onSubmit={handleSearchSubmit}>
-                    <input onChange={handleChange} value={search} placeholder="search" />
-                    <button className="btn" type="submit">Submit</button>
+                <form onSubmit={handleSearchSubmit}
+                className="flex justify-center gap-4">
+                    <input onChange={handleChange} value={search} placeholder="search"
+                        className="p-2 w-1/2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500" />
+                    <button className="btn bg-gray-200" type="submit">Search</button>
                 </form>
                 <div className="">{errs.map((e) => { return <p key={e}>{e}</p> })}</div>
             </div>
@@ -57,7 +59,7 @@ function Movies({ movieQueury }) {
                     })
                 }
             </div>
-            <MediaPageNav pages={movieNavPages} setParams={setUrlParams} />
+            <MediaPageNav pages={movieNavPages} setParams={setSearchParams} />
             <div className="">{errs.map((e) => { return <p key={e}>{e}</p> })}</div>
         </div>
     );
