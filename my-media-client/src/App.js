@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import AdminUserManager from './components/AdminUserManager';
+import AdminUserProfile from './components/AdminUserProfile';
 import AuthContext from './components/AuthContext';
 import AuthRouteAdmin from './components/AuthRouteAdmin';
 import AuthRouteUser from './components/AuthRouteUser';
@@ -70,9 +72,9 @@ function App() {
                 <Route path="/profile" element={<AuthRouteUser user={user}><Profile /></AuthRouteUser>} />
               </Route>
               <Route path="/admin">
-                <Route path="/admin" element={<AuthRouteUser user={user}><p>admin landing page</p></AuthRouteUser>} />
+                <Route path="/admin" element={<AuthRouteAdmin user={user}><AdminUserProfile /></AuthRouteAdmin>} />
+                <Route path="/admin/users" element={<AuthRouteAdmin user={user}><AdminUserManager /></AuthRouteAdmin>} />
               </Route>
-
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<CreateAccount />} />
               <Route path="*" element={<p>404 not found!</p>} />
