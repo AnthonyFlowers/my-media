@@ -1,35 +1,57 @@
 import { useEffect, useState } from "react";
-import { getMoviesPageMovieCount } from "../services/movieService";
-import { SmallUserMovie } from "./Movie";
+import { Link } from "react-router-dom";
+import { getMoviesLimit } from "../services/movieService";
+import { getTvShowsLimit } from "../services/tvShowService";
+import { SmallMovie } from "./Movie";
+import { SmallTvShow } from "./TvShow";
+
+const DEFAULT_COUNT = 6;
 
 function Home() {
-    const [moviePage, setMoviePage] = useState(1)
-    const [movieCount, setMovieCount] = useState(6)
     const [movies, setMovies] = useState([]);
+    const [tvShows, setTvShows] = useState([]);
     const [errs, setErrs] = useState([]);
 
 
     useEffect(() => {
-        getMoviesPageMovieCount(moviePage, movieCount)
+        const newErrors = [];
+        getMoviesLimit(DEFAULT_COUNT)
             .then((page) => {
                 setMovies(page.content);
             })
-            .catch(setErrs);
+            .catch((e) => {
+                newErrors += e;
+            });
+        getTvShowsLimit(DEFAULT_COUNT)
+            .then((page) => {
+                setTvShows(page.content);
+            })
+            .catch((e) => {
+                newErrors += e;
+            });
+        setErrs(newErrors);
     }, []);
 
 
     return (
         <>
             <h1 className="text-xl">Welcome to My Media!</h1>
-            <h3 className="text-xl">Explore Movies</h3>
-            <div id="smallMovies" className="grid grid-cols-3 bg-gray-100 p-3 m-2 rounded-lg">
-            {
+            <h3 className="text-lg"><Link to="/movies">Explore Movies</Link></h3>
+            <div id="smallMovies" className="media-container-md">
+                {
                     movies.map((m) => {
-                        return <SmallUserMovie key={m.movieId} movie={m} />;
+                        return <SmallMovie key={m.movieId} movie={m} />;
                     })
                 }
             </div>
-            <h3 className="text-md">Explore Tv Shows</h3>
+            <h3 className="text-lg"><Link to="/tv-shows">Explore Tv Shows</Link></h3>
+            <div id="smallTvShows" className="media-container-md">
+                {
+                    tvShows.map((t) => {
+                        return <SmallTvShow key={t.tvShowId} tvShow={t} />;
+                    })
+                }
+            </div>
         </>
     )
 }

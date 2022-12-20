@@ -32,7 +32,7 @@ function Movie({ movie }) {
 
 export default Movie;
 
-export function SmallUserMovie({ movie }) {
+export function SmallMovie({ movie }) {
 
     return (
         <div className="m-2 text-gray-600 border">

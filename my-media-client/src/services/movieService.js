@@ -32,14 +32,13 @@ export async function getUserMovies(page = 1, pageSize = 10) {
 }
 
 export async function getRecentMovies(page) {
-    page = Math.max(0, page - 1);
+    page = Math.max(1, page);
     const response = await fetch(`${movieApi}/recent?page=${page}`);
     return movieQueryResponse(response, "error finding recent movies");
 }
 
-export async function getMoviesPageMovieCount(page, movieCount) {
-    page = Math.max(0, page - 1);
-    const response = await fetch(`${movieApi}?page=${page}&pageSize=${movieCount}`)
+export async function getMoviesLimit(movieCount) {
+    const response = await fetch(`${movieApi}?pageSize=${movieCount}`)
     return movieQueryResponse(response, "error finding movies by page and movie count")
 }
 

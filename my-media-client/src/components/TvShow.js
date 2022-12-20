@@ -29,6 +29,16 @@ export default function TvShow({ tvShow }) {
     )
 }
 
+export function SmallTvShow({ tvShow }) {
+    return (
+        <div className="m-2 text-gray-600 border">
+            <p className="font-bold">{tvShow.tvShowName}</p>
+            <p className="">Year: {tvShow.releaseYear}</p>
+            <p>Overview: {tvShow.overview}</p>
+        </div>
+    );
+}
+
 export function ListTvShow({ t, setUserTvShows, setErrs }) {
     const [userTvShow, setUserTvShow] = useState(t);
 

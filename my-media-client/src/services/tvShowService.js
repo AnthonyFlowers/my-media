@@ -15,8 +15,13 @@ export async function getTvShowsSearch(title, page = 1) {
     if (title == null || title === "") {
         return getTvShows(page)
     }
-const response = await fetch(`${tvShowApi}/search?page=${page}&title=${title}`);
+    const response = await fetch(`${tvShowApi}/search?page=${page}&title=${title}`);
     return tvShowQueryResponse(response, "error searching for tv shows");
+}
+
+export async function getTvShowsLimit(count) {
+    const response = await fetch(`${tvShowApi}?pageSize=${count}`);
+    return tvShowQueryResponse(response, "error finding " + count + " tv shows :<");
 }
 
 export async function getUserTvShows() {
@@ -25,7 +30,7 @@ export async function getUserTvShows() {
             "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`
         }
     });
-    return tvShowQueryResponse(response, "error finding tv shows") 
+    return tvShowQueryResponse(response, "error finding tv shows")
 }
 
 
