@@ -12,11 +12,11 @@ export async function getMovies(page = 1) {
     const response = await fetch(`${movieApi}?page=${page}`);
     return movieQueryResponse(response, "error finding movies");
 }
-export async function getMoviesSearch(name, page = 1) {
-    if (name == null || name === "") {
+export async function getMoviesSearch(title, page = 1) {
+    if (title == null || title === "") {
         return getMovies(page)
     }
-    const response = await fetch(`${movieApi}?page=${page}&title=${name}`);
+    const response = await fetch(`${movieApi}?page=${page}&title=${title}`);
     return movieQueryResponse(response, "error searching for movies");
 }
 

@@ -22,7 +22,7 @@ public class TvShowController {
 
     @GetMapping
     public ResponseEntity<?> getTvShows(
-            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "50") int pageSize,
             @RequestParam(required = false) String title) {
         Page<TvShow> tvShows;

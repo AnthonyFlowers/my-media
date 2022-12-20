@@ -4,7 +4,7 @@ import Movie from "./Movie";
 import MediaPageNav from "./MediaPageNav";
 import { getMoviesSearch } from "../services/movieService";
 
-function Movies() {
+function MovieSearch() {
 
     const [movies, setMovies] = useState([]);
     const [movieNavPages, setMovieNavPages] = useState({
@@ -46,4 +46,4 @@ function Movies() {
     )
 }
 
-export default Movies;
+export default MovieSearch;

@@ -11,6 +11,7 @@ import MovieSearch from './components/MovieSearch';
 import Navbar from './components/Navbar';
 import Profile from './components/Profile';
 import TvShows from './components/TvShows';
+import TvShowSearch from './components/TvShowSearch';
 import { LOCAL_STORAGE_TOKEN_KEY, refresh } from './services/authenticationService';
 import { getMovies, getMoviesSearch, getRecentMovies } from './services/movieService';
 import { getTvShows } from './services/tvShowService';
@@ -59,10 +60,10 @@ function App() {
               <Route path="/movies" >
                 <Route path="/movies" element={<Movies movieQueury={getMovies} />} />
                 <Route path="/movies/search" element={<MovieSearch />} />
-                <Route path="/movies/recent" element={<Movies movieQueury={getRecentMovies} />} />
               </Route>
               <Route path="/tv-shows">
-                <Route path="/tv-shows" element={<TvShows tvShowQuery={getTvShows} />}></Route>
+                <Route path="/tv-shows" element={<TvShows tvShowQuery={getTvShows} />} />
+                <Route path="/tv-shows/search" element={<TvShowSearch />} />
               </Route>
 
               <Route path="/profile">

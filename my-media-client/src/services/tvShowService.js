@@ -6,9 +6,17 @@ const userTvShowApi = `${SERVER_URL}/api/user/tv-show`;
 
 export async function getTvShows(page) {
     page = page == null ? 1 : page;
-    page = Math.max(0, page - 1);
+    page = Math.max(1, page);
     const response = await fetch(`${tvShowApi}?page=${page}`);
-    return tvShowQueryResponse(response, "error finding movies")
+    return tvShowQueryResponse(response, "error finding tv shows")
+}
+
+export async function getTvShowsSearch(title, page = 1) {
+    if (title == null || title === "") {
+        return getTvShows(page)
+    }
+    const response = await fetch(`${tvShowApi}?page=${page}&title=${title}`);
+    return tvShowQueryResponse(response, "error searching for tv shows");
 }
 
 export async function getUserTvShows() {
@@ -17,7 +25,7 @@ export async function getUserTvShows() {
             "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`
         }
     });
-    return tvShowQueryResponse(response, "error finding movies") 
+    return tvShowQueryResponse(response, "error finding tv shows") 
 }
 
 
@@ -79,6 +87,6 @@ export async function updateUserTvShow(userTvShow) {
     if (response.ok) {
         return Promise.resolve(response);
     } else {
-        return Promise.reject(["could not update user movie"]);
+        return Promise.reject(["could not update user tv show"]);
     }
 }

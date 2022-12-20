@@ -17,7 +17,7 @@ public class TvShowService {
 
     public Page<TvShow> findTvShows(int page, int pageSize) {
         return repository.findAll(PageRequest.of(
-                page, pageSize,
+                page - 1, pageSize,
                 Sort.by(Sort.Direction.DESC, "releaseYear"))
         );
     }

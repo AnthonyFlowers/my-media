@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { getTvShowsSearch } from "../services/tvShowService";
 import MediaPageNav from "./MediaPageNav";
 import TvShow from "./TvShow";
 
-function TvShows({ tvShowQuery }) {
+function TvShowSearch() {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -18,40 +19,22 @@ function TvShows({ tvShowQuery }) {
     const [errs, setErrs] = useState([]);
 
     useEffect(() => {
-        tvShowQuery(tvShowPage)
-        .then((page) => {
-            setTvShows(page.content);
-            setTvShowPage(searchParams.get("page"));
-            let tvShowNavPages = {
-                start: 1,
-                current: page.pageable.pageNumber + 1,
-                end: page.totalPages
-            }
-            setTvShowNavPages(tvShowNavPages);
-        })
-        .catch(setErrs);
-    }, [tvShowQuery, tvShowPage, searchParams])
-
-    function handleChange(evt) {
-        setSearch(evt.target.value);
-    }
-
-    function handleSearchSubmit(evt) {
-        evt.preventDefault();
-        navigate(`/tv-shows/search?page=1&name=${search}`);
-    }
+        getTvShowsSearch(searchParams.get("title"), searchParams.get("page"))
+            .then((page) => {
+                setTvShows(page.content);
+                setTvShowPage(searchParams.get("page"));
+                let tvShowNavPages = {
+                    start: 1,
+                    current: page.pageable.pageNumber + 1,
+                    end: page.totalPages
+                }
+                setTvShowNavPages(tvShowNavPages);
+            })
+            .catch(setErrs);
+    }, [tvShowPage, searchParams])
 
     return (
         <div id="tvShows">
-            <div id="tvShowSearch">
-                <form onSubmit={handleSearchSubmit}
-                className="flex justify-center gap-4">
-                    <input onChange={handleChange} value={search} placeholder="search"
-                        className="p-2 w-1/2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500" />
-                    <button className="btn bg-gray-200" type="submit">Search</button>
-                </form>
-                <div className="">{errs.map((e) => { return <p key={e}>{e}</p> })}</div>
-            </div>
             <MediaPageNav pages={tvShowNavPages} setParams={setSearchParams} />
             <div className="media-container-lg">
                 {
@@ -65,4 +48,4 @@ function TvShows({ tvShowQuery }) {
     )
 }
 
-export default TvShows;
+export default TvShowSearch;
