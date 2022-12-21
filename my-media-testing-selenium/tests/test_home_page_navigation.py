@@ -39,5 +39,5 @@ class TestHomePageNavigation:
         assert home_page.current_url == home_page.expected_tv_show_url, \
             'did not navigate to the expected url: ' + \
             home_page.expected_tv_show_url
-        assert home_page.get_active_nav_name() == 'Tv Shows', \
-            'the "Tv Shows" nav element should be active'
+        assert home_page.get_active_nav_name() == 'TV Shows', \
+            'the "TV Shows" nav element should be active'
