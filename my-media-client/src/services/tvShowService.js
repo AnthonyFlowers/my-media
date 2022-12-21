@@ -30,9 +30,17 @@ export async function getUserTvShows() {
             "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`
         }
     });
-    return tvShowQueryResponse(response, "error finding tv shows")
+    return tvShowQueryResponse(response, "error finding tv shows");
 }
 
+export async function getAllUserTvShows() {
+    const response = await fetch(`${userTvShowApi}/all`, {
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`
+        }
+    });
+    return tvShowQueryResponse(response, "error finding tv shows");
+}
 
 async function tvShowQueryResponse(response, errorMsg) {
     var errors = [];

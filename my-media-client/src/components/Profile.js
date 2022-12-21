@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { getUserMovies } from "../services/movieService";
 import { getUserTvShows } from "../services/tvShowService";
 import AuthContext from "./AuthContext";
@@ -20,10 +21,10 @@ function Profile() {
             })
             .catch(setErrs);
         getUserTvShows()
-        .then((page) => {
-            setUserTvShows(page["content"]);
-        })
-        .catch(setErrs);
+            .then((page) => {
+                setUserTvShows(page["content"]);
+            })
+            .catch(setErrs);
     }, []);
 
     return (
@@ -51,7 +52,7 @@ function Profile() {
                     <div
                         id="profileMovieList"
                         className="p-3 border rounded-md border-gray-400">
-                        <h3 className="text-2xl">Your Movies</h3>
+                        <h3 className="text-2xl"><Link to="/movies/user">Your Movies</Link></h3>
                         <ul>
                             {
                                 userMovies.map((m) => {

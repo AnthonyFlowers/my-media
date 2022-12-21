@@ -5,19 +5,23 @@ import { isAdmin } from './AuthRouteAdmin';
 
 
 function Navbar() {
+    const homepage = { name: 'Home', href: '/', active: false };
     const defaultNav = [
-        { name: 'Home', href: '/', active: false },
+        homepage,
         { name: 'Movies', href: '/movies', active: false },
-        { name: 'Tv Shows', href: '/tv-shows', active: false }
+        { name: 'TV Shows', href: '/tv-shows', active: false }
     ];
+    const location = useLocation();
     const { user, logout } = useContext(AuthContext);
     const [pageNav, setPageNav] = useState(defaultNav);
-    const location = useLocation();
 
     useEffect(() => {
         var nextPageNav = [...defaultNav];
         nextPageNav.forEach(n => {
-            if (location.pathname === (n.href)) {
+            const path = location.pathname;
+            if(path === homepage.href & n.name === homepage.name){
+                n.active = true;
+            } else if (n.name !== homepage.name && path.startsWith(n.href)) {
                 n.active = true;
             } else {
                 n.active = false;

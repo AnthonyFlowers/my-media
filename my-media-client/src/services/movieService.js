@@ -31,6 +31,22 @@ export async function getUserMovies(page = 1, pageSize = 10) {
     return userMovieQueryResponse(response, "error finding movies for the user");
 }
 
+export async function getAllUserMovies(user) {
+    if(!user) {
+        return Promise.resolve("not logged in");
+    }
+    const response = await fetch(`${userMovieApi}/all`, {
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`
+        }
+    });
+    if(response.ok) {
+        const body = await response.json();
+        return body;
+    }
+    return Promise.reject(["error finding movies for the user"]);
+}
+
 export async function getRecentMovies(page) {
     page = Math.max(1, page);
     const response = await fetch(`${movieApi}/recent?page=${page}`);
@@ -74,7 +90,7 @@ export async function updateUserMovie(userMovie) {
     }
 }
 
-export async function deleteUserMovie(userMovieId) {
+export async function deleteUserMovieById(userMovieId) {
     const response = await fetch(`${userMovieApi}`, {
         method: "DELETE",
         headers: {
@@ -110,7 +126,6 @@ async function userMovieQueryResponse(response, errorMsg) {
     var errors = [];
     if (response.ok) {
         const body = await response.json();
-        const movies = [];
         return body;
     } else if (response.status === 403) {
         errors.push("authentication error")

@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Validator;
+import java.util.List;
 
 @Service
 public class AppUserTvShowService {
@@ -100,5 +101,9 @@ public class AppUserTvShowService {
             }
         }
         return result;
+    }
+
+    public List<AppUserTvShow> findAllUserTvShows(AppUser appUser) {
+        return repository.findByUserUsername(appUser.getUsername());
     }
 }

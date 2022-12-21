@@ -6,11 +6,14 @@ import mymedia.models.AppUserMovie;
 import mymedia.models.Movie;
 import mymedia.security.AppUser;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/user/movie")
@@ -28,6 +31,13 @@ public class AppUserMovieController {
             @RequestParam(required = false, defaultValue = "1") int page,
             @RequestParam(required = false, defaultValue = "10") int pageSize) {
         Page<AppUserMovie> movies = service.findUserMovies(page, pageSize, appUser);
+        return new ResponseEntity<>(movies, HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllUserMovies(
+            @AuthenticationPrincipal AppUser appUser) {
+        List<AppUserMovie> movies = service.findAllUserMovies(appUser);
         return new ResponseEntity<>(movies, HttpStatus.OK);
     }
 

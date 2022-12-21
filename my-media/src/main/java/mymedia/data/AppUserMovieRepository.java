@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AppUserMovieRepository extends JpaRepository<AppUserMovie, Integer> {
 
@@ -15,4 +17,6 @@ public interface AppUserMovieRepository extends JpaRepository<AppUserMovie, Inte
     AppUserMovie findByAppUserMovieIdAndUser(int appUserMovieId, AppUser user);
 
     AppUserMovie findByUserAppUserIdAndMovieMovieId(int userId, int movieId);
+
+    List<AppUserMovie> findByUserUsername(String username);
 }

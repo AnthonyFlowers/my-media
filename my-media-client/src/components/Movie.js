@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
-import { addMovieToUser, deleteUserMovie, getUserMovies, updateUserMovie } from "../services/movieService";
+import { addMovieToUser, deleteUserMovieById, getUserMovies, updateUserMovie } from "../services/movieService";
 import AuthContext from "./AuthContext";
 
-function Movie({ movie }) {
+export default function Movie({ movie }) {
     const { user } = useContext(AuthContext);
 
     function handleAdd() {
@@ -30,8 +30,6 @@ function Movie({ movie }) {
     )
 }
 
-export default Movie;
-
 export function SmallMovie({ movie }) {
 
     return (
@@ -56,7 +54,7 @@ export function ListMovie({ m, setUserMovies, setErr }) {
 
     function handleDelete(evt) {
         console.log(evt.target.value)
-        deleteUserMovie(evt.target.value)
+        deleteUserMovieById(evt.target.value)
             .then(() => {
                 getUserMovies()
                     .then((page) => {
