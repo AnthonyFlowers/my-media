@@ -1,38 +1,41 @@
-import { useState } from "react";
+import debounce from "lodash.debounce";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 function MediaPageNav({ pages }) {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const [pageInput, setPageInput] = useState(pages.current);
-    const [timeoutId, setTimeoutId] = useState();
+
+    const changePage = (nextValue) => {
+        searchParams.set("page", nextValue);
+        setSearchParams(searchParams)
+    }
 
     function handleMoviePage(evt) {
         const nextPage = evt.target.value;
         if (nextPage > pages.end || nextPage < pages.start) {
             return;
         }
-        searchParams.set("page", nextPage);
         setPageInput(nextPage);
-        setSearchParams(searchParams);
+        changePage(nextPage);
     }
 
+    const debounceChangePage = useCallback(debounce((nextValue) => {
+        changePage(nextValue);
+    }, 1500), []);
+
     function handleChange(evt) {
-        clearTimeout(timeoutId);
-        const nextValue = evt.target.value;
+        let nextValue = evt.target.value;
         if (nextValue > pages.end) {
-            setPageInput(pages.end);
+            nextValue = pages.end;
         } else if (nextValue < pages.start) {
-            setPageInput(pages.start);
-        } else {
-            setPageInput(evt.target.value);
+            nextValue = pages.start;
         }
-        const t = setTimeout(() => {
-            searchParams.set("page", nextValue);
-            setSearchParams(searchParams);
-        }, 2000);
-        setTimeoutId(t);
+        setPageInput(nextValue);
+        debounceChangePage(nextValue);
     }
+
     return (
         <ul className="flex justify-center my-2 gap-4">
             <li>
