@@ -15,8 +15,7 @@ function UserMovies() {
             .catch(setErrs);
     }, [user]);
 
-    function handleDelete(evt) {
-        const userMovieId = evt.target.value;
+    function handleDelete(userMovieId) {
         deleteUserMovieById(userMovieId)
             .then(() => {
                 getAllUserMovies(user)

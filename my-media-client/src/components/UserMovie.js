@@ -1,4 +1,5 @@
-import { useState } from "react"
+import debounce from "lodash.debounce";
+import { useCallback, useState } from "react"
 import { updateUserMovie } from "../services/movieService";
 
 export default function UserMovie({ um, handleDelete }) {
@@ -20,6 +21,10 @@ export default function UserMovie({ um, handleDelete }) {
                 setUserMovie(nextMovie);
             })
             .catch(setErrs);
+    }
+
+    function deleteMovie(evt) {
+        handleDelete(evt.target.value);
     }
 
     function unwatch() {
@@ -48,7 +53,7 @@ export default function UserMovie({ um, handleDelete }) {
                 <p className="attribute">Length: {userMovie.movie.movieLength} Minutes</p>
                 <p className="attribute">Year: {userMovie.movie.movieYear}</p>
                 <p className="overview group-hover:h-auto">Overview: {userMovie.movie.movieOverview}</p>
-                <button value={userMovie.appUserMovieId} onClick={handleDelete} className="btn btn-red">Delete</button>
+                <button value={userMovie.appUserMovieId} onClick={deleteMovie} className="btn btn-red">Delete</button>
             </div>
             {errs && errs.length > 0 ? errs.map((e) => { return <p>(e)</p> }) : <></>}
         </div>
