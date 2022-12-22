@@ -19,7 +19,7 @@ function Navbar() {
         var nextPageNav = [...defaultNav];
         nextPageNav.forEach(n => {
             const path = location.pathname;
-            if(path === homepage.href & n.name === homepage.name){
+            if (path === homepage.href & n.name === homepage.name) {
                 n.active = true;
             } else if (n.name !== homepage.name && path.startsWith(n.href)) {
                 n.active = true;

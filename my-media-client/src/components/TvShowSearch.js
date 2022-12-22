@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { getTvShowsSearch } from "../services/tvShowService";
 import MediaPageNav from "./MediaPageNav";
 import TvShow from "./TvShow";
@@ -7,7 +7,6 @@ import TvShow from "./TvShow";
 function TvShowSearch() {
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const navigate = useNavigate();
     const [tvShows, setTvShows] = useState([]);
     const [tvShowNavPages, setTvShowNavPages] = useState({
         start: 1,
@@ -15,7 +14,6 @@ function TvShowSearch() {
         end: 1
     });
     const [tvShowPage, setTvShowPage] = useState(1);
-    const [search, setSearch] = useState("");
     const [errs, setErrs] = useState([]);
 
     useEffect(() => {

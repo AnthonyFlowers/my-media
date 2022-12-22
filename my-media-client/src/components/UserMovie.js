@@ -6,9 +6,17 @@ export default function UserMovie({ um, handleDelete }) {
     const [userMovie, setUserMovie] = useState(um);
     const [errs, setErrs] = useState([]);
 
+    const debounceHandleUpdateMovie = useCallback(debounce((nextMovie) => {
+        updateUserMovie(nextMovie)
+            .catch(setErrs);
+    }, 1000), []);
+
     function handleWatchCount(evt) {
         const nextMovie = { ...userMovie };
         const nextWatchCount = nextMovie.watchCount + parseInt(evt.target.value);
+        if (nextWatchCount < 0) {
+            return;
+        }
         if (nextWatchCount <= 0 && nextMovie.watched) {
             nextMovie.nextWatchCount = 0;
             nextMovie.watched = false;
@@ -16,11 +24,8 @@ export default function UserMovie({ um, handleDelete }) {
             nextMovie.watched = true;
         }
         nextMovie.watchCount = nextWatchCount;
-        updateUserMovie(nextMovie)
-            .then(() => {
-                setUserMovie(nextMovie);
-            })
-            .catch(setErrs);
+        debounceHandleUpdateMovie(nextMovie);
+        setUserMovie(nextMovie);
     }
 
     function deleteMovie(evt) {
@@ -45,17 +50,17 @@ export default function UserMovie({ um, handleDelete }) {
         <div className="media-card-lg group">
             <h1 className="text-xl font-bold">{userMovie.movie.movieName}</h1>
             <div className="details">
-                <p className="attribute">
-                    Watched: {userMovie.watched ? "Yes" : "No"}
-                    <button onClick={unwatch} className="btn btn-small btn-red text-xs" hidden={!userMovie.watched}>Unwatch</button>
-                </p>
+                <p className="attribute">Watched: {userMovie.watched ? "Yes" : "No"}</p>
                 <p className="attribute">Watch Count: <button className="font-bold" value="-1" onClick={handleWatchCount}>&lt;</button> {userMovie.watchCount} <button className="font-bold" value="1" onClick={handleWatchCount}>&gt;</button></p>
                 <p className="attribute">Length: {userMovie.movie.movieLength} Minutes</p>
                 <p className="attribute">Year: {userMovie.movie.movieYear}</p>
                 <p className="overview group-hover:h-auto">Overview: {userMovie.movie.movieOverview}</p>
-                <button value={userMovie.appUserMovieId} onClick={deleteMovie} className="btn btn-red">Delete</button>
+                <div className="space-x-3">
+                    <button value={userMovie.appUserMovieId} onClick={deleteMovie} className="btn btn-red">Delete</button>
+                    <button value={userMovie.appUserMovieId} onClick={unwatch} className="btn btn-yellow">Unwatch</button>
+                </div>
             </div>
-            {errs && errs.length > 0 ? errs.map((e) => { return <p>(e)</p> }) : <></>}
+            {errs.length > 0 ? errs.map((e) => { return <p>{e}</p> }) : <></>}
         </div>
     )
 }

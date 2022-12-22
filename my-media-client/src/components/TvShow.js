@@ -63,7 +63,7 @@ export function ListTvShow({ t, setUserTvShows, setErrs }) {
 
     function handleSeasonChange(evt) {
         const nextValue = evt.target.value;
-        if(nextValue > 100 || nextValue < 0){
+        if (nextValue > 100 || nextValue < 0) {
             return;
         }
         const nextUserTvShow = { ...userTvShow };

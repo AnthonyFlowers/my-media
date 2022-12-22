@@ -1,7 +1,6 @@
 import debounce from "lodash.debounce";
-import { useCallback, useContext, useState } from "react";
-import { addTvShowToUser, deleteUserTvShow, getUserTvShows, updateUserTvShow } from "../services/tvShowService";
-import AuthContext from "./AuthContext";
+import { useCallback, useState } from "react";
+import { updateUserTvShow } from "../services/tvShowService";
 
 export default function UserTvShow({ uts, handleDelete }) {
     const [userTvShow, setUserTvShow] = useState(uts);
@@ -25,6 +24,17 @@ export default function UserTvShow({ uts, handleDelete }) {
         setUserTvShow(nextTvShow);
     }
 
+    function unwatch() {
+        if (userTvShow.season === 0 && userTvShow.episode === 0) {
+            return;
+        }
+        const nextTvShow = { ...userTvShow };
+        nextTvShow.season = 0;
+        nextTvShow.episode = 0;
+        debounceHandleUpdateShow(nextTvShow);
+        setUserTvShow(nextTvShow);
+    }
+
     return (
         <div className="media-card-lg group">
             <h1 className="text-xl font-bold">{uts.tvShow.tvShowName}</h1>
@@ -37,8 +47,16 @@ export default function UserTvShow({ uts, handleDelete }) {
                 </p>
                 <p className="attribute">Year: {userTvShow.tvShow.releaseYear}</p>
                 <p className="overview group-hover:h-auto">Overview: {userTvShow.tvShow.overview}</p>
-                <button value={userTvShow.appUserTvShowId} onClick={deleteShow} className="btn btn-red">Delete</button>
+                <div className="space-x-3">
+                    <button value={userTvShow.appUserTvShowId} onClick={deleteShow} className="btn btn-red">Delete</button>
+                    <button value={userTvShow.appUserTvShowId} onClick={unwatch} className="btn btn-yellow">Unwatch</button>
+                </div>
             </div>
+            {errs.length > 0 ? <div>
+                {errs.map((e) => {
+                    return <p key={e}>{e}</p>
+                })}
+            </div> : <></>}
         </div>
     )
 }

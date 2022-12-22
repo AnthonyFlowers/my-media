@@ -32,7 +32,7 @@ export async function getUserMovies(page = 1, pageSize = 10) {
 }
 
 export async function getAllUserMovies(user) {
-    if(!user) {
+    if (!user) {
         return Promise.resolve("not logged in");
     }
     const response = await fetch(`${userMovieApi}/all`, {
@@ -40,7 +40,7 @@ export async function getAllUserMovies(user) {
             "Authorization": `Bearer ${localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)}`
         }
     });
-    if(response.ok) {
+    if (response.ok) {
         const body = await response.json();
         return body;
     }

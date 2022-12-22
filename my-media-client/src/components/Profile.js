@@ -48,7 +48,7 @@ function Profile() {
                         </ul>
                     </div>
                 </div>
-                <div className="grid-cols-1 col-span-2 p-3 rounded-lg border-4 border-gray-500">
+                <div className="grid-cols-1 col-span-2 p-3 rounded-lg border-4 border-gray-500 space-y-3">
                     <div
                         id="profileMovieList"
                         className="p-3 border rounded-md border-gray-400">
