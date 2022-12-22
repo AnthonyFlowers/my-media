@@ -60,7 +60,7 @@ public class AppUserTvShowService {
                 tvShow.getTvShowId()
         );
         if (found != null) {
-            result.addMessage(ResultType.INVALID, "user already has an entry for that TV Show");
+            result.addMessage(ResultType.INVALID, "User already has an entry for that TV Show");
         }
         return result;
     }
@@ -73,7 +73,7 @@ public class AppUserTvShowService {
             return result;
         }
         if (foundAppUserTvShow.getUserId() != appUser.getAppUserId()) {
-            result.addMessage(ResultType.INVALID, "Could not update that tv show entry");
+            result.addMessage(ResultType.INVALID, "Could not delete that tv show entry");
         } else {
             repository.delete(foundAppUserTvShow);
         }
@@ -86,6 +86,11 @@ public class AppUserTvShowService {
 
     public Result<AppUserTvShow> update(AppUserTvShow userTvShow, AppUser appUser) {
         Result<AppUserTvShow> result = new Result<>();
+        validator.validate(userTvShow).forEach((vi) ->
+                result.addMessage(ResultType.INVALID, vi.getMessage()));
+        if(!result.isSuccess()){
+            return result;
+        }
         AppUserTvShow foundAppUserTvShow = findByUserTvShowId(userTvShow.getAppUserTvShowId());
         if (foundAppUserTvShow == null) {
             result.addMessage(ResultType.NOT_FOUND, "Could not find that tv show entry to update");
@@ -94,8 +99,6 @@ public class AppUserTvShowService {
         } else {
             userTvShow.setTvShow(foundAppUserTvShow.getTvShow());
             userTvShow.setUser(appUser);
-            validator.validate(userTvShow).forEach((vi) ->
-                    result.addMessage(ResultType.INVALID, vi.getMessage()));
             if (result.isSuccess()) {
                 result.setPayload(repository.save(userTvShow));
             }

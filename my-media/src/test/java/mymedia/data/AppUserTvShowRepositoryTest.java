@@ -35,7 +35,7 @@ class AppUserTvShowRepositoryTest {
     }
 
     @Test
-    void shouldAddSharkTankToJohnsmith() {
+    void shouldAddSharkTankToJohnSmith() {
         AppUserTvShow userTvShow = new AppUserTvShow();
         userTvShow.setUser(KnownGoodState.getJohnSmith(userRepository));
         TvShow sharkTank = showRepository.findById(4).orElse(null);
@@ -49,7 +49,7 @@ class AppUserTvShowRepositoryTest {
     }
 
     @Test
-    void shouldFindRickAndMortyInJohmsmithsShows() {
+    void shouldFindRickAndMortyInJohnSmithsShows() {
         AppUserTvShow userTvShow = userTvShowRepository.findByUserUsername(
                 Pageable.unpaged(),
                 "johnsmith"
@@ -59,7 +59,7 @@ class AppUserTvShowRepositoryTest {
     }
 
     @Test
-    void shouldUpdateJohnsmithsShow(){
+    void shouldUpdateJohnSmithsShow(){
         AppUserTvShow userTvShow = userTvShowRepository.findByUserUsername(
                 Pageable.unpaged(),
                 "johnsmith"
@@ -71,7 +71,7 @@ class AppUserTvShowRepositoryTest {
     }
 
     @Test
-    void shouldDeleteJanedoesShow() {
+    void shouldDeleteJaneDoesShow() {
         AppUserTvShow showToDelete = userTvShowRepository.findByUserUsername(
                 Pageable.unpaged(), "janedoe"
         ).getContent().get(0);
