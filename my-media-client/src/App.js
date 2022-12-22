@@ -17,7 +17,6 @@ import TvShowSearch from './components/TvShowSearch';
 import UserMovies from './components/UserMovies';
 import UserTvShows from './components/UserTvShows';
 import { LOCAL_STORAGE_TOKEN_KEY, refresh } from './services/authenticationService';
-import { getMovies, getMoviesSearch, getRecentMovies } from './services/movieService';
 import { getTvShows } from './services/tvShowService';
 
 
@@ -88,8 +87,8 @@ function App() {
       </Router>
     </AuthContext.Provider> : <div className="flex justify-center items-center">
       <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
+        <span className="visually-hidden">Loading...</span>
       </div>
-      <span className="visually-hidden">Loading...</span>
     </div>
   );
 }

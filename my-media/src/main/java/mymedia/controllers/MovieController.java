@@ -4,12 +4,15 @@ import mymedia.domain.MovieService;
 import mymedia.domain.Result;
 import mymedia.models.Movie;
 import org.springframework.data.domain.Page;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.concurrent.TimeUnit;
 
 @Controller
 @RequestMapping("/api/movie")
@@ -26,7 +29,9 @@ public class MovieController {
             @RequestParam(required = false, defaultValue = "50") int pageSize,
             @RequestParam(required = false) String title) {
         Page<Movie> movies = movieService.findMovies(page, pageSize);
-        return new ResponseEntity<>(movies, HttpStatus.OK);
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(60, TimeUnit.MINUTES))
+                .body(movies);
     }
 
     @GetMapping("/recent")

@@ -46,12 +46,13 @@
 .btn-nav {
     @apply inline-block border rounded py-1 px-3;
 }
-nav > ul li {
+
+nav>ul li {
     @apply mr-3;
 
 }
 
-.btn-nav-selectable { 
+.btn-nav-selectable {
     @apply border-gray-100 hover:border-gray-200 text-black hover:bg-gray-200;
 }
 
@@ -79,7 +80,7 @@ body {
     @apply grid md:grid-cols-1 lg:grid-cols-2 py-4;
 }
 
-.media-card-lg { 
+.media-card-lg {
     @apply grid grid-cols-1 m-2 bg-gray-100 p-8 rounded-lg shadow-md content-start;
     @apply hover:overflow-visible;
 }
