@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { deleteUserTvShow, getAllUserTvShows } from "../services/tvShowService";
 import AuthContext from "./AuthContext";
 import UserTvShow from "./UserTvShow";
@@ -28,6 +29,9 @@ function UserTvShows() {
     return (
         <div id="tvShows">
             <div className="media-container-lg">
+                {
+                    userTvShows.length < 1 ? <p>No shows found <Link className="btn" to="/tv-shows">Click to add some!</Link></p> : <></>
+                }
                 {
                     userTvShows.map((t) => {
                         return <UserTvShow key={t.appUserTvShowId} uts={t} handleDelete={handleDelete} />

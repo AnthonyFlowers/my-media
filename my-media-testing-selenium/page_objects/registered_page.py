@@ -8,7 +8,7 @@ class RegisteredPage(BasePage):
         super().__init__(driver)
         self.__username_locator = (By.XPATH, '//*[@id="username"]')
         self.__status_locator = (By.XPATH, '//*[@id="status"]')
-        self.__movie_list = (By.XPATH, '//*[@id="profileMovieList"]')
+        self.__movie_stats = (By.XPATH, '//*[@id="profileMovieStats"]')
         self.__url = f'{self._base_url}/profile'
 
     @property
@@ -26,4 +26,4 @@ class RegisteredPage(BasePage):
     def wait_for_user_profile(self):
         super()._wait_until_element_is_visible(self.__username_locator)
         super()._wait_until_element_is_visible(self.__status_locator)
-        super()._wait_until_element_is_visible(self.__movie_list)
+        super()._wait_until_element_is_visible(self.__movie_stats)

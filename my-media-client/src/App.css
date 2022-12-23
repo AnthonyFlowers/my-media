@@ -97,6 +97,10 @@ body {
     @apply text-gray-600;
 }
 
+.link {
+    @apply underline text-blue-600 hover:text-blue-800 visited:text-purple-600;
+}
+
 /* high contrast for designing */
 .watermelon {
     @apply bg-red-500 border-2 border-green-400;

@@ -16,21 +16,25 @@ export default function UserTvShow({ uts, handleDelete }) {
     }, 1000), []);
 
     function handleChange(evt) {
-        const value = evt.target.value;
+        const value = parseInt(evt.target.value);
         const attribute = evt.target.name;
         const nextTvShow = { ...userTvShow };
-        nextTvShow[attribute] = nextTvShow[attribute] + parseInt(value);
+        nextTvShow[attribute] = nextTvShow[attribute] + value;
+        if (attribute === "season") {
+            nextTvShow.episode = 0;
+        }
         debounceHandleUpdateShow(nextTvShow);
         setUserTvShow(nextTvShow);
     }
 
     function unwatch() {
-        if (userTvShow.season === 0 && userTvShow.episode === 0) {
+        if (userTvShow.season === 0 && userTvShow.episode === 0 && userTvShow.watchCount === 0) {
             return;
         }
         const nextTvShow = { ...userTvShow };
         nextTvShow.season = 0;
         nextTvShow.episode = 0;
+        nextTvShow.watchCount = 0;
         debounceHandleUpdateShow(nextTvShow);
         setUserTvShow(nextTvShow);
     }
@@ -44,6 +48,9 @@ export default function UserTvShow({ uts, handleDelete }) {
                 </p>
                 <p className="attribute">
                     Episode: <button value="-1" name="episode" onClick={handleChange}>&lt;</button> {userTvShow.episode} <button value="1" name="episode" onClick={handleChange}>&gt;</button>
+                </p>
+                <p className="attribute">
+                    Watch Count: <button value="-1" name="watchCount" onClick={handleChange}>&lt;</button> {userTvShow.watchCount} <button value="1" name="watchCount" onClick={handleChange}>&gt;</button>
                 </p>
                 <p className="attribute">Year: {userTvShow.tvShow.releaseYear}</p>
                 <p className="overview group-hover:h-auto">Overview: {userTvShow.tvShow.overview}</p>

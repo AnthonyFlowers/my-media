@@ -1,17 +1,26 @@
+import { ErrorResponse } from "@remix-run/router";
 import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import { addMovieToUser, deleteUserMovieById, getUserMovies, updateUserMovie } from "../services/movieService";
 import AuthContext from "./AuthContext";
 
 export default function Movie({ movie }) {
+
     const { user } = useContext(AuthContext);
+    const [errs, setErrs] = useState([]);
+    const [success, setSuccess] = useState(false);
 
     function handleAdd() {
         addMovieToUser(movie)
             .then((msg) => {
                 // show success message
                 console.log(msg)
+                setSuccess(true);
             })
-            .catch(console.log);
+            .catch((e) => {
+                setErrs(e);
+
+            });
     }
 
     return (
@@ -22,9 +31,23 @@ export default function Movie({ movie }) {
                 <p className="attribute">Year: {movie.movieYear}</p>
                 <p className="overview group-hover:h-auto">Overview: {movie.movieOverview}</p>
             </div>
-            {/* check if movie already added and if logged in*/}
             {
-                user ? <button className="btn-media-add" onClick={handleAdd}>Add</button> : <></>
+                user && !success ? <button className="btn-media-add" onClick={handleAdd}>Add</button> : <></>
+            }
+            {
+                success ? <div role="alert">
+                    <p className="bg-green-500 text-white font-bold rounded px-4 py-2 mt-2">Movie Added</p>
+                </div> : <></>
+            }
+            {
+                errs.length > 0 ? <div role="alert">
+                    <p className="bg-orange-500 text-white font-bold rounded-t px-4 py-2 mt-2">Could not add that movie.</p>
+                    <p className="border border-t-0 border-orange-400 rounded-b bg-orange-100 px-4 py-3 text-orange-700">
+                        {!user ?
+                            <>You need to be <Link className="link" to="/login">logged in</Link> to add movies to your list</> :
+                            <>You already added that movie to your list update it <Link className="link" to="/movies/user">here</Link></>}
+                    </p>
+                </div> : <></>
             }
         </div>
     )

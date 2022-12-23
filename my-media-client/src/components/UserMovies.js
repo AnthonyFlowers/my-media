@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { deleteUserMovieById, getAllUserMovies } from "../services/movieService";
 import AuthContext from "./AuthContext";
 import UserMovie from "./UserMovie";
@@ -27,6 +28,9 @@ function UserMovies() {
     return (
         <div id="movies">
             <div className="media-container-lg">
+                {
+                    userMovies.length < 1 ? <p>No movies found <Link className="btn mx-0" to="/movies">Click to add some!</Link></p> : <></>
+                }
                 {
                     userMovies.map((m) => {
                         return <UserMovie key={m.appUserMovieId} um={m} handleDelete={handleDelete} />;
