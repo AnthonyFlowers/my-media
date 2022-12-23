@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes, useNavigate } from 'react-router-dom';
 import AdminUserManager from './components/AdminUserManager';
 import AdminUserProfile from './components/AdminUserProfile';
 import AuthContext from './components/AuthContext';
@@ -63,14 +63,13 @@ function App() {
               <Route path="/movies" >
                 <Route path="/movies" element={<Movies />} />
                 <Route path="/movies/search" element={<MovieSearch />} />
-                <Route path="/movies/user" element={<UserMovies />} />
+                <Route path="/movies/user" element={<AuthRouteUser user={user}><UserMovies /></AuthRouteUser>} />
               </Route>
               <Route path="/tv-shows">
                 <Route path="/tv-shows" element={<TvShows tvShowQuery={getTvShows} />} />
                 <Route path="/tv-shows/search" element={<TvShowSearch />} />
-                <Route path="/tv-shows/user" element={<UserTvShows />} />
+                <Route path="/tv-shows/user" element={<AuthRouteUser user={user}><UserTvShows /></AuthRouteUser>} />
               </Route>
-
               <Route path="/profile">
                 <Route path="/profile" element={<AuthRouteUser user={user}><Profile /></AuthRouteUser>} />
               </Route>

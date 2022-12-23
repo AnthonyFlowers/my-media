@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 import { getUserMovies } from "../services/movieService";
 import { getUserTvShows } from "../services/tvShowService";
 import AuthContext from "./AuthContext";
-import { ListMovie } from "./Movie";
-import { ListTvShow } from "./TvShow";
 
 function Profile() {
 
     const { user } = useContext(AuthContext);
     const [userMovies, setUserMovies] = useState([]);
+    const [userMovieStats, setUserMovieStats] = useState({});
     const [userTvShows, setUserTvShows] = useState([]);
+    const [userTvShowStats, setUserTvShowStats] = useState({});
     const [errs, setErrs] = useState([])
 
 
@@ -26,6 +26,47 @@ function Profile() {
             })
             .catch(setErrs);
     }, []);
+
+    useEffect(() => {
+        const nextUserMovieStats = {
+            count: 0,
+            watched: 0,
+            rewatchCount: 0,
+            time: 0,
+            mostWatched: userMovies[0]
+        };
+        nextUserMovieStats.count = userMovies.length;
+        for (const um of userMovies) {
+            if (um.watchCount >= nextUserMovieStats.mostWatched.watchCount) {
+                nextUserMovieStats.mostWatched = um;
+            }
+            if (um.watchCount > 0) { nextUserMovieStats.watched += 1 }
+            nextUserMovieStats.rewatchCount += um.watchCount;
+            nextUserMovieStats.time += um.watchCount * um.movie.movieLength;
+        }
+        setUserMovieStats(nextUserMovieStats);
+    }, [userMovies]);
+
+    useEffect(() => {
+        const nextUserTvShowStats = {
+            count: 0,
+            watched: 0,
+            totalSeasons: 0,
+            watchCount: 0,
+            mostWatched: userTvShows[0]
+        };
+        nextUserTvShowStats.count = userTvShows.length;
+        for (const uts of userTvShows) {
+            if (uts.watchCount >= nextUserTvShowStats.mostWatched.watchCount) {
+                nextUserTvShowStats.mostWatched = uts;
+            }
+            if (uts.watchCount > 0) { nextUserTvShowStats.watched += 1 }
+            nextUserTvShowStats.totalSeasons += uts.season;
+            nextUserTvShowStats.watchCount += uts.watchCount;
+
+        }
+        setUserTvShowStats(nextUserTvShowStats);
+    }, [userTvShows])
 
     return (
         <>
@@ -50,28 +91,23 @@ function Profile() {
                 </div>
                 <div className="grid-cols-1 col-span-2 p-3 rounded-lg border-4 border-gray-500 space-y-3">
                     <div
-                        id="profileMovieList"
+                        id="profileMovieStats"
                         className="p-3 border rounded-md border-gray-400">
-                        <h3 className="text-2xl"><Link to="/movies/user">Your Movies</Link></h3>
-                        <ul>
-                            {
-                                userMovies.map((m) => {
-                                    return <ListMovie key={m.appUserMovieId} m={m} setUserMovies={setUserMovies} />
-                                })
-                            }
-                        </ul>
+                        <h3 className="text-2xl"><Link to="/movies/user">Movie Stats</Link></h3>
+                        <p>Movie Count: {userMovieStats.count}</p>
+                        <p>Completed: {userMovieStats.watched}</p>
+                        <p>Rewatched Count: {userMovieStats.rewatchCount}</p>
+                        <p>Time Watching: {userMovieStats.time} Hours</p>
+                        <p>Most Watched: {userMovieStats.mostWatched ? userMovieStats.mostWatched.movie.movieName : "none"}</p>
                     </div>
                     <div
-                        id="profileTvShowList"
+                        id="profileTvShowStats"
                         className="p-3 border rounded-md border-gray-400">
-                        <h3 className="text-2xl">Your Shows</h3>
-                        <ul>
-                            {
-                                userTvShows.map((t) => {
-                                    return <ListTvShow key={t.appUserTvShowId} t={t} setUserTvShows={setUserTvShows} setErrs={setErrs} />
-                                })
-                            }
-                        </ul>
+                        <h3 className="text-2xl"><Link to="/tv-shows/user">Show Stats</Link></h3>
+                        <p>Show Count: {userTvShowStats.count}</p>
+                        <p>Completed: {userTvShowStats.watchCount}</p>
+                        <p>Seasons Watched: {userTvShowStats.totalSeasons}</p>
+                        <p>Most Watched: {userTvShowStats.mostWatched ? userTvShowStats.mostWatched.tvShow.tvShowName : ""}</p>
                     </div>
                 </div>
                 <div>{errs.map((e) => { return <p>{e}</p>; })}</div>
