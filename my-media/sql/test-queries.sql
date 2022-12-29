@@ -6,6 +6,7 @@ select * from app_user_movie;
 select * from app_user_role;
 select * from app_role;
 select * from tv_show;
+select * from movie;
 
 select username, movie_name from app_user a join app_user_movie am join movie m
     on a.app_user_id = am.app_user_id
