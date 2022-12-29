@@ -14,7 +14,7 @@ function Home() {
 
 
     useEffect(() => {
-        const newErrors = [];
+        let newErrors = [];
         getMoviesLimit(DEFAULT_COUNT)
             .then((page) => {
                 setMovies(page.content);

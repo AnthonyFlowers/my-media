@@ -38,3 +38,16 @@ target/
 
 # Node
 node_modules/
+
+# property files
+application-*.properties
+
+#config files
+api-config.json
+db-config.json
+
+# vscode
+.vscode
+
+# python
+__pycache__

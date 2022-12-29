@@ -54,9 +54,11 @@ function Movies() {
                     <button className="btn bg-gray-400 hover:bg-gray-200" type="submit">Search</button>
                     {user ? <Link to="/movies/user" className="btn bg-gray-400 hover:bg-gray-200">My Movies</Link> : <></>}
                 </form>
-                <div className="">{errs.map((e) => { return <p key={e}>{e}</p> })}</div>
+                {/* <div className="">{errs.map((e) => { return <p key={e}>{e}</p> })}</div> */}
             </div>
             <MediaPageNav pages={movieNavPages} />
+            <div className="">{errs && errs.length > 0 ? errs.map((e) => { return <p key={e}>{e}</p> }) : ""}</div>
+
             <div className="media-container-lg">
                 {
                     movies.map((m) => {
@@ -64,7 +66,6 @@ function Movies() {
                     })
                 }
             </div>
-            <div className="">{errs.map((e) => { return <p key={e}>{e}</p> })}</div>
         </div>
     );
 }
