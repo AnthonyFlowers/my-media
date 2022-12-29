@@ -1,14 +1,16 @@
 import os, mysql.connector
+from config_loader import load_config
 
 # create a script that adds the default test users
 # johnsmith - '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa'
 # janedoe - '$2a$10$ntB7CsRKQzuLoKY3rfoAQen5nNyiC/U60wBsWnnYrtQQi8Z3IZzQa'
 
 # connection variables
-db_username = os.environ["DB_USERNAME"]
-db_password = os.environ["DB_PASSWORD"]
-host = "localhost"
-database = "my_media"
+config = load_config()
+db_username = config["username"]
+db_password = config["password"]
+host = config["host"]
+database = config["database"]
 
 # create connection
 mysql_conn = mysql.connector.connect(
