@@ -54,7 +54,7 @@ function App() {
 
   return (refreshed ?
     <AuthContext.Provider value={auth}>
-      <Router>
+      <Router basename="/my-media">
         <div className="my-5 mx-10">
           <Navbar />
           <div className="bg-white rounded-lg p-5 my-5">

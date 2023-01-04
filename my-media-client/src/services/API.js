@@ -1,2 +1,1 @@
-import configData from "./api-config.json"
-export const SERVER_URL = configData.SERVER_URL;
+export const SERVER_URL = "https://my-media.anthonyf.net:8443/my-media";
