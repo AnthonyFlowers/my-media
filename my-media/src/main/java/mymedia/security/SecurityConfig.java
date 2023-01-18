@@ -32,7 +32,8 @@ public class SecurityConfig {
                 ).authenticated()
                 .antMatchers(HttpMethod.GET,
                         "/api/movie",
-                        "/api/movie/search"
+                        "/api/movie/search",
+                        "/api/movie-night/group"
                 ).permitAll()
                 .antMatchers(
                         "/api/user/movie",

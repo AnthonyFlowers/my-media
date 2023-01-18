@@ -24,6 +24,41 @@ create table app_user (
     enabled bit not null default 1
 );
 
+create table movie_night_group (
+	group_id int primary key auto_increment,
+    group_name varchar(50) not null
+ );
+
+create table movie_night_group_movie (
+	group_id int not null,
+    movie_id int not null,
+    constraint fk_movie_night_group_movie_group_id
+		foreign key (group_id)
+        references movie_night_group(group_id),
+	constraint fk_movie_night_group_movie_movie_id
+		foreign key (movie_id)
+        references movie(movie_id),
+    constraint pk_movie_night_group_movie
+		primary key (group_id, movie_id)
+);
+
+create table movie_night_app_user (
+	app_user_movie_night_group_id int primary key auto_increment,
+	app_user_id int not null,
+    group_id int not null,
+    moderator boolean default false,
+    user_vote int,
+	constraint fk_movie_night_app_user_app_user_id
+		foreign key (app_user_id)
+        references app_user(app_user_id),
+	constraint fk_movie_night_app_user_movie_night_group
+		foreign key (group_id)
+        references movie_night_group(group_id),
+	constraint fk_movie_night_app_user_movie_night_group_movie_movie_id
+		foreign key (user_vote)
+        references movie_night_group_movie(movie_id)
+);
+
 create table app_user_movie (
 	app_user_movie_id int primary key auto_increment,
     app_user_id int not null,
@@ -83,6 +118,11 @@ create procedure set_known_good_state()
 begin
 	set sql_safe_updates = 0;
 
+delete from movie_night_app_user;
+    alter table movie_night_app_user auto_increment = 1;
+delete from movie_night_group_movie;
+delete from movie_night_group;
+    alter table movie_night_group auto_increment = 1;
 	delete from app_user_role;
 	alter table app_user_role auto_increment = 1;
 	delete from app_user_movie;
@@ -130,6 +170,27 @@ begin
     insert into app_user_role (app_user_id, app_role_id) values
         (1, 1),
         (2, 2);
+        
+	insert into movie_night_group (group_name) values
+		("Test Group"), -- read
+        ("Friends"), -- update ("Discord Friends")
+        ("Online"), -- delete
+        ("Extra Group");
+        -- test create ("New Group")
+        
+	insert into movie_night_group_movie (group_id, movie_id) values
+		(1, 1), -- read
+        (1, 2),
+        (2, 1); -- delete
+        -- test create (2, 2)
+        
+	insert into movie_night_app_user (app_user_id, group_id, moderator, user_vote) values
+		(1, 1, true, 1), -- read
+        (2, 4, true, null), -- update (2, 4, true, 1)
+        (2, 1, false, 1), -- read
+        (2, 2, true, null); -- delete
+        -- test create "adding a user to a group" (1, 4, false, null)
+	
 
     set sql_safe_updates = 1;
 end //
