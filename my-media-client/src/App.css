@@ -3,105 +3,103 @@
 @tailwind utilities;
 
 .btn {
-    @apply font-bold py-2 px-4 rounded;
+  @apply font-bold py-2 px-4 rounded;
 }
 
 .btn-small {
-    @apply mx-2 rounded px-1 py-0 m-0;
+  @apply mx-2 rounded px-1 py-0 m-0;
 }
 
 .btn-blue {
-    @apply bg-blue-500 text-white;
+  @apply bg-blue-500 text-white;
 }
 
 .btn-blue:hover {
-    @apply bg-blue-700;
+  @apply bg-blue-700;
 }
 
 .btn-yellow {
-    @apply bg-yellow-500 text-black;
+  @apply bg-yellow-500 text-black;
 }
 
 .btn-yellow:hover {
-    @apply bg-yellow-700
+  @apply bg-yellow-700;
 }
 
 .btn-green {
-    @apply bg-green-500 text-black;
+  @apply bg-green-500 text-black;
 }
 
 .btn-green:hover {
-    @apply bg-green-700;
+  @apply bg-green-700;
 }
 
 .btn-red {
-    @apply bg-red-400 text-black;
+  @apply bg-red-400 text-black;
 }
 
 .btn-red:hover {
-    @apply bg-red-600;
+  @apply bg-red-600;
 }
-
 
 .btn-nav {
-    @apply inline-block border rounded py-1 px-3;
+  @apply inline-block border rounded py-1 px-3;
 }
 
-nav>ul li {
-    @apply mr-3;
-
+nav > ul li {
+  @apply mr-3;
 }
 
 .btn-nav-selectable {
-    @apply border-gray-100 hover:border-gray-200 text-black hover:bg-gray-200;
+  @apply border-gray-100 hover:border-gray-200 text-black hover:bg-gray-200;
 }
 
 .btn-nav-active {
-    @apply border-gray-600 bg-gray-400 text-white;
+  @apply border-gray-600 bg-gray-400 text-white;
 }
 
 body {
-    @apply bg-gray-300;
+  @apply bg-gray-300;
 }
 
 .err-box {
-    @apply bg-red-400 my-2 p-3 rounded-lg list-disc list-inside;
+  @apply bg-red-400 my-2 p-3 rounded-lg list-disc list-inside;
 }
 
 .btn-media-add {
-    @apply btn btn-green mt-4 w-min;
+  @apply btn btn-green mt-4 w-min;
 }
 
 .media-container-md {
-    @apply grid grid-cols-3 bg-gray-100 p-3 m-2 rounded-lg;
+  @apply grid grid-cols-3 bg-gray-100 p-3 m-2 rounded-lg;
 }
 
 .media-container-lg {
-    @apply grid md:grid-cols-1 lg:grid-cols-2 py-4;
+  @apply grid md:grid-cols-1 lg:grid-cols-2 py-4;
 }
 
 .media-card-lg {
-    @apply grid grid-cols-1 m-2 bg-gray-100 p-8 rounded-lg shadow-md content-start;
-    @apply hover:overflow-visible;
+  @apply grid grid-cols-1 m-2 bg-gray-100 p-8 rounded-lg shadow-md content-start;
+  @apply hover:overflow-visible;
 }
 
 .media-card-lg .details {
-    @apply my-2;
+  @apply my-2;
 }
 
 .media-card-lg .overview {
-    @apply min-h-[3rem] h-12 duration-500 text-clip overflow-hidden mb-4;
+  @apply min-h-[3rem] h-12 duration-500 text-clip overflow-hidden mb-4;
 }
 
 .media-card-lg .attribute {
-    @apply text-gray-600;
+  @apply text-gray-600;
 }
 
 .link {
-    @apply underline text-blue-600 hover:text-blue-800 visited:text-purple-600;
+  @apply underline text-blue-600 hover:text-blue-800 visited:text-purple-600;
 }
 
 /* high contrast for designing */
 .watermelon {
-    @apply bg-red-500 border-2 border-green-400;
+  @apply bg-red-500 border-2 border-green-400;
 }
